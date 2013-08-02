@@ -53,6 +53,7 @@ public class UnDeath {
 	{
 		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
+		proxy.SetupRenderers();
 	}
 	
 	@EventHandler

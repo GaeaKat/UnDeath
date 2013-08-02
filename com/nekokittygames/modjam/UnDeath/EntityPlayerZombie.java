@@ -3,11 +3,20 @@
  */
 package com.nekokittygames.modjam.UnDeath;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 
 /**
@@ -26,6 +35,13 @@ public class EntityPlayerZombie extends EntityZombie {
     public double field_71094_bP;
     public double field_71095_bQ;
     public double field_71085_bR;
+    
+    public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
+    private ThreadDownloadImageData field_110316_a;
+    private ThreadDownloadImageData field_110315_c;
+    private ResourceLocation field_110312_d;
+    private ResourceLocation field_110313_e;
+    
 	public String getZombieName() {
 		return ZombieName;
 	}
@@ -37,9 +53,93 @@ public class EntityPlayerZombie extends EntityZombie {
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
+		this.setZombieName("nekosune");
+		if(FMLCommonHandler.instance().getSide()==Side.CLIENT)
+		{
+			this.func_110302_j();
+		}
 		
 	}
-	
+	protected void func_110302_j()
+    {
+        System.out.println("Setting up custom skins");
+
+        if (this.getZombieName() != null && !this.getZombieName().isEmpty())
+        {
+            this.field_110312_d = func_110311_f(this.getZombieName());
+            this.field_110313_e = func_110299_g(this.getZombieName());
+            this.field_110316_a = func_110304_a(this.field_110312_d, this.getZombieName());
+            this.field_110315_c = func_110307_b(this.field_110313_e, this.getZombieName());
+        }
+    }
+	public ThreadDownloadImageData func_110309_l()
+    {
+        return this.field_110316_a;
+    }
+
+    public ThreadDownloadImageData func_110310_o()
+    {
+        return this.field_110315_c;
+    }
+
+    public ResourceLocation func_110306_p()
+    {
+        return this.field_110312_d;
+    }
+
+    public ResourceLocation func_110303_q()
+    {
+        return this.field_110313_e;
+    }
+
+    public static ThreadDownloadImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
+    {
+        return func_110301_a(par0ResourceLocation, func_110300_d(par1Str), field_110314_b, new ImageBufferDownload());
+    }
+
+    public static ThreadDownloadImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
+    {
+        return func_110301_a(par0ResourceLocation, func_110308_e(par1Str), (ResourceLocation)null, (IImageBuffer)null);
+    }
+
+    private static ThreadDownloadImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+    {
+        TextureManager texturemanager = Minecraft.getMinecraft().func_110434_K();
+        Object object = texturemanager.func_110581_b(par0ResourceLocation);
+
+        if (object == null)
+        {
+            object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
+            texturemanager.func_110579_a(par0ResourceLocation, (TextureObject)object);
+        }
+
+        return (ThreadDownloadImageData)object;
+    }
+
+    public static String func_110300_d(String par0Str)
+    {
+        return String.format("http://skins.minecraft.net/MinecraftSkins/%s.png", new Object[] {StringUtils.stripControlCodes(par0Str)});
+    }
+
+    public static String func_110308_e(String par0Str)
+    {
+        return String.format("http://skins.minecraft.net/MinecraftCloaks/%s.png", new Object[] {StringUtils.stripControlCodes(par0Str)});
+    }
+
+    public static ResourceLocation func_110311_f(String par0Str)
+    {
+        return new ResourceLocation("skins/" + StringUtils.stripControlCodes(par0Str));
+    }
+
+    public static ResourceLocation func_110299_g(String par0Str)
+    {
+        return new ResourceLocation("cloaks/" + StringUtils.stripControlCodes(par0Str));
+    }
+
+    public static ResourceLocation func_110305_h(String par0Str)
+    {
+        return new ResourceLocation("skull/" + StringUtils.stripControlCodes(par0Str));
+    }
 	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
@@ -108,23 +208,5 @@ public class EntityPlayerZombie extends EntityZombie {
         return this.itemInUseCount;
     }
 
-	public ResourceLocation func_110306_p() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public ThreadDownloadImageData func_110309_l()
-    {
-		//TODO Add in the proepr stuff here to grab skin
-        return null;
-    }
-	public ThreadDownloadImageData func_110310_o()
-    {
-		//TODO: Add in skin grabbing part here
-        return null;
-    }
-	public ResourceLocation func_110303_q()
-    {
-		//TODO: More skin grabber
-        return null;
-    }
+	
 }

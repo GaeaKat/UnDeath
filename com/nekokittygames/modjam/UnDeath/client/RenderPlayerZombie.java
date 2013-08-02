@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -388,38 +389,74 @@ public class RenderPlayerZombie extends RenderBiped {
 	
 	protected void func_96450_a(EntityPlayerZombie par1EntityPlayerZombie, double par2, double par4, double par6, String par8Str, float par9, double par10)
     {
-        if (par10 < 100.0D)
-        {
-            Scoreboard scoreboard = par1AbstractClientPlayer.getWorldScoreboard();
-            ScoreObjective scoreobjective = scoreboard.func_96539_a(2);
 
-            if (scoreobjective != null)
-            {
-                Score score = scoreboard.func_96529_a(par1AbstractClientPlayer.getEntityName(), scoreobjective);
+        super.func_96449_a(par1EntityPlayerZombie, par2, par4, par6, par8Str, par9, par10);
+    }
 
-                if (par1AbstractClientPlayer.isPlayerSleeping())
-                {
-                    this.renderLivingLabel(par1AbstractClientPlayer, score.getScorePoints() + " " + scoreobjective.getDisplayName(), par2, par4 - 1.5D, par6, 64);
-                }
-                else
-                {
-                    this.renderLivingLabel(par1AbstractClientPlayer, score.getScorePoints() + " " + scoreobjective.getDisplayName(), par2, par4, par6, 64);
-                }
+	protected void renderPlayerSleep(EntityPlayerZombie par1EntityPlayerZombie, double par2, double par4, double par6)
+    {
 
-                par4 += (double)((float)this.getFontRendererFromRenderManager().FONT_HEIGHT * 1.15F * par9);
-            }
-        }
+            super.renderLivingAt(par1EntityPlayerZombie, par2, par4, par6);
+    }
 
-        super.func_96449_a(par1AbstractClientPlayer, par2, par4, par6, par8Str, par9, par10);
+	protected void rotatePlayer(EntityPlayerZombie par1EntityPlayerZombie, float par2, float par3, float par4)
+	{
+	        super.rotateCorpse(par1EntityPlayerZombie, par2, par3, par4);
+	}
+	
+	protected void func_96449_a(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6, String par8Str, float par9, double par10)
+    {
+        this.func_96450_a((EntityPlayerZombie)par1EntityLivingBase, par2, par4, par6, par8Str, par9, par10);
+    }
+	
+	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
+    {
+        this.renderPlayerScale((EntityPlayerZombie)par1EntityLivingBase, par2);
+    }
+
+    protected void func_82408_c(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+    {
+        this.func_130220_b((EntityPlayerZombie)par1EntityLivingBase, par2, par3);
+    }
+    
+    protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+    {
+        return this.setArmorModel((EntityPlayerZombie)par1EntityLivingBase, par2, par3);
+    }
+
+    protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
+    {
+        this.renderSpecials((EntityPlayerZombie)par1EntityLivingBase, par2);
+    }
+
+    protected void rotateCorpse(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+    {
+        this.rotatePlayer((EntityPlayerZombie)par1EntityLivingBase, par2, par3, par4);
+    }
+    protected void renderLivingAt(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6)
+    {
+        this.renderPlayerSleep((EntityPlayerZombie)par1EntityLivingBase, par2, par4, par6);
+    }
+
+    public void func_130000_a(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6, float par8, float par9)
+    {
+        this.func_130009_a((EntityPlayerZombie)par1EntityLivingBase, par2, par4, par6, par8, par9);
+    }
+    
+    @Override
+    protected ResourceLocation func_110775_a(Entity par1Entity)
+    {
+        return this.func_110817_a((EntityPlayerZombie)par1Entity);
+    }
+    
+    public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+    {
+        this.func_130009_a((EntityPlayerZombie)par1Entity, par2, par4, par6, par8, par9);
     }
 	protected ResourceLocation func_110817_a(EntityPlayerZombie par1EntityPlayerZombie)
     {
         return par1EntityPlayerZombie.func_110306_p();
     }
-	@Override
-	protected ResourceLocation func_110775_a(Entity entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }
