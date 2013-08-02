@@ -44,7 +44,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class RenderPlayerZombie extends RenderBiped {
 	
-	 	private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png");
+	 	
 	 	private static final Map<String,ResourceLocation> layerdSkins = new HashMap<String, ResourceLocation>();
 	    private ModelBiped modelBipedMain;
 	    private ModelBiped modelArmorChestplate;

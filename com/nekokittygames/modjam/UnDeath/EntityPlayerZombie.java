@@ -38,6 +38,7 @@ public class EntityPlayerZombie extends EntityZombie {
     public double field_71085_bR;
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
+    private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png");
     private ThreadDownloadImageData field_110316_a;
     private ThreadDownloadImageData field_110315_c;
     private ResourceLocation mmmm;
@@ -60,10 +61,10 @@ public class EntityPlayerZombie extends EntityZombie {
 		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"_zombie";
 	}
 	@SideOnly(Side.CLIENT)
-	public String[] getSkins()
+	public ResourceLocation[] getSkins()
 	{
 		this.field_110316_a.func_110557_a();
-		return new String[] {getSkinName(getZombieName()),"textures/entity/playerZombie.png"};
+		return new ResourceLocation[] {this.func_110306_p(),overlay};
 	}
 	public String getZombieName() {
 		return ZombieName;
