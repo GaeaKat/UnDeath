@@ -50,7 +50,7 @@ public class UnDeath {
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug PZ Spawner");
 	}
-	
+	public static int PlayerZombieId;
 	@EventHandler
 	public void Init(FMLInitializationEvent event)
 	{

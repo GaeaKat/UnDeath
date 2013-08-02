@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -243,6 +244,10 @@ public class EntityPlayerZombie extends EntityZombie {
     {
         return this.itemInUseCount;
     }
+	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
+		this.setZombieName(par7EntityPlayer.getCommandSenderName());
+		
+	}
 	
 
 
