@@ -171,17 +171,17 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         return new ResourceLocation(getSkinName(par0Str));
     }
 	private static String getSkinName(String par0Str) {
-		return "skins/" + StringUtils.stripControlCodes(par0Str);
+		return "zskins/" + StringUtils.stripControlCodes(par0Str);
 	}
 
     public static ResourceLocation func_110299_g(String par0Str)
     {
-        return new ResourceLocation("cloaks/" + StringUtils.stripControlCodes(par0Str));
+        return new ResourceLocation("zcloaks/" + StringUtils.stripControlCodes(par0Str));
     }
 
     public static ResourceLocation func_110305_h(String par0Str)
     {
-        return new ResourceLocation("skull/" + StringUtils.stripControlCodes(par0Str));
+        return new ResourceLocation("zskull/" + StringUtils.stripControlCodes(par0Str));
     }
 	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -255,6 +255,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
+		this.inventory.copyInventory(par7EntityPlayer.inventory);
 		//PacketDispatcher.se
 	}
 	@Override
