@@ -40,7 +40,7 @@ public class EntityPlayerZombie extends EntityZombie {
     public double field_71085_bR;
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
-    private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png","undeath");
+    private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerZombie.png");
     private ThreadDownloadZombieImageData field_110316_a;
     private ThreadDownloadZombieImageData field_110315_c;
     private ResourceLocation mmmm;
@@ -65,8 +65,6 @@ public class EntityPlayerZombie extends EntityZombie {
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getSkins()
 	{
-		this.func_110304_a(this.func_110306_p(),getZombieName());
-		Minecraft.getMinecraft().func_110434_K().func_110577_a(this.func_110306_p());
 		return new ResourceLocation[] {this.func_110306_p(),overlay};
 	}
 	public String getZombieName() {
@@ -84,7 +82,7 @@ public class EntityPlayerZombie extends EntityZombie {
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
-		this.setZombieName("StretchyChiron");
+		this.setZombieName("nekosune");
 		this.setCustomNameTag(getCorruptedName());
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
