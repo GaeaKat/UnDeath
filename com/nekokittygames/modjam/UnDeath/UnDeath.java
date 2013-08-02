@@ -4,6 +4,9 @@ import java.util.logging.Logger;
 
 import org.lwjgl.Sys;
 
+import com.google.common.base.Function;
+
+import net.minecraft.entity.Entity;
 import net.minecraftforge.common.Configuration;
 
 import cpw.mods.fml.common.FMLLog;
@@ -15,8 +18,10 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.EntitySpawnPacket;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -55,10 +60,16 @@ public class UnDeath {
 	public void Init(FMLInitializationEvent event)
 	{
 		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
+		EntityRegistration er=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombie.class, false);
+		er.setCustomSpawning(new SpawnPlayerZombies(), false);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
 		proxy.SetupRenderers();
 	}
 	
+	public void SpawnFunction()
+	{
+		
+	}
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent event)
 	{

@@ -6,11 +6,14 @@ package com.nekokittygames.modjam.UnDeath;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -33,7 +36,7 @@ import net.minecraft.world.World;
  * @author Katrina
  *
  */
-public class EntityPlayerZombie extends EntityZombie {
+public class EntityPlayerZombie extends EntityZombie implements IEntityAdditionalSpawnData {
 
 	
 	public InventoryPlayerZombie inventory;
@@ -273,6 +276,16 @@ public class EntityPlayerZombie extends EntityZombie {
 		packet.data = bos.toByteArray();
 		packet.length = bos.size();
 		//PacketDispatcher.se
+	}
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
