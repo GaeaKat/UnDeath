@@ -1,7 +1,16 @@
 package com.nekokittygames.modjam.UnDeath;
 
+import java.util.logging.Logger;
+
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 @Mod(modid=UnDeath.ID,name=UnDeath.NAME,version=UnDeath.VERSION,modLanguage="java")
@@ -14,4 +23,26 @@ public class UnDeath {
 	
 	@Instance(ID)
 	public static UnDeath Instance;
+	
+	@SidedProxy(clientSide="com.nekokittygames.modjam.UnDeath.client.ClientProxy",serverSide="com.nekokittygames.modjam.UnDeath.ServerProxy")
+	public ServerProxy proxy;
+	
+	public static Logger logging;
+	
+	@EventHandler
+	public void PreInit(FMLPreInitializationEvent event)
+	{
+		logging=Logger.getLogger(ID);
+		logging.setParent(FMLLog.getLogger());
+	}
+	
+	@EventHandler
+	public void Init(FMLInitializationEvent event)
+	{
+	}
+	
+	@EventHandler
+	public void PostInit(FMLPostInitializationEvent event)
+	{
+	}
 }
