@@ -35,8 +35,8 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 public class RenderPlayerZombie extends RenderBiped {
-
-	 private static final ResourceLocation field_110826_a = new ResourceLocation("textures/entity/steve.png");
+	
+	 private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png");
 	    private ModelBiped modelBipedMain;
 	    private ModelBiped modelArmorChestplate;
 	    private ModelBiped modelArmor;
