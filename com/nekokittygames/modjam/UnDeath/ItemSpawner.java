@@ -140,11 +140,12 @@ public class ItemSpawner extends Item {
                 if (entity != null && entity instanceof EntityLivingBase)
                 {
                     EntityLiving entityliving = (EntityLiving)entity;
+                    ((EntityPlayerZombie)entityliving).InitFromPlayer(par7EntityPlayer);
                     entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
                     entityliving.rotationYawHead = entityliving.rotationYaw;
                     entityliving.renderYawOffset = entityliving.rotationYaw;
                     entityliving.func_110161_a((EntityLivingData)null);
-                    ((EntityPlayerZombie)entityliving).InitFromPlayer(par7EntityPlayer);
+                    
                     par0World.spawnEntityInWorld(entity);
                     entityliving.playLivingSound();
                 }

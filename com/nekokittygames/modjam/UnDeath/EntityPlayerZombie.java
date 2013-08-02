@@ -61,7 +61,7 @@ public class EntityPlayerZombie extends EntityZombie {
 	@SideOnly(Side.CLIENT)
 	public void BuildLayeredName()
 	{
-		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"_zombie";
+		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"/zombie";
 	}
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getSkins()
@@ -84,7 +84,7 @@ public class EntityPlayerZombie extends EntityZombie {
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
-		this.setZombieName("KharonAlpua");
+		//this.setZombieName("KharonAlpua");
 		
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
@@ -247,6 +247,10 @@ public class EntityPlayerZombie extends EntityZombie {
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
+		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+		{
+			this.func_110302_j();
+		}
 		
 	}
 	
