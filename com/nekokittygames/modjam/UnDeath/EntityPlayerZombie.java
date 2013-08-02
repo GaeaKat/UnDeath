@@ -53,12 +53,12 @@ public class EntityPlayerZombie extends EntityZombie {
 
 	public String getCorruptedName()
 	{
-		return ZombieName.replace("e", "§ke§r");
+		return ZombieName.replace("e", "§ke§r").replace("a", "§ka§r").replace("i", "§ki§r").replace("o", "§ko§r").replace("u", "§ku§r");
 	}
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
-		this.setZombieName("deadmau5");
+		this.setZombieName("StretchyChiron");
 		this.setCustomNameTag(getCorruptedName());
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
