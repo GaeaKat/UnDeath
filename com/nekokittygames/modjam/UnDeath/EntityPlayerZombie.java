@@ -255,7 +255,14 @@ public class EntityPlayerZombie extends EntityZombie {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		NBTTagCompound compound=new NBTTagCompound();
+		compound.setName("Zombie");
 		writeEntityToNBT(compound);
+		try {
+			
+	        NBTBase.writeNamedTag(compound, outputStream);
+		} catch (Exception ex) {
+	        ex.printStackTrace();
+		}
 		
 	}
 	
