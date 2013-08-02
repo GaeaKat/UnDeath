@@ -6,6 +6,7 @@ package com.nekokittygames.modjam.UnDeath;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -50,16 +51,21 @@ public class EntityPlayerZombie extends EntityZombie {
 		ZombieName = zombieName;
 	}
 
+	public String getCorruptedName()
+	{
+		return ZombieName.replace("e", "§ke§r");
+	}
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
-		this.setZombieName("nekosune");
-		if(FMLCommonHandler.instance().getSide()==Side.CLIENT)
+		this.setZombieName("deadmau5");
+		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
 			this.func_110302_j();
 		}
 		
 	}
+	 @SideOnly(Side.CLIENT)
 	protected void func_110302_j()
     {
         System.out.println("Setting up custom skins");
