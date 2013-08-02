@@ -466,7 +466,7 @@ public class RenderPlayerZombie extends RenderBiped {
     	if(rl==null)
     	{
     		rl=new ResourceLocation(s);
-    		Minecraft.getMinecraft().func_110434_K().func_110579_a(rl,new LayeredTexture(par1EntityPlayerZombie.getSkins()));
+    		Minecraft.getMinecraft().func_110434_K().func_110579_a(rl,new ResourceLayeredTexture(par1EntityPlayerZombie.getSkins()));
     		layerdSkins.put(s, rl);
     	}
     	return rl;

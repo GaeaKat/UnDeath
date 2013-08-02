@@ -62,6 +62,7 @@ public class EntityPlayerZombie extends EntityZombie {
 	@SideOnly(Side.CLIENT)
 	public String[] getSkins()
 	{
+		this.field_110316_a.func_110557_a();
 		return new String[] {getSkinName(getZombieName()),"textures/entity/playerZombie.png"};
 	}
 	public String getZombieName() {
