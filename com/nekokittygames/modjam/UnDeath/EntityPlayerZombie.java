@@ -63,7 +63,8 @@ public class EntityPlayerZombie extends EntityZombie {
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getSkins()
 	{
-		this.field_110316_a.func_110557_a();
+		this.func_110304_a(this.func_110306_p(),getZombieName());
+		Minecraft.getMinecraft().func_110434_K().func_110577_a(this.func_110306_p());
 		return new ResourceLocation[] {this.func_110306_p(),overlay};
 	}
 	public String getZombieName() {
