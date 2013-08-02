@@ -21,6 +21,9 @@ public class Configs {
 	@CfgBool
 	public static Boolean KeepInventory=true;
 	
+	@CfgString
+	public static String TestString="test";
+	
 	public static void  load(Configuration config) {
 		try {
 			config.load();
