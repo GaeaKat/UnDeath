@@ -90,6 +90,7 @@ public class EntityPlayerZombie extends EntityZombie {
 		{
 			this.func_110302_j();
 		}
+		dataWatcher.updateObject(15, 0);
 		
 	}
 	 @SideOnly(Side.CLIENT)
@@ -184,6 +185,10 @@ public class EntityPlayerZombie extends EntityZombie {
         this.inventory.readFromNBT(nbttaglist);
         this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
         this.setZombieName(par1NBTTagCompound.getString("zombieName"));
+        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+		{
+			this.func_110302_j();
+		}
     }
 	
 	@Override
@@ -240,6 +245,15 @@ public class EntityPlayerZombie extends EntityZombie {
         this.field_71094_bP += d0 * 0.25D;
         this.field_71085_bR += d2 * 0.25D;
         this.field_71095_bQ += d1 * 0.25D;
+        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+		{
+        	if(dataWatcher.getWatchableObjectInt(15)==1)
+        	{
+        		this.func_110302_j();
+        		dataWatcher.updateObject(15, 0);
+        		
+        	}
+		}
 	}
 	public int getItemInUseCount()
     {
@@ -247,10 +261,7 @@ public class EntityPlayerZombie extends EntityZombie {
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
-		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-		{
-			this.func_110302_j();
-		}
+		dataWatcher.updateObject(15, 1);
 		
 	}
 	
