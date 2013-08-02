@@ -26,7 +26,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid=UnDeath.ID,name=UnDeath.NAME,version=UnDeath.VERSION,modLanguage="java")
-@NetworkMod(clientSideRequired=true,serverSideRequired=false,channels={"undeathZombie"},packetHandler=PacketHandler.class)
+@NetworkMod(clientSideRequired=true,serverSideRequired=false)
 public class UnDeath {
 	public static final String ID = "UnDeath";
 	public static final String VERSION = "1.0";
@@ -60,8 +60,6 @@ public class UnDeath {
 	public void Init(FMLInitializationEvent event)
 	{
 		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
-		EntityRegistration er=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombie.class, false);
-		er.setCustomSpawning(new SpawnPlayerZombies(), false);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
 		proxy.SetupRenderers();
 	}

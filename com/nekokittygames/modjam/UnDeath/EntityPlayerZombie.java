@@ -5,6 +5,7 @@ package com.nekokittygames.modjam.UnDeath;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -95,10 +96,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		inventory=new InventoryPlayerZombie(this);
 		//this.setZombieName("KharonAlpua");
 		
-		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-		{
-			this.func_110302_j();
-		}
+		
 		
 	}
 	 @SideOnly(Side.CLIENT)
@@ -257,34 +255,41 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream outputStream = new DataOutputStream(bos);
+		//PacketDispatcher.se
+	}
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
 		NBTTagCompound compound=new NBTTagCompound();
 		compound.setName("Zombie");
-		compound.setString("entityID", this.func_110124_au().toString());
 		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		compound.setString("zombieName", getZombieName());
 		try {
 			
-	        NBTBase.writeNamedTag(compound, outputStream);
+	        NBTBase.writeNamedTag(compound, data);
 		} catch (Exception ex) {
 	        ex.printStackTrace();
 		}
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "undeathZombie";
-		packet.data = bos.toByteArray();
-		packet.length = bos.size();
-		//PacketDispatcher.se
-	}
-	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
-		// TODO Auto-generated method stub
+		NBTTagCompound compound;
+		try {
+			compound = (NBTTagCompound) NBTBase.readNamedTag(data);
+			NBTTagList nbttaglist = compound.getTagList("Inventory");
+	        this.inventory.readFromNBT(nbttaglist);
+	        this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
+	        this.setZombieName(compound.getString("zombieName"));
+	        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+			{
+				this.func_110302_j();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 	
