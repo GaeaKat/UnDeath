@@ -22,6 +22,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -201,12 +204,12 @@ public class RenderPlayerZombie extends RenderBiped {
 
         if (par1EntityPlayerZombie.getZombieName().equals("deadmau5") && par1EntityPlayerZombie.func_110309_l().func_110557_a())
         {
-            this.func_110776_a(par1AbstractClientPlayer.func_110306_p());
+            this.func_110776_a(par1EntityPlayerZombie.func_110306_p());
 
             for (int i = 0; i < 2; ++i)
             {
-                float f3 = par1AbstractClientPlayer.prevRotationYaw + (par1AbstractClientPlayer.rotationYaw - par1AbstractClientPlayer.prevRotationYaw) * par2 - (par1AbstractClientPlayer.prevRenderYawOffset + (par1AbstractClientPlayer.renderYawOffset - par1AbstractClientPlayer.prevRenderYawOffset) * par2);
-                float f4 = par1AbstractClientPlayer.prevRotationPitch + (par1AbstractClientPlayer.rotationPitch - par1AbstractClientPlayer.prevRotationPitch) * par2;
+                float f3 = par1EntityPlayerZombie.prevRotationYaw + (par1EntityPlayerZombie.rotationYaw - par1EntityPlayerZombie.prevRotationYaw) * par2 - (par1EntityPlayerZombie.prevRenderYawOffset + (par1EntityPlayerZombie.renderYawOffset - par1EntityPlayerZombie.prevRenderYawOffset) * par2);
+                float f4 = par1EntityPlayerZombie.prevRotationPitch + (par1EntityPlayerZombie.rotationPitch - par1EntityPlayerZombie.prevRotationPitch) * par2;
                 GL11.glPushMatrix();
                 GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(f4, 1.0F, 0.0F, 0.0F);
@@ -221,21 +224,20 @@ public class RenderPlayerZombie extends RenderBiped {
             }
         }
 
-        boolean flag = par1AbstractClientPlayer.func_110310_o().func_110557_a();
-        boolean flag1 = !par1AbstractClientPlayer.isInvisible();
-        boolean flag2 = !par1AbstractClientPlayer.getHideCape();
-        flag = event.renderCape && flag;
+        boolean flag = par1EntityPlayerZombie.func_110310_o().func_110557_a();
+        boolean flag1 = !par1EntityPlayerZombie.isInvisible();
+        boolean flag2 = true;
         float f6;
 
         if (flag && flag1 && flag2)
         {
-            this.func_110776_a(par1AbstractClientPlayer.func_110303_q());
+            this.func_110776_a(par1EntityPlayerZombie.func_110303_q());
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, 0.0F, 0.125F);
-            double d0 = par1AbstractClientPlayer.field_71091_bM + (par1AbstractClientPlayer.field_71094_bP - par1AbstractClientPlayer.field_71091_bM) * (double)par2 - (par1AbstractClientPlayer.prevPosX + (par1AbstractClientPlayer.posX - par1AbstractClientPlayer.prevPosX) * (double)par2);
-            double d1 = par1AbstractClientPlayer.field_71096_bN + (par1AbstractClientPlayer.field_71095_bQ - par1AbstractClientPlayer.field_71096_bN) * (double)par2 - (par1AbstractClientPlayer.prevPosY + (par1AbstractClientPlayer.posY - par1AbstractClientPlayer.prevPosY) * (double)par2);
-            double d2 = par1AbstractClientPlayer.field_71097_bO + (par1AbstractClientPlayer.field_71085_bR - par1AbstractClientPlayer.field_71097_bO) * (double)par2 - (par1AbstractClientPlayer.prevPosZ + (par1AbstractClientPlayer.posZ - par1AbstractClientPlayer.prevPosZ) * (double)par2);
-            f6 = par1AbstractClientPlayer.prevRenderYawOffset + (par1AbstractClientPlayer.renderYawOffset - par1AbstractClientPlayer.prevRenderYawOffset) * par2;
+            double d0 = par1EntityPlayerZombie.field_71091_bM + (par1EntityPlayerZombie.field_71094_bP - par1EntityPlayerZombie.field_71091_bM) * (double)par2 - (par1EntityPlayerZombie.prevPosX + (par1EntityPlayerZombie.posX - par1EntityPlayerZombie.prevPosX) * (double)par2);
+            double d1 = par1EntityPlayerZombie.field_71096_bN + (par1EntityPlayerZombie.field_71095_bQ - par1EntityPlayerZombie.field_71096_bN) * (double)par2 - (par1EntityPlayerZombie.prevPosY + (par1EntityPlayerZombie.posY - par1EntityPlayerZombie.prevPosY) * (double)par2);
+            double d2 = par1EntityPlayerZombie.field_71097_bO + (par1EntityPlayerZombie.field_71085_bR - par1EntityPlayerZombie.field_71097_bO) * (double)par2 - (par1EntityPlayerZombie.prevPosZ + (par1EntityPlayerZombie.posZ - par1EntityPlayerZombie.prevPosZ) * (double)par2);
+            f6 = par1EntityPlayerZombie.prevRenderYawOffset + (par1EntityPlayerZombie.renderYawOffset - par1EntityPlayerZombie.prevRenderYawOffset) * par2;
             double d3 = (double)MathHelper.sin(f6 * (float)Math.PI / 180.0F);
             double d4 = (double)(-MathHelper.cos(f6 * (float)Math.PI / 180.0F));
             float f7 = (float)d1 * 10.0F;
@@ -258,10 +260,10 @@ public class RenderPlayerZombie extends RenderBiped {
                 f8 = 0.0F;
             }
 
-            float f10 = par1AbstractClientPlayer.prevCameraYaw + (par1AbstractClientPlayer.cameraYaw - par1AbstractClientPlayer.prevCameraYaw) * par2;
-            f7 += MathHelper.sin((par1AbstractClientPlayer.prevDistanceWalkedModified + (par1AbstractClientPlayer.distanceWalkedModified - par1AbstractClientPlayer.prevDistanceWalkedModified) * par2) * 6.0F) * 32.0F * f10;
+            float f10 = 0; //par1EntityPlayerZombie.prevCameraYaw + (par1EntityPlayerZombie.cameraYaw - par1EntityPlayerZombie.prevCameraYaw) * par2;
+            f7 += MathHelper.sin((par1EntityPlayerZombie.prevDistanceWalkedModified + (par1EntityPlayerZombie.distanceWalkedModified - par1EntityPlayerZombie.prevDistanceWalkedModified) * par2) * 6.0F) * 32.0F * f10;
 
-            if (par1AbstractClientPlayer.isSneaking())
+            if (par1EntityPlayerZombie.isSneaking())
             {
                 f7 += 25.0F;
             }
@@ -274,22 +276,19 @@ public class RenderPlayerZombie extends RenderBiped {
             GL11.glPopMatrix();
         }
 
-        ItemStack itemstack1 = par1AbstractClientPlayer.inventory.getCurrentItem();
+        ItemStack itemstack1 = par1EntityPlayerZombie.inventory.getCurrentItem();
 
-        if (itemstack1 != null && event.renderItem)
+        if (itemstack1 != null)
         {
             GL11.glPushMatrix();
             this.modelBipedMain.bipedRightArm.postRender(0.0625F);
             GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
-            if (par1AbstractClientPlayer.fishEntity != null)
-            {
-                itemstack1 = new ItemStack(Item.stick);
-            }
+           
 
             EnumAction enumaction = null;
 
-            if (par1AbstractClientPlayer.getItemInUseCount() > 0)
+            if (par1EntityPlayerZombie.getItemInUseCount() > 0)
             {
                 enumaction = itemstack1.getItemUseAction();
             }
@@ -328,7 +327,7 @@ public class RenderPlayerZombie extends RenderBiped {
                     GL11.glTranslatef(0.0F, -0.125F, 0.0F);
                 }
 
-                if (par1AbstractClientPlayer.getItemInUseCount() > 0 && enumaction == EnumAction.block)
+                if (par1EntityPlayerZombie.getItemInUseCount() > 0 && enumaction == EnumAction.block)
                 {
                     GL11.glTranslatef(0.05F, 0.0F, -0.1F);
                     GL11.glRotatef(-50.0F, 0.0F, 1.0F, 0.0F);
@@ -364,7 +363,7 @@ public class RenderPlayerZombie extends RenderBiped {
                     f12 = (float)(k >> 8 & 255) / 255.0F;
                     f6 = (float)(k & 255) / 255.0F;
                     GL11.glColor4f(f13, f12, f6, 1.0F);
-                    this.renderManager.itemRenderer.renderItem(par1AbstractClientPlayer, itemstack1, j);
+                    this.renderManager.itemRenderer.renderItem(par1EntityPlayerZombie, itemstack1, j);
                 }
             }
             else
@@ -374,12 +373,44 @@ public class RenderPlayerZombie extends RenderBiped {
                 f13 = (float)(j >> 8 & 255) / 255.0F;
                 f12 = (float)(j & 255) / 255.0F;
                 GL11.glColor4f(f14, f13, f12, 1.0F);
-                this.renderManager.itemRenderer.renderItem(par1AbstractClientPlayer, itemstack1, 0);
+                this.renderManager.itemRenderer.renderItem(par1EntityPlayerZombie, itemstack1, 0);
             }
 
             GL11.glPopMatrix();
         }
-        MinecraftForge.EVENT_BUS.post(new RenderPlayerEvent.Specials.Post(par1AbstractClientPlayer, this, par2));
+    }
+	
+	protected void renderPlayerScale(EntityPlayerZombie par1EntityPlayerZombie, float par2)
+    {
+        float f1 = 0.9375F;
+        GL11.glScalef(f1, f1, f1);
+    }
+	
+	protected void func_96450_a(EntityPlayerZombie par1EntityPlayerZombie, double par2, double par4, double par6, String par8Str, float par9, double par10)
+    {
+        if (par10 < 100.0D)
+        {
+            Scoreboard scoreboard = par1AbstractClientPlayer.getWorldScoreboard();
+            ScoreObjective scoreobjective = scoreboard.func_96539_a(2);
+
+            if (scoreobjective != null)
+            {
+                Score score = scoreboard.func_96529_a(par1AbstractClientPlayer.getEntityName(), scoreobjective);
+
+                if (par1AbstractClientPlayer.isPlayerSleeping())
+                {
+                    this.renderLivingLabel(par1AbstractClientPlayer, score.getScorePoints() + " " + scoreobjective.getDisplayName(), par2, par4 - 1.5D, par6, 64);
+                }
+                else
+                {
+                    this.renderLivingLabel(par1AbstractClientPlayer, score.getScorePoints() + " " + scoreobjective.getDisplayName(), par2, par4, par6, 64);
+                }
+
+                par4 += (double)((float)this.getFontRendererFromRenderManager().FONT_HEIGHT * 1.15F * par9);
+            }
+        }
+
+        super.func_96449_a(par1AbstractClientPlayer, par2, par4, par6, par8Str, par9, par10);
     }
 	protected ResourceLocation func_110817_a(EntityPlayerZombie par1EntityPlayerZombie)
     {
