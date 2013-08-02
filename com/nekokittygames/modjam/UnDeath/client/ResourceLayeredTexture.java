@@ -11,7 +11,10 @@ import javax.imageio.ImageIO;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.Resource;
 import net.minecraft.client.resources.ResourceManager;
@@ -40,16 +43,37 @@ public class ResourceLayeredTexture extends AbstractTexture {
                 if (s != null)
                 {
                 	
-                	Resource resource = par1ResourceManager.func_110536_a(s);
-                    InputStream inputstream = resource.func_110527_b();
-                    BufferedImage bufferedimage1 = ImageIO.read(inputstream);
+                	try
+                	{
+                		Resource resource = par1ResourceManager.func_110536_a(s);
+                		 InputStream inputstream = resource.func_110527_b();
+                         BufferedImage bufferedimage1 = ImageIO.read(inputstream);
 
-                    if (bufferedimage == null)
-                    {
-                        bufferedimage = new BufferedImage(bufferedimage1.getWidth(), bufferedimage1.getHeight(), 2);
-                    }
-
-                    bufferedimage.getGraphics().drawImage(bufferedimage1, 0, 0, (ImageObserver)null);
+                         if (bufferedimage == null)
+                         {
+                             bufferedimage = new BufferedImage(bufferedimage1.getWidth(), bufferedimage1.getHeight(), 2);
+                         }
+                         
+                         
+                         bufferedimage.getGraphics().drawImage(bufferedimage1, 0, 0, (ImageObserver)null);
+                	}
+                	catch(IOException e)
+                	{
+                		TextureObject object = (TextureObject)Minecraft.getMinecraft().func_110434_K().func_110581_b(s);
+                		if(object==null || ! (object instanceof ThreadDownloadZombieImageData))
+                			throw e;
+                		
+                		ThreadDownloadZombieImageData data=(ThreadDownloadZombieImageData)object;
+                		BufferedImage bufferedimage1=data.getField_110560_d();
+                		if (bufferedimage == null)
+                        {
+                            bufferedimage = new BufferedImage(bufferedimage1.getWidth(), bufferedimage1.getHeight(), 2);
+                        }
+                        
+                        
+                        bufferedimage.getGraphics().drawImage(bufferedimage1, 0, 0, (ImageObserver)null);
+                	}
+                   
                 }
             }
         }

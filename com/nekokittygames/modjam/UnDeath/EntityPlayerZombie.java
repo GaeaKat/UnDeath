@@ -3,6 +3,8 @@
  */
 package com.nekokittygames.modjam.UnDeath;
 
+import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -38,9 +40,9 @@ public class EntityPlayerZombie extends EntityZombie {
     public double field_71085_bR;
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
-    private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png");
-    private ThreadDownloadImageData field_110316_a;
-    private ThreadDownloadImageData field_110315_c;
+    private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png","undeath");
+    private ThreadDownloadZombieImageData field_110316_a;
+    private ThreadDownloadZombieImageData field_110315_c;
     private ResourceLocation mmmm;
     private ResourceLocation tsch;
     @SideOnly(Side.CLIENT)
@@ -103,12 +105,12 @@ public class EntityPlayerZombie extends EntityZombie {
             this.field_110315_c = func_110307_b(tsch, this.getZombieName());
         }
     }
-	public ThreadDownloadImageData func_110309_l()
+	public ThreadDownloadZombieImageData func_110309_l()
     {
         return this.field_110316_a;
     }
 
-    public ThreadDownloadImageData func_110310_o()
+    public ThreadDownloadZombieImageData func_110310_o()
     {
         return this.field_110315_c;
     }
@@ -123,28 +125,28 @@ public class EntityPlayerZombie extends EntityZombie {
         return this.tsch;
     }
 
-    public static ThreadDownloadImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
+    public static ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
     {
         return func_110301_a(par0ResourceLocation, func_110300_d(par1Str), field_110314_b, new ImageBufferDownload());
     }
 
-    public static ThreadDownloadImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
+    public static ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
     {
         return func_110301_a(par0ResourceLocation, func_110308_e(par1Str), (ResourceLocation)null, (IImageBuffer)null);
     }
 
-    private static ThreadDownloadImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+    private static ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
     {
         TextureManager texturemanager = Minecraft.getMinecraft().func_110434_K();
         Object object = texturemanager.func_110581_b(par0ResourceLocation);
 
         if (object == null)
         {
-            object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
+            object = new ThreadDownloadZombieImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
             texturemanager.func_110579_a(par0ResourceLocation, (TextureObject)object);
         }
 
-        return (ThreadDownloadImageData)object;
+        return (ThreadDownloadZombieImageData)object;
     }
 
     public static String func_110300_d(String par0Str)
