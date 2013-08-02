@@ -59,6 +59,7 @@ public class EntityPlayerZombie extends EntityZombie {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
 		this.setZombieName("deadmau5");
+		this.setCustomNameTag(getCorruptedName());
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
 			this.func_110302_j();
