@@ -18,6 +18,9 @@ public class Configs {
 	@Retention(RetentionPolicy.RUNTIME)
 	private static @interface CfgString {}
 	
+	@CfgBool
+	public static Boolean KeepInventory=true;
+	
 	public static void  load(Configuration config) {
 		try {
 			config.load();
@@ -38,6 +41,12 @@ public class Configs {
 						bool = config.get(Configuration.CATEGORY_GENERAL,
 								field.getName(), bool).getBoolean(bool);
 						field.setBoolean(null, bool);
+					}
+					else if(field.isAnnotationPresent(CfgString.class))
+					{
+						String string=(String)field.get(null);
+						string=config.get(Configuration.CATEGORY_GENERAL, field.getName(), string).getString();
+						field.set(null, string);
 					}
 				}
 			}

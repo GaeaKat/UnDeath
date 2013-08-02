@@ -2,6 +2,8 @@ package com.nekokittygames.modjam.UnDeath;
 
 import java.util.logging.Logger;
 
+import net.minecraftforge.common.Configuration;
+
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -34,6 +36,9 @@ public class UnDeath {
 	{
 		logging=Logger.getLogger(ID);
 		logging.setParent(FMLLog.getLogger());
+		
+		Configuration config=new Configuration(event.getSuggestedConfigurationFile());
+		Configs.load(config);
 	}
 	
 	@EventHandler
