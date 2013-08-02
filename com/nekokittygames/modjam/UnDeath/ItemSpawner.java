@@ -135,7 +135,7 @@ public class ItemSpawner extends Item {
 
             for (int j = 0; j < 1; ++j)
             {
-                entity = EntityList.createEntityByName("PlayerZombie",par0World);
+                entity = EntityList.createEntityByName("playerZombie",par0World);
 
                 if (entity != null && entity instanceof EntityLivingBase)
                 {

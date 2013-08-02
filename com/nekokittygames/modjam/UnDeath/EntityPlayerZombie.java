@@ -74,6 +74,7 @@ public class EntityPlayerZombie extends EntityZombie {
 
 	public void setZombieName(String zombieName) {
 		ZombieName = zombieName;
+		this.setCustomNameTag(getCorruptedName());
 	}
 
 	public String getCorruptedName()
@@ -84,7 +85,7 @@ public class EntityPlayerZombie extends EntityZombie {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
 		this.setZombieName("KharonAlpua");
-		this.setCustomNameTag(getCorruptedName());
+		
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
 			this.func_110302_j();
