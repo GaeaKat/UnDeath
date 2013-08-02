@@ -90,7 +90,7 @@ public class EntityPlayerZombie extends EntityZombie {
 		{
 			this.func_110302_j();
 		}
-		dataWatcher.updateObject(15, 0);
+		dataWatcher.addObject(15, Integer.valueOf(0));
 		
 	}
 	 @SideOnly(Side.CLIENT)
@@ -250,7 +250,7 @@ public class EntityPlayerZombie extends EntityZombie {
         	if(dataWatcher.getWatchableObjectInt(15)==1)
         	{
         		this.func_110302_j();
-        		dataWatcher.updateObject(15, 0);
+        		dataWatcher.updateObject(15, Integer.valueOf(0));
         		
         	}
 		}
@@ -261,7 +261,7 @@ public class EntityPlayerZombie extends EntityZombie {
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
-		dataWatcher.updateObject(15, 1);
+		dataWatcher.updateObject(15, Integer.valueOf(1));
 		
 	}
 	
