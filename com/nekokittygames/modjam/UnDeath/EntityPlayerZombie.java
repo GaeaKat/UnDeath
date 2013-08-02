@@ -10,6 +10,7 @@ import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
@@ -256,14 +258,21 @@ public class EntityPlayerZombie extends EntityZombie {
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		NBTTagCompound compound=new NBTTagCompound();
 		compound.setName("Zombie");
-		writeEntityToNBT(compound);
+		compound.setString("entityID", this.func_110124_au().toString());
+		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
+		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
+		compound.setString("zombieName", getZombieName());
 		try {
 			
 	        NBTBase.writeNamedTag(compound, outputStream);
 		} catch (Exception ex) {
 	        ex.printStackTrace();
 		}
-		
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "undeathZombie";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		//PacketDispatcher.se
 	}
 	
 
