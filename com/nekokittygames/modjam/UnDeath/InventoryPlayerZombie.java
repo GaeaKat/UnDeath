@@ -5,10 +5,16 @@ package com.nekokittygames.modjam.UnDeath;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.entity.player.CallableItemName;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ReportedException;
 
 /**
  * @author Katrina
@@ -244,32 +250,332 @@ public class InventoryPlayerZombie implements IInventory {
 	            }
 	        }
 	    }
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#getSizeInventory()
-	 */
-	@Override
-	public int getSizeInventory() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	    
+	    private int storePartialItemStack(ItemStack par1ItemStack)
+	    {
+	        int i = par1ItemStack.itemID;
+	        int j = par1ItemStack.stackSize;
+	        int k;
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#getStackInSlot(int)
-	 */
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	        if (par1ItemStack.getMaxStackSize() == 1)
+	        {
+	            k = this.getFirstEmptyStack();
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#decrStackSize(int, int)
-	 */
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	            if (k < 0)
+	            {
+	                return j;
+	            }
+	            else
+	            {
+	                if (this.mainInventory[k] == null)
+	                {
+	                    this.mainInventory[k] = ItemStack.copyItemStack(par1ItemStack);
+	                }
+
+	                return 0;
+	            }
+	        }
+	        else
+	        {
+	            k = this.storeItemStack(par1ItemStack);
+
+	            if (k < 0)
+	            {
+	                k = this.getFirstEmptyStack();
+	            }
+
+	            if (k < 0)
+	            {
+	                return j;
+	            }
+	            else
+	            {
+	                if (this.mainInventory[k] == null)
+	                {
+	                    this.mainInventory[k] = new ItemStack(i, 0, par1ItemStack.getItemDamage());
+
+	                    if (par1ItemStack.hasTagCompound())
+	                    {
+	                        this.mainInventory[k].setTagCompound((NBTTagCompound)par1ItemStack.getTagCompound().copy());
+	                    }
+	                }
+
+	                int l = j;
+
+	                if (j > this.mainInventory[k].getMaxStackSize() - this.mainInventory[k].stackSize)
+	                {
+	                    l = this.mainInventory[k].getMaxStackSize() - this.mainInventory[k].stackSize;
+	                }
+
+	                if (l > this.getInventoryStackLimit() - this.mainInventory[k].stackSize)
+	                {
+	                    l = this.getInventoryStackLimit() - this.mainInventory[k].stackSize;
+	                }
+
+	                if (l == 0)
+	                {
+	                    return j;
+	                }
+	                else
+	                {
+	                    j -= l;
+	                    this.mainInventory[k].stackSize += l;
+	                    this.mainInventory[k].animationsToGo = 5;
+	                    return j;
+	                }
+	            }
+	        }
+	    }
+	    
+	    
+	    public boolean consumeInventoryItem(int par1)
+	    {
+	        int j = this.getInventorySlotContainItem(par1);
+
+	        if (j < 0)
+	        {
+	            return false;
+	        }
+	        else
+	        {
+	            if (--this.mainInventory[j].stackSize <= 0)
+	            {
+	                this.mainInventory[j] = null;
+	            }
+
+	            return true;
+	        }
+	    }
+	    
+	    public boolean hasItem(int par1)
+	    {
+	        int j = this.getInventorySlotContainItem(par1);
+	        return j >= 0;
+	    }
+	    
+	    
+	    public boolean addItemStackToInventory(ItemStack par1ItemStack)
+	    {
+	        if (par1ItemStack == null)
+	        {
+	            return false;
+	        }
+	        else if (par1ItemStack.stackSize == 0)
+	        {
+	            return false;
+	        }
+	        else
+	        {
+	            try
+	            {
+	                int i;
+
+	                if (par1ItemStack.isItemDamaged())
+	                {
+	                    i = this.getFirstEmptyStack();
+
+	                    if (i >= 0)
+	                    {
+	                        this.mainInventory[i] = ItemStack.copyItemStack(par1ItemStack);
+	                        this.mainInventory[i].animationsToGo = 5;
+	                        par1ItemStack.stackSize = 0;
+	                        return true;
+	                    }
+	                    else
+	                    {
+	                        return false;
+	                    }
+	                }
+	                else
+	                {
+	                    do
+	                    {
+	                        i = par1ItemStack.stackSize;
+	                        par1ItemStack.stackSize = this.storePartialItemStack(par1ItemStack);
+	                    }
+	                    while (par1ItemStack.stackSize > 0 && par1ItemStack.stackSize < i);
+
+
+	                    return par1ItemStack.stackSize < i;
+
+	                }
+	            }
+	            catch (Throwable throwable)
+	            {
+	                CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Adding item to inventory");
+	                CrashReportCategory crashreportcategory = crashreport.makeCategory("Item being added");
+	                crashreportcategory.addCrashSection("Item ID", Integer.valueOf(par1ItemStack.itemID));
+	                crashreportcategory.addCrashSection("Item data", Integer.valueOf(par1ItemStack.getItemDamage()));
+	                crashreportcategory.addCrashSectionCallable("Item name", new CallableZombieItemName(this, par1ItemStack));
+	                throw new ReportedException(crashreport);
+	            }
+	        }
+	    }
+	    
+		/* (non-Javadoc)
+		 * @see net.minecraft.inventory.IInventory#decrStackSize(int, int)
+		 */
+	    @Override
+	    public ItemStack decrStackSize(int par1, int par2)
+	    {
+	        ItemStack[] aitemstack = this.mainInventory;
+
+	        if (par1 >= this.mainInventory.length)
+	        {
+	            aitemstack = this.armorInventory;
+	            par1 -= this.mainInventory.length;
+	        }
+
+	        if (aitemstack[par1] != null)
+	        {
+	            ItemStack itemstack;
+
+	            if (aitemstack[par1].stackSize <= par2)
+	            {
+	                itemstack = aitemstack[par1];
+	                aitemstack[par1] = null;
+	                return itemstack;
+	            }
+	            else
+	            {
+	                itemstack = aitemstack[par1].splitStack(par2);
+
+	                if (aitemstack[par1].stackSize == 0)
+	                {
+	                    aitemstack[par1] = null;
+	                }
+
+	                return itemstack;
+	            }
+	        }
+	        else
+	        {
+	            return null;
+	        }
+	    }
+	    
+	    /* (non-Javadoc)
+		 * @see net.minecraft.inventory.IInventory#setInventorySlotContents(int, net.minecraft.item.ItemStack)
+		 */
+	    @Override
+	    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	    {
+	        ItemStack[] aitemstack = this.mainInventory;
+
+	        if (par1 >= aitemstack.length)
+	        {
+	            par1 -= aitemstack.length;
+	            aitemstack = this.armorInventory;
+	        }
+
+	        aitemstack[par1] = par2ItemStack;
+	    }
+	    public NBTTagList writeToNBT(NBTTagList par1NBTTagList)
+	    {
+	        int i;
+	        NBTTagCompound nbttagcompound;
+
+	        for (i = 0; i < this.mainInventory.length; ++i)
+	        {
+	            if (this.mainInventory[i] != null)
+	            {
+	                nbttagcompound = new NBTTagCompound();
+	                nbttagcompound.setByte("Slot", (byte)i);
+	                this.mainInventory[i].writeToNBT(nbttagcompound);
+	                par1NBTTagList.appendTag(nbttagcompound);
+	            }
+	        }
+
+	        for (i = 0; i < this.armorInventory.length; ++i)
+	        {
+	            if (this.armorInventory[i] != null)
+	            {
+	                nbttagcompound = new NBTTagCompound();
+	                nbttagcompound.setByte("Slot", (byte)(i + 100));
+	                this.armorInventory[i].writeToNBT(nbttagcompound);
+	                par1NBTTagList.appendTag(nbttagcompound);
+	            }
+	        }
+
+	        return par1NBTTagList;
+	    }
+
+	    /**
+	     * Reads from the given tag list and fills the slots in the inventory with the correct items.
+	     */
+	    public void readFromNBT(NBTTagList par1NBTTagList)
+	    {
+	        this.mainInventory = new ItemStack[36];
+	        this.armorInventory = new ItemStack[4];
+
+	        for (int i = 0; i < par1NBTTagList.tagCount(); ++i)
+	        {
+	            NBTTagCompound nbttagcompound = (NBTTagCompound)par1NBTTagList.tagAt(i);
+	            int j = nbttagcompound.getByte("Slot") & 255;
+	            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
+
+	            if (itemstack != null)
+	            {
+	                if (j >= 0 && j < this.mainInventory.length)
+	                {
+	                    this.mainInventory[j] = itemstack;
+	                }
+
+	                if (j >= 100 && j < this.armorInventory.length + 100)
+	                {
+	                    this.armorInventory[j - 100] = itemstack;
+	                }
+	            }
+	        }
+	    }
+	    /* (non-Javadoc)
+		 * @see net.minecraft.inventory.IInventory#getSizeInventory()
+		 */
+	    @Override
+	    public int getSizeInventory()
+	    {
+	        return this.mainInventory.length + 4;
+	    }
+	    
+	    /**
+	     * Returns the stack in slot i
+	     */
+	    @Override
+	    public ItemStack getStackInSlot(int par1)
+	    {
+	        ItemStack[] aitemstack = this.mainInventory;
+
+	        if (par1 >= aitemstack.length)
+	        {
+	            par1 -= aitemstack.length;
+	            aitemstack = this.armorInventory;
+	        }
+
+	        return aitemstack[par1];
+	    }
+	    /**
+	     * Returns the name of the inventory.
+	     */
+	    @Override
+	    public String getInvName()
+	    {
+	        return "container.inventory";
+	    }
+
+	    /**
+	     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
+	     * language. Otherwise it will be used directly.
+	     */
+	    public boolean isInvNameLocalized()
+	    {
+	        return false;
+	    }
+
+
+
+
+
+
 
 	/* (non-Javadoc)
 	 * @see net.minecraft.inventory.IInventory#getStackInSlotOnClosing(int)
@@ -280,14 +586,8 @@ public class InventoryPlayerZombie implements IInventory {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#setInventorySlotContents(int, net.minecraft.item.ItemStack)
-	 */
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-
-	}
+	
+	
 
 	/* (non-Javadoc)
 	 * @see net.minecraft.inventory.IInventory#getInvName()
