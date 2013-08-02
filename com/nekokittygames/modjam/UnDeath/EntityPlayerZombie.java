@@ -3,6 +3,9 @@
  */
 package com.nekokittygames.modjam.UnDeath;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+
 import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -17,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -90,7 +94,6 @@ public class EntityPlayerZombie extends EntityZombie {
 		{
 			this.func_110302_j();
 		}
-		dataWatcher.addObject(15, Integer.valueOf(0));
 		
 	}
 	 @SideOnly(Side.CLIENT)
@@ -185,10 +188,6 @@ public class EntityPlayerZombie extends EntityZombie {
         this.inventory.readFromNBT(nbttaglist);
         this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
         this.setZombieName(par1NBTTagCompound.getString("zombieName"));
-        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-		{
-			this.func_110302_j();
-		}
     }
 	
 	@Override
@@ -245,15 +244,7 @@ public class EntityPlayerZombie extends EntityZombie {
         this.field_71094_bP += d0 * 0.25D;
         this.field_71085_bR += d2 * 0.25D;
         this.field_71095_bQ += d1 * 0.25D;
-        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-		{
-        	if(dataWatcher.getWatchableObjectInt(15)==1)
-        	{
-        		this.func_110302_j();
-        		dataWatcher.updateObject(15, Integer.valueOf(0));
-        		
-        	}
-		}
+        
 	}
 	public int getItemInUseCount()
     {
@@ -261,7 +252,10 @@ public class EntityPlayerZombie extends EntityZombie {
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
-		dataWatcher.updateObject(15, Integer.valueOf(1));
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		NBTTagCompound compound=new NBTTagCompound();
+		writeEntityToNBT(compound);
 		
 	}
 	

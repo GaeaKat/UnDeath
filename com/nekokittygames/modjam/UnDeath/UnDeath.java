@@ -21,7 +21,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid=UnDeath.ID,name=UnDeath.NAME,version=UnDeath.VERSION,modLanguage="java")
-@NetworkMod(clientSideRequired=true,serverSideRequired=false)
+@NetworkMod(clientSideRequired=true,serverSideRequired=false,channels={"undeathZombie"},packetHandler=PacketHandler.class)
 public class UnDeath {
 	public static final String ID = "UnDeath";
 	public static final String VERSION = "1.0";
