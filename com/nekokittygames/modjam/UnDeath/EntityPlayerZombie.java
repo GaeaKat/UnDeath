@@ -57,7 +57,12 @@ public class EntityPlayerZombie extends EntityZombie {
 	@SideOnly(Side.CLIENT)
 	public void BuildLayeredName()
 	{
-		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"/zombie";
+		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"_zombie";
+	}
+	@SideOnly(Side.CLIENT)
+	public String[] getSkins()
+	{
+		return new String[] {getSkinName(getZombieName()),"textures/entity/playerZombie.png"};
 	}
 	public String getZombieName() {
 		return ZombieName;

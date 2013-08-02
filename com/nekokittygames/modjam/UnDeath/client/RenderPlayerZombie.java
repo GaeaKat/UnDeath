@@ -455,7 +455,8 @@ public class RenderPlayerZombie extends RenderBiped {
     @Override
     protected ResourceLocation func_110775_a(Entity par1Entity)
     {
-        return this.func_110817_a((EntityPlayerZombie)par1Entity);
+        //return this.func_110817_a((EntityPlayerZombie)par1Entity);
+    	return this.getLayered((EntityPlayerZombie)par1Entity);
     }
     
     public ResourceLocation getLayered(EntityPlayerZombie par1EntityPlayerZombie)
@@ -465,7 +466,7 @@ public class RenderPlayerZombie extends RenderBiped {
     	if(rl==null)
     	{
     		rl=new ResourceLocation(s);
-    		Minecraft.getMinecraft().func_110434_K().func_110579_a(rl,new LayeredTexture());
+    		Minecraft.getMinecraft().func_110434_K().func_110579_a(rl,new LayeredTexture(par1EntityPlayerZombie.getSkins()));
     		layerdSkins.put(s, rl);
     	}
     	return rl;
