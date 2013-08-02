@@ -449,10 +449,15 @@ public class RenderPlayerZombie extends RenderBiped {
         return this.func_110817_a((EntityPlayerZombie)par1Entity);
     }
     
+    public ResourceLocation getLayered(EntityPlayerZombie par1EntityPlayerZombie)
+    {
+    	
+    }
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
     {
         this.func_130009_a((EntityPlayerZombie)par1Entity, par2, par4, par6, par8, par9);
     }
+    // this is where it gets the thign to render as skin
 	protected ResourceLocation func_110817_a(EntityPlayerZombie par1EntityPlayerZombie)
     {
         return par1EntityPlayerZombie.func_110306_p();

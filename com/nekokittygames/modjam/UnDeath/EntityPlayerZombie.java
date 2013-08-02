@@ -42,7 +42,18 @@ public class EntityPlayerZombie extends EntityZombie {
     private ThreadDownloadImageData field_110315_c;
     private ResourceLocation field_110312_d;
     private ResourceLocation field_110313_e;
-    
+    private String LayeredName;
+	public String getLayeredName() {
+		return LayeredName;
+	}
+
+	public void setLayeredName(String layeredName) {
+		LayeredName = layeredName;
+	}
+	public void BuildLayeredName()
+	{
+		LayeredName="skins/" + StringUtils.stripControlCodes(par0Str)+"/zombie";
+	}
 	public String getZombieName() {
 		return ZombieName;
 	}
@@ -214,6 +225,8 @@ public class EntityPlayerZombie extends EntityZombie {
     {
         return this.itemInUseCount;
     }
+	
+
 
 	
 }
