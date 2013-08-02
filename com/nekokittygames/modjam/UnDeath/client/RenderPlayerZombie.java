@@ -3,11 +3,18 @@ package com.nekokittygames.modjam.UnDeath.client;
 import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.text.LayeredHighlighter;
+
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.Maps;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerZombie;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
@@ -15,6 +22,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.texture.LayeredTexture;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,7 +44,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class RenderPlayerZombie extends RenderBiped {
 	
-	 private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png");
+	 	private static final ResourceLocation overlay=new ResourceLocation("textures/entity/playerZombie.png");
+	 	private static final Map<String,ResourceLocation> layerdSkins = new HashMap<String, ResourceLocation>();
 	    private ModelBiped modelBipedMain;
 	    private ModelBiped modelArmorChestplate;
 	    private ModelBiped modelArmor;
@@ -451,6 +460,15 @@ public class RenderPlayerZombie extends RenderBiped {
     
     public ResourceLocation getLayered(EntityPlayerZombie par1EntityPlayerZombie)
     {
+    	String s=par1EntityPlayerZombie.getLayeredName();
+    	ResourceLocation rl=layerdSkins.get(s);
+    	if(rl==null)
+    	{
+    		rl=new ResourceLocation(s);
+    		Minecraft.getMinecraft().func_110434_K().func_110579_a(rl,new LayeredTexture());
+    		layerdSkins.put(s, rl);
+    	}
+    	return rl;
     	
     }
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)

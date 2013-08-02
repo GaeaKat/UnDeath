@@ -40,19 +40,24 @@ public class EntityPlayerZombie extends EntityZombie {
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
     private ThreadDownloadImageData field_110316_a;
     private ThreadDownloadImageData field_110315_c;
-    private ResourceLocation field_110312_d;
-    private ResourceLocation field_110313_e;
+    private ResourceLocation mmmm;
+    private ResourceLocation tsch;
+    @SideOnly(Side.CLIENT)
     private String LayeredName;
+    @SideOnly(Side.CLIENT)
 	public String getLayeredName() {
-		return LayeredName;
+		if(LayeredName==null)
+			BuildLayeredName();
+    	return LayeredName;
 	}
-
+	@SideOnly(Side.CLIENT)
 	public void setLayeredName(String layeredName) {
 		LayeredName = layeredName;
 	}
+	@SideOnly(Side.CLIENT)
 	public void BuildLayeredName()
 	{
-		LayeredName="skins/" + StringUtils.stripControlCodes(par0Str)+"/zombie";
+		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"/zombie";
 	}
 	public String getZombieName() {
 		return ZombieName;
@@ -84,10 +89,10 @@ public class EntityPlayerZombie extends EntityZombie {
 
         if (this.getZombieName() != null && !this.getZombieName().isEmpty())
         {
-            this.field_110312_d = func_110311_f(this.getZombieName());
-            this.field_110313_e = func_110299_g(this.getZombieName());
-            this.field_110316_a = func_110304_a(this.field_110312_d, this.getZombieName());
-            this.field_110315_c = func_110307_b(this.field_110313_e, this.getZombieName());
+            this.mmmm = func_110311_f(this.getZombieName());
+            this.tsch = func_110299_g(this.getZombieName());
+            this.field_110316_a = func_110304_a(this.mmmm, this.getZombieName());
+            this.field_110315_c = func_110307_b(tsch, this.getZombieName());
         }
     }
 	public ThreadDownloadImageData func_110309_l()
@@ -102,12 +107,12 @@ public class EntityPlayerZombie extends EntityZombie {
 
     public ResourceLocation func_110306_p()
     {
-        return this.field_110312_d;
+        return this.mmmm;
     }
 
     public ResourceLocation func_110303_q()
     {
-        return this.field_110313_e;
+        return this.tsch;
     }
 
     public static ThreadDownloadImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
@@ -146,8 +151,11 @@ public class EntityPlayerZombie extends EntityZombie {
 
     public static ResourceLocation func_110311_f(String par0Str)
     {
-        return new ResourceLocation("skins/" + StringUtils.stripControlCodes(par0Str));
+        return new ResourceLocation(getSkinName(par0Str));
     }
+	private static String getSkinName(String par0Str) {
+		return "skins/" + StringUtils.stripControlCodes(par0Str);
+	}
 
     public static ResourceLocation func_110299_g(String par0Str)
     {
