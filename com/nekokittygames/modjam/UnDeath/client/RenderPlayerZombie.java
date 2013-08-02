@@ -9,7 +9,10 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPlayerZombie extends RenderBiped {
 
-
+	 private static final ResourceLocation field_110826_a = new ResourceLocation("textures/entity/steve.png");
+	    private ModelBiped modelBipedMain;
+	    private ModelBiped modelArmorChestplate;
+	    private ModelBiped modelArmor;
 
 	public RenderPlayerZombie(ModelBiped par1ModelBiped, float par2) {
 		super(par1ModelBiped, par2);

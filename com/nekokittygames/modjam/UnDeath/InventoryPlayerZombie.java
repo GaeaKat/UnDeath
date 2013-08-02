@@ -7,10 +7,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.entity.player.CallableItemName;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -566,81 +567,182 @@ public class InventoryPlayerZombie implements IInventory {
 	     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
 	     * language. Otherwise it will be used directly.
 	     */
+	    @Override
 	    public boolean isInvNameLocalized()
 	    {
 	        return false;
 	    }
 
+	    /**
+	     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
+	     * this more of a set than a get?*
+	     */
+	    @Override
+	    public int getInventoryStackLimit()
+	    {
+	        return 64;
+	    }
+
+	    public ItemStack armorItemInSlot(int par1)
+	    {
+	        return this.armorInventory[par1];
+	    }
+	    
+	    
+	    public int getTotalArmorValue()
+	    {
+	        int i = 0;
+
+	        for (int j = 0; j < this.armorInventory.length; ++j)
+	        {
+	            if (this.armorInventory[j] != null && this.armorInventory[j].getItem() instanceof ItemArmor)
+	            {
+	                int k = ((ItemArmor)this.armorInventory[j].getItem()).damageReduceAmount;
+	                i += k;
+	            }
+	        }
+
+	        return i;
+	    }
+	    
+	    public void damageArmor(float par1)
+	    {
+	        par1 /= 4.0F;
+
+	        if (par1 < 1.0F)
+	        {
+	            par1 = 1.0F;
+	        }
+
+	        for (int i = 0; i < this.armorInventory.length; ++i)
+	        {
+	            if (this.armorInventory[i] != null && this.armorInventory[i].getItem() instanceof ItemArmor)
+	            {
+	                this.armorInventory[i].damageItem((int)par1, this.playerZombie);
+
+	                if (this.armorInventory[i].stackSize == 0)
+	                {
+	                    this.armorInventory[i] = null;
+	                }
+	            }
+	        }
+	    }
+	    
+	    public void dropAllItems()
+	    {
+	        int i;
+
+	        for (i = 0; i < this.mainInventory.length; ++i)
+	        {
+	            if (this.mainInventory[i] != null)
+	            {
+	                this.playerZombie.entityDropItem(this.mainInventory[i], 0.0f);
+	                this.mainInventory[i] = null;
+	            }
+	        }
+
+	        for (i = 0; i < this.armorInventory.length; ++i)
+	        {
+	            if (this.armorInventory[i] != null)
+	            {
+	                this.playerZombie.entityDropItem(this.armorInventory[i], 0.0f);
+	                this.armorInventory[i] = null;
+	            }
+	        }
+	    }
+	    
+	    @Override
+	    public void onInventoryChanged()
+	    {
+	        this.inventoryChanged = true;
+	    }
+
+	    public void setItemStack(ItemStack par1ItemStack)
+	    {
+	        this.itemStack = par1ItemStack;
+	    }
+
+	    public ItemStack getItemStack()
+	    {
+	        return this.itemStack;
+	    }
+	    @Override
+	    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+			return false;
+		}
+	    
+	    public boolean hasItemStack(ItemStack par1ItemStack)
+	    {
+	        int i;
+
+	        for (i = 0; i < this.armorInventory.length; ++i)
+	        {
+	            if (this.armorInventory[i] != null && this.armorInventory[i].isItemEqual(par1ItemStack))
+	            {
+	                return true;
+	            }
+	        }
+
+	        for (i = 0; i < this.mainInventory.length; ++i)
+	        {
+	            if (this.mainInventory[i] != null && this.mainInventory[i].isItemEqual(par1ItemStack))
+	            {
+	                return true;
+	            }
+	        }
+
+	        return false;
+	    }
+
+
+	    @Override
+	    public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	    {
+	        return true;
+	    }
+
+	    public void copyInventory(InventoryPlayer par1InventoryPlayer)
+	    {
+	        int i;
+
+	        for (i = 0; i < this.mainInventory.length; ++i)
+	        {
+	            this.mainInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.mainInventory[i]);
+	        }
+
+	        for (i = 0; i < this.armorInventory.length; ++i)
+	        {
+	            this.armorInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.armorInventory[i]);
+	        }
+
+	        this.currentItem = par1InventoryPlayer.currentItem;
+	    }
+	    
+	    public void copyInventory(InventoryPlayerZombie par1InventoryPlayer)
+	    {
+	        int i;
+
+	        for (i = 0; i < this.mainInventory.length; ++i)
+	        {
+	            this.mainInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.mainInventory[i]);
+	        }
+
+	        for (i = 0; i < this.armorInventory.length; ++i)
+	        {
+	            this.armorInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.armorInventory[i]);
+	        }
+
+	        this.currentItem = par1InventoryPlayer.currentItem;
+	    }
 
 
 
-
-
-
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#getStackInSlotOnClosing(int)
-	 */
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	
-
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#getInvName()
-	 */
-	@Override
-	public String getInvName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#isInvNameLocalized()
-	 */
-	@Override
-	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#getInventoryStackLimit()
-	 */
-	@Override
-	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#onInventoryChanged()
-	 */
-	@Override
-	public void onInventoryChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#isUseableByPlayer(net.minecraft.entity.player.EntityPlayer)
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	/* (non-Javadoc)
 	 * @see net.minecraft.inventory.IInventory#openChest()
 	 */
 	@Override
 	public void openChest() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
@@ -648,17 +750,13 @@ public class InventoryPlayerZombie implements IInventory {
 	 */
 	@Override
 	public void closeChest() {
-		// TODO Auto-generated method stub
-
 	}
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#isItemValidForSlot(int, net.minecraft.item.ItemStack)
-	 */
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return false;
+	public ItemStack getStackInSlotOnClosing(int i) {
+		return null;
 	}
+
+
 
 }
