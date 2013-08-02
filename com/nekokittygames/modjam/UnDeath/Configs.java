@@ -20,7 +20,8 @@ public class Configs {
 	
 	@CfgBool
 	public static Boolean KeepInventory=true;
-	
+	@CfgId(block=false)
+	public static int debugStick=2032;
 	@CfgString
 	public static String TestString="test";
 	

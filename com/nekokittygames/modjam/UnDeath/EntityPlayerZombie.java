@@ -82,7 +82,7 @@ public class EntityPlayerZombie extends EntityZombie {
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
 		inventory=new InventoryPlayerZombie(this);
-		this.setZombieName("nekosune");
+		this.setZombieName("KharonAlpua");
 		this.setCustomNameTag(getCorruptedName());
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
@@ -181,6 +181,7 @@ public class EntityPlayerZombie extends EntityZombie {
         NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Inventory");
         this.inventory.readFromNBT(nbttaglist);
         this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
+        this.setZombieName(par1NBTTagCompound.getString("zombieName"));
     }
 	
 	@Override
@@ -189,6 +190,7 @@ public class EntityPlayerZombie extends EntityZombie {
         super.writeEntityToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
         par1NBTTagCompound.setInteger("SelectedItemSlot", this.inventory.currentItem);
+        par1NBTTagCompound.setString("zombieName", getZombieName());
     }
 	
 	@Override

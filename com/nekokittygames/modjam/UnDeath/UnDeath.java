@@ -26,7 +26,7 @@ public class UnDeath {
 	public static final String ID = "UnDeath";
 	public static final String VERSION = "1.0";
 	public static final String NAME = "Un Death";
-	
+	public static ItemSpawner spawner;
 	
 	@Instance(ID)
 	public static UnDeath Instance;
@@ -46,6 +46,9 @@ public class UnDeath {
 		Configs.load(config);
 		logging.info(Configs.TestString);
 		logging.info(Configs.KeepInventory.toString());
+		
+		spawner=new ItemSpawner(Configs.debugStick);
+		LanguageRegistry.addName(spawner, "debug PZ Spawner");
 	}
 	
 	@EventHandler
