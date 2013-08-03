@@ -60,7 +60,7 @@ public class UnDeath {
 	@EventHandler
 	public void Init(FMLInitializationEvent event)
 	{
-		//EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
+		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
 		EntityRegistry.registerModEntity(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), this, 80, 3, true);
 		EntityRegistration er=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombie.class, false);
 		er.setCustomSpawning(new SpawnPlayerZombies(), false);
