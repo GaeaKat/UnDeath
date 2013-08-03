@@ -387,8 +387,12 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
      */
     public ItemStack getCurrentItemOrArmor(int par1)
     {
+    	
         if(par1==0)
-        	return this.inventory.mainInventory[this.inventory.currentItem];
+        	if(this.inventory.currentItem==-1)
+        		return null;
+        	else
+        		return this.inventory.mainInventory[this.inventory.currentItem];
         return this.inventory.armorInventory[par1-1];
     }
     
@@ -419,6 +423,8 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     
     public ItemStack getHeldItem()
     {
+    	if(this.inventory.currentItem==-1)
+    		return null;
         return this.inventory.mainInventory[this.inventory.currentItem];
     }
 }
