@@ -46,7 +46,7 @@ import net.minecraft.world.World;
  * @author Katrina
  *
  */
-public class EntityPlayerZombie extends EntityLiving implements IEntityAdditionalSpawnData {
+public class EntityPlayerZombie extends EntityZombie implements IEntityAdditionalSpawnData {
 
 	
 	public InventoryPlayerZombie inventory;
