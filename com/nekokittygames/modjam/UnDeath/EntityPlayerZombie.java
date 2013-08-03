@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.google.common.collect.Multimap;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
@@ -25,6 +26,8 @@ import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -268,12 +271,20 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		ItemStack bestWeapon;
 		int bestLocation;
 		ItemStack currentCheck;
+		int currentScore;
 		for(int i=0;i<this.inventory.mainInventory.length;i++)
 		{
 			currentCheck=this.inventory.mainInventory[i];
 			if(currentCheck==null)
 				continue;
-			UnDeath.logging.info(currentCheck.func_111283_C().toString());
+			Multimap map=currentCheck.func_111283_C();
+			AttributeModifier obj=(AttributeModifier)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+			if(obj==null)
+				currentScore=0;
+			else
+				currentScore=(int)obj.func_111164_d();
+
+			UnDeath.logging.info(currentCheck.getEnchantmentTagList().toString());
 		}
 	}
 	@Override
