@@ -271,6 +271,8 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		for(int i=0;i<this.inventory.mainInventory.length;i++)
 		{
 			currentCheck=this.inventory.mainInventory[i];
+			if(currentCheck==null)
+				continue;
 			UnDeath.logging.info(currentCheck.func_111283_C().toString());
 		}
 	}
