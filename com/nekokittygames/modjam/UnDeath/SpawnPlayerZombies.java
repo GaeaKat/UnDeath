@@ -17,12 +17,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Katrina
  *
  */
-@SideOnly(Side.CLIENT)
 public class SpawnPlayerZombies implements Function<EntitySpawnPacket, Entity> {
 
 	@Override
-	public
-	Entity apply(EntitySpawnPacket input) {
+	@SideOnly(Side.CLIENT)
+	public 	Entity apply(EntitySpawnPacket input) {
 		UnDeath.logging.info(FMLCommonHandler.instance().getEffectiveSide().toString());
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
