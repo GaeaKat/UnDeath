@@ -7,6 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
@@ -316,8 +318,31 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     
     public ItemStack func_130225_q(int i)
     {
-        return this.inventory.armorInventory[i + 1];
+        return this.inventory.armorInventory[i];
+    }
+    
+    public void setCurrentItemOrArmor(int par1, ItemStack par2ItemStack)
+    {
+    	if(par1==0)
+        	this.inventory.mainInventory[this.inventory.currentItem]=par2ItemStack;
+    	else
+    		this.inventory.armorInventory[par1-1]=par2ItemStack;
     }
 
-	
+    public ItemStack[] getLastActiveItems()
+    {
+    	
+        return ArrayUtils.addAll(new ItemStack[] { this.inventory.mainInventory[this.inventory.currentItem]},this.inventory.armorInventory);
+    }
+    
+    @Override
+    protected void dropEquipment(boolean par1, int par2)
+    {
+    	this.inventory.dropAllItems();
+    }
+    
+    public ItemStack getHeldItem()
+    {
+        return this.inventory.mainInventory[this.inventory.currentItem];
+    }
 }
