@@ -50,6 +50,7 @@ public class UnDeath {
 		
 		Configuration config=new Configuration(event.getSuggestedConfigurationFile());
 		Configs.load(config);
+		
 		logging.info(Configs.TestString);
 		logging.info(Configs.KeepInventory.toString());
 		

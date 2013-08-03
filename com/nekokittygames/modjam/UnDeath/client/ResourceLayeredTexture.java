@@ -12,6 +12,9 @@ import javax.imageio.ImageIO;
 import com.google.common.collect.Lists;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerZombie;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureObject;
@@ -19,7 +22,7 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.Resource;
 import net.minecraft.client.resources.ResourceManager;
 import net.minecraft.util.ResourceLocation;
-
+@SideOnly(Side.CLIENT)
 public class ResourceLayeredTexture extends AbstractTexture {
 	public final List field_110567_b;
 

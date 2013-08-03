@@ -13,6 +13,9 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.collect.Maps;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerZombie;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -41,7 +44,7 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
-
+@SideOnly(Side.CLIENT)
 public class RenderPlayerZombie extends RenderBiped {
 	
 	 	
