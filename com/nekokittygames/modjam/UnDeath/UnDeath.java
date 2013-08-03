@@ -8,6 +8,7 @@ import com.google.common.base.Function;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -65,6 +66,7 @@ public class UnDeath {
 		er.setCustomSpawning(new SpawnPlayerZombies(), false);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
 		proxy.SetupRenderers();
+		MinecraftForge.EVENT_BUS.register(new PlayerEvent());
 	}
 	
 	public void SpawnFunction()
