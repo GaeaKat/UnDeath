@@ -325,6 +325,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		{
 			UnDeath.logging.info("No weapons found");
 			this.inventory.currentItem=-1;
+			return;
 		}
 		UnDeath.logging.info(String.format("Best Weapon is %s with score %d", bestWeapon.toString(),bestScore));
 		this.inventory.currentItem=bestLocation;
