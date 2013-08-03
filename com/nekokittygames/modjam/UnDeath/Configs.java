@@ -18,12 +18,17 @@ public class Configs {
 	@Retention(RetentionPolicy.RUNTIME)
 	private static @interface CfgString {}
 	
+	@Retention(RetentionPolicy.RUNTIME)
+	private static @interface CfgDouble {}
+	
 	@CfgBool
 	public static Boolean KeepInventory=true;
 	@CfgId(block=false)
 	public static int debugStick=2032;
 	@CfgString
 	public static String TestString="test";
+	@CfgDouble
+	public static double ZombificationChance=1.0;
 	
 	public static void  load(Configuration config) {
 		try {
@@ -51,6 +56,12 @@ public class Configs {
 						String string=(String)field.get(null);
 						string=config.get(Configuration.CATEGORY_GENERAL, field.getName(), string).getString();
 						field.set(null, string);
+					}
+					else if(field.isAnnotationPresent(CfgDouble.class))
+					{
+						double doub=field.getDouble(null);
+						doub=config.get(Configuration.CATEGORY_GENERAL, field.getName(), doub).getDouble(doub);
+						field.set(null, doub);
 					}
 				}
 			}
