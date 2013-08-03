@@ -194,6 +194,7 @@ public class EntityPlayerSkellington extends EntitySkeleton implements IEntityAd
 			this.setSkellingtonName(par7EntityPlayer.getCommandSenderName());
 			//this.setZombieName("Luonas");
 			this.inventory.copyInventory(par7EntityPlayer.inventory);
+			this.inventory.currentItem=1;
 			//TODO: The skellington version of this!
 			//findBestEquipment();
 			//

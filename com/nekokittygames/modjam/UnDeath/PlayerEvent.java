@@ -29,7 +29,7 @@ public class PlayerEvent {
 				double x=event.entity.posX;
 				double y=event.entity.posY;
 				double z=event.entity.posZ;
-				ItemSpawner.spawnCreature(event.entity.worldObj, x, y, z, (EntityPlayer)event.entity);
+				ItemSpawner.spawnCreature(event.entity.worldObj,1, x, y, z, (EntityPlayer)event.entity);
 				spawning=true;
 			}
 		}

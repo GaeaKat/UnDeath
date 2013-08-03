@@ -67,6 +67,9 @@ public class UnDeath {
 		EntityRegistry.registerModEntity(EntityPlayerSkellington.class, "playerSkellington", EntityRegistry.findGlobalUniqueEntityId(), this, 80, 3, true);
 		EntityRegistration er=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombie.class, false);
 		er.setCustomSpawning(new SpawnPlayerZombies(), false);
+		
+		EntityRegistration er2=EntityRegistry.instance().lookupModSpawn(EntityPlayerSkellington.class, false);
+		er2.setCustomSpawning(new SpawnPlayerSkellingtons(), false);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
 		LanguageRegistry.instance().addStringLocalization("entity.playerSkellington.name", "Player Zombie");
 		proxy.SetupRenderers();
