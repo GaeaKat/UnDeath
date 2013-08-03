@@ -52,7 +52,7 @@ public class UnDeath {
 		Configs.load(config);
 		
 		logging.info(Configs.TestString);
-		logging.info(Configs.KeepInventory.toString());
+		logging.info(Boolean.toString(Configs.KeepInventory));
 		
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug PZ Spawner");

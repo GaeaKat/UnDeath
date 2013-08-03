@@ -23,7 +23,8 @@ public class PlayerEvent {
 		{
 			Random rand=new Random();
 			int num=rand.nextInt(100);
-			if(num/100 <= Configs.ZombificationChance)
+			UnDeath.logging.info(String.format("I got %f,  and zombification chance is: %f",((double)num/100),Configs.ZombificationChance));
+			if(((float)num/100.0f) <= Configs.ZombificationChance)
 			{
 				double x=event.entity.posX;
 				double y=event.entity.posY;

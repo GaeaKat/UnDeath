@@ -3,6 +3,7 @@ package com.nekokittygames.modjam.UnDeath;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 import net.minecraftforge.common.Configuration;
 
@@ -22,7 +23,7 @@ public class Configs {
 	private static @interface CfgDouble {}
 	
 	@CfgBool
-	public static Boolean KeepInventory=true;
+	public static boolean KeepInventory=true;
 	@CfgId(block=false)
 	public static int debugStick=2032;
 	@CfgString
@@ -66,7 +67,7 @@ public class Configs {
 				}
 			}
 		} catch(Exception e) {
-			//failed to load configs log
+			UnDeath.logging.log(Level.SEVERE, "Got an error in loading config!", e);
 		} finally {
 			config.save();
 		}
