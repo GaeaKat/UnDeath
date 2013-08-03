@@ -366,7 +366,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 			{
 				this.func_110302_j();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
