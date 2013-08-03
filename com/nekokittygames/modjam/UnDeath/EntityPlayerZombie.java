@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -45,7 +46,7 @@ import net.minecraft.world.World;
  * @author Katrina
  *
  */
-public class EntityPlayerZombie extends EntityZombie implements IEntityAdditionalSpawnData {
+public class EntityPlayerZombie extends EntityLiving implements IEntityAdditionalSpawnData {
 
 	
 	public InventoryPlayerZombie inventory;
@@ -269,9 +270,9 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 	}
 	private void findBestEquipment() {
 		
-		int weaponScore;
-		ItemStack bestWeapon;
-		int bestLocation;
+		int bestScore=-1;
+		ItemStack bestWeapon=null;
+		int bestLocation=0;
 		ItemStack currentCheck;
 		int currentScore;
 		for(int i=0;i<this.inventory.mainInventory.length;i++)
@@ -313,7 +314,20 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 				}
 			}
 			UnDeath.logging.info(String.format("Item %s got score %d", currentCheck.toString(),currentScore));
+			if(currentScore>bestScore)
+			{
+				bestWeapon=currentCheck;
+				bestLocation=i;
+				bestScore=currentScore;
+			}
 		}
+		if(bestScore==-1)
+		{
+			UnDeath.logging.info("No weapons found");
+			this.inventory.currentItem=-1;
+		}
+		UnDeath.logging.info(String.format("Best Weapon is %s with score %d", bestWeapon.toString(),bestScore));
+		this.inventory.currentItem=bestLocation;
 	}
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
