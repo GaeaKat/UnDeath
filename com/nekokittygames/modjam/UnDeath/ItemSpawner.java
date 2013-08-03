@@ -24,6 +24,7 @@ public class ItemSpawner extends Item {
 		setMaxStackSize(64);
 		setCreativeTab(CreativeTabs.tabMisc);
 		setUnlocalizedName("debugSpawner");
+		func_111206_d("undeath:DebugItem");
 	}
 	
 	
