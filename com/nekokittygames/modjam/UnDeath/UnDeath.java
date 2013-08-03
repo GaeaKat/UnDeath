@@ -63,9 +63,12 @@ public class UnDeath {
 	{
 		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
 		EntityRegistry.registerModEntity(EntityPlayerZombie.class, "playerZombie", EntityRegistry.findGlobalUniqueEntityId(), this, 80, 3, true);
+		EntityRegistry.registerGlobalEntityID(EntityPlayerSkellington.class, "playerSkellington", EntityRegistry.findGlobalUniqueEntityId(), 0xff0000, 0x00ff00);
+		EntityRegistry.registerModEntity(EntityPlayerSkellington.class, "playerSkellington", EntityRegistry.findGlobalUniqueEntityId(), this, 80, 3, true);
 		EntityRegistration er=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombie.class, false);
 		er.setCustomSpawning(new SpawnPlayerZombies(), false);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
+		LanguageRegistry.instance().addStringLocalization("entity.playerSkellington.name", "Player Zombie");
 		proxy.SetupRenderers();
 		MinecraftForge.EVENT_BUS.register(new PlayerEvent());
 	}
