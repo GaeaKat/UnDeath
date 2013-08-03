@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -292,9 +293,31 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		}
 		
 		
+		
+		
 	}
 	
-
+	// Theese zombies can't be converted back
+	@Override
+	public boolean interact(EntityPlayer par1EntityPlayer)
+	{
+		return false;
+	}
+	
+	/**
+     * 0 = item, 1-n is armor
+     */
+    public ItemStack getCurrentItemOrArmor(int par1)
+    {
+        if(par1==0)
+        	return this.inventory.mainInventory[this.inventory.currentItem];
+        return this.inventory.armorInventory[par1-1];
+    }
+    
+    public ItemStack func_130225_q(int i)
+    {
+        return this.inventory.armorInventory[i + 1];
+    }
 
 	
 }
