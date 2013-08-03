@@ -6,6 +6,7 @@ package com.nekokittygames.modjam.UnDeath;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -27,6 +28,7 @@ import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -278,13 +280,19 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 			if(currentCheck==null)
 				continue;
 			Multimap map=currentCheck.func_111283_C();
-			AttributeModifier obj=(AttributeModifier)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
-			if(obj==null)
+			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+			
+			if(Attributes.size()==0)
 				currentScore=0;
 			else
-				currentScore=(int)obj.func_111164_d();
-
-			UnDeath.logging.info(currentCheck.getEnchantmentTagList().toString());
+				currentScore=(int)((AttributeModifier)Attributes.toArray()[0]).func_111164_d();
+			NBTTagList enchList=currentCheck.getEnchantmentTagList();
+			if(enchList==null)
+				currentScore+=0;
+			else
+			{
+				UnDeath.logging.info(enchList.toString());
+			}
 		}
 	}
 	@Override
