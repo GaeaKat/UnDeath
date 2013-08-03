@@ -40,7 +40,7 @@ protected ResourceLocation func_110775_a(Entity par1Entity)
 
 public ResourceLocation getLayered(EntityPlayerSkellington par1EntityPlayerSkellington)
 {
-	String s=par1EntityPlayerZombie.getLayeredName();
+	String s=par1EntityPlayerSkellington.getLayeredName();
 	ResourceLocation rl=layerdSkins.get(s);
 	if(rl==null)
 	{

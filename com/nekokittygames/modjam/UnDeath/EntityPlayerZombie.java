@@ -53,12 +53,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 	public InventoryPlayerZombie inventory;
 	private int itemInUseCount=100; //TODO: For now until I can experiment with how to deal withthis
 	private String ZombieName="";
-	public double field_71091_bM;
-    public double field_71096_bN;
-    public double field_71097_bO;
-    public double field_71094_bP;
-    public double field_71095_bQ;
-    public double field_71085_bR;
+
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
     private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerZombie.png");
@@ -214,53 +209,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         par1NBTTagCompound.setString("zombieName", getZombieName());
     }
 	
-	@Override
-	public void onUpdate()
-	{
-		super.onUpdate();
-		this.field_71091_bM = this.field_71094_bP;
-        this.field_71096_bN = this.field_71095_bQ;
-        this.field_71097_bO = this.field_71085_bR;
-        double d0 = this.posX - this.field_71094_bP;
-        double d1 = this.posY - this.field_71095_bQ;
-        double d2 = this.posZ - this.field_71085_bR;
-        double d3 = 10.0D;
 
-        if (d0 > d3)
-        {
-            this.field_71091_bM = this.field_71094_bP = this.posX;
-        }
-
-        if (d2 > d3)
-        {
-            this.field_71097_bO = this.field_71085_bR = this.posZ;
-        }
-
-        if (d1 > d3)
-        {
-            this.field_71096_bN = this.field_71095_bQ = this.posY;
-        }
-
-        if (d0 < -d3)
-        {
-            this.field_71091_bM = this.field_71094_bP = this.posX;
-        }
-
-        if (d2 < -d3)
-        {
-            this.field_71097_bO = this.field_71085_bR = this.posZ;
-        }
-
-        if (d1 < -d3)
-        {
-            this.field_71096_bN = this.field_71095_bQ = this.posY;
-        }
-
-        this.field_71094_bP += d0 * 0.25D;
-        this.field_71085_bR += d2 * 0.25D;
-        this.field_71095_bQ += d1 * 0.25D;
-        
-	}
 	public int getItemInUseCount()
     {
         return this.itemInUseCount;

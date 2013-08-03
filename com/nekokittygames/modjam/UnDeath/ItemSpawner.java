@@ -1,9 +1,15 @@
 package com.nekokittygames.modjam.UnDeath;
 
+import java.util.Iterator;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,6 +31,7 @@ public class ItemSpawner extends Item {
 		setCreativeTab(CreativeTabs.tabMisc);
 		setUnlocalizedName("debugSpawner");
 		func_111206_d("undeath:DebugItem");
+		this.setHasSubtypes(true);
 	}
 	
 	
@@ -47,7 +54,7 @@ public class ItemSpawner extends Item {
                 d0 = 0.5D;
             }
 
-            Entity entity = spawnCreature(par3World, (double)par4 + 0.5D, (double)par5 + d0, (double)par6 + 0.5D,par2EntityPlayer);
+            Entity entity = spawnCreature(par3World, par1ItemStack.getItemDamage(),(double)par4 + 0.5D, (double)par5 + d0, (double)par6 + 0.5D,par2EntityPlayer);
 
             if (entity != null)
             {
@@ -103,7 +110,7 @@ public class ItemSpawner extends Item {
 
                     if (par2World.getBlockMaterial(i, j, k) == Material.water)
                     {
-                        Entity entity = spawnCreature(par2World, (double)i, (double)j, (double)k,par3EntityPlayer);
+                        Entity entity = spawnCreature(par2World, par1ItemStack.getItemDamage(),(double)i, (double)j, (double)k,par3EntityPlayer);
 
                         if (entity != null)
                         {
@@ -129,7 +136,7 @@ public class ItemSpawner extends Item {
      * Spawns the creature specified by the egg's type in the location specified by the last three parameters.
      * Parameters: world, entityID, x, y, z.
      */
-    public static Entity spawnCreature(World par0World,  double par2, double par4, double par6,EntityPlayer par7EntityPlayer)
+    public static Entity spawnCreature(World par0World, int itemDamage, double par2, double par4, double par6,EntityPlayer par7EntityPlayer)
     {
         
             Entity entity = null;
@@ -154,4 +161,16 @@ public class ItemSpawner extends Item {
 
             return entity;
         }
+    
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+     */
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    {
+        
+            par3List.add(new ItemStack(par1, 1, 1));
+            par3List.add(new ItemStack(par1, 1, 2));
+    }
 }
