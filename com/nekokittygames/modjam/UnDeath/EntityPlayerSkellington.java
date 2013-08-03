@@ -16,8 +16,10 @@ import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 
-public class EntityPlayerSkellington extends EntitySkeleton implements IEntityAdditionalSpawnData {
+public class EntityPlayerSkellington extends EntityMob implements IEntityAdditionalSpawnData {
 
 	
 	public InventoryPlayerSkellington inventory;
@@ -35,7 +37,7 @@ public class EntityPlayerSkellington extends EntitySkeleton implements IEntityAd
 
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
-    private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerZombie.png");
+    private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerSkellington.png");
     private ThreadDownloadZombieImageData field_110316_a;
     private ThreadDownloadZombieImageData field_110315_c;
     private ResourceLocation mmmm;
@@ -294,6 +296,11 @@ public class EntityPlayerSkellington extends EntitySkeleton implements IEntityAd
 	    	if(this.inventory.currentItem==-1)
 	    		return null;
 	        return this.inventory.mainInventory[this.inventory.currentItem];
+	    }
+	    
+	    public void setCombatTask()
+	    {
+	        
 	    }
 
 }
