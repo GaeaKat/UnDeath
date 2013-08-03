@@ -9,6 +9,8 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 
 public class PlayerEvent {
 
+	public boolean spawning=false;
+	
 	@ForgeSubscribe
 	public void PlayerDies(LivingDeathEvent event)
 	{
@@ -27,8 +29,17 @@ public class PlayerEvent {
 				double y=event.entity.posY;
 				double z=event.entity.posZ;
 				ItemSpawner.spawnCreature(event.entity.worldObj, x, y, z, (EntityPlayer)event.entity);
-				event.setCanceled(true);
+				spawning=true;
 			}
 		}
+	}
+	@ForgeSubscribe
+	public void PlayerDrops(PlayerDropsEvent event)
+	{
+		if(spawning=true)
+		{
+			event.setCanceled(true);
+			spawning=false;
+	}
 	}
 }

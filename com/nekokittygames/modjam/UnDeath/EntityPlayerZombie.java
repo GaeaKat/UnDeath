@@ -411,7 +411,8 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 
     public ItemStack[] getLastActiveItems()
     {
-    	
+    	if(this.inventory.currentItem==-1)
+    		return ArrayUtils.addAll(new ItemStack[] { null},this.inventory.armorInventory);
         return ArrayUtils.addAll(new ItemStack[] { this.inventory.mainInventory[this.inventory.currentItem]},this.inventory.armorInventory);
     }
     
