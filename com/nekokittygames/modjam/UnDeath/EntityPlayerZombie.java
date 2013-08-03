@@ -294,10 +294,25 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 				for(int j=0;j<enchList.tagCount();j++)
 				{
 					NBTTagCompound comp=(NBTTagCompound)enchList.tagAt(j);
-					int enchId=comp.getInteger("id");
-					int enchLvl=comp.getInteger("lvl");
+					int enchId=comp.getShort("id");
+					int enchLvl=comp.getShort("lvl");
+					switch(enchId)
+					{
+					case 16:
+						currentScore+=(1*enchLvl);
+						break;
+					case 19:
+						currentScore+=(1*enchLvl);
+						break;
+					case 20:
+						currentScore+=(2*enchLvl);
+						break;
+					default:
+						currentScore+=1;
+					}
 				}
 			}
+			UnDeath.logging.info(String.format("Item %s got score %d", currentCheck.toString(),currentScore));
 		}
 	}
 	@Override
