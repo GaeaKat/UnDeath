@@ -265,7 +265,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     }
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		//this.setZombieName(par7EntityPlayer.getCommandSenderName());
-		this.setZombieName("luonas");
+		this.setZombieName("nekosune");
 		this.inventory.copyInventory(par7EntityPlayer.inventory);
 		findBestEquipment();
 		//
