@@ -240,6 +240,11 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	    {
 	        return true;
 	    }
+		
+		// Add in other funcs here
+		
+		
+		
 		public EntityLivingData func_110161_a(EntityLivingData par1EntityLivingData)
 		{
 			return null;
