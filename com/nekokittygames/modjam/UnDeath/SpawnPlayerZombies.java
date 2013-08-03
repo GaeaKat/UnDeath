@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import com.google.common.base.Function;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.EntitySpawnPacket;
 
 /**
@@ -20,6 +21,7 @@ public class SpawnPlayerZombies implements Function<EntitySpawnPacket, Entity> {
 	public
 	Entity apply(EntitySpawnPacket input) {
 		return new EntityPlayerZombie(FMLClientHandler.instance().getClient().theWorld);
+		//new EntityPlayerZombie(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(input.))
 	}
 
 }
