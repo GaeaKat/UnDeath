@@ -259,7 +259,20 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
 		this.inventory.copyInventory(par7EntityPlayer.inventory);
+		findBestEquipment();
 		//
+	}
+	private void findBestEquipment() {
+		
+		int weaponScore;
+		ItemStack bestWeapon;
+		int bestLocation;
+		ItemStack currentCheck;
+		for(int i=0;i<this.inventory.mainInventory.length;i++)
+		{
+			currentCheck=this.inventory.mainInventory[i];
+			UnDeath.logging.info(currentCheck.func_111283_C().toString());
+		}
 	}
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
