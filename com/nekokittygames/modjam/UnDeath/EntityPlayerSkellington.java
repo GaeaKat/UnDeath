@@ -221,8 +221,8 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	        return this.itemInUseCount;
 	    }
 		public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
-			this.setSkellingtonName(par7EntityPlayer.getCommandSenderName());
-			//this.setZombieName("Luonas");
+			//this.setSkellingtonName(par7EntityPlayer.getCommandSenderName());
+			this.setSkellingtonName("nekosune");
 			this.inventory.copyInventory(par7EntityPlayer.inventory);
 			this.inventory.currentItem=1;
 			//TODO: The skellington version of this!
