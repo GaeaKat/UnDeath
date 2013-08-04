@@ -72,6 +72,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	private ThreadDownloadZombieImageData field_110315_c;
 	private ResourceLocation mmmm;
 	private ResourceLocation tsch;
+	private boolean usingBow;
 	@SideOnly(Side.CLIENT)
 	private String LayeredName;
 	@SideOnly(Side.CLIENT)
@@ -271,7 +272,9 @@ private void findBestEquipment() {
 		if(hasBow && arrows>0)
 		{
 			UnDeath.logging.info("Using bow found");
+			usingBow=true;
 			this.setCurrentItem(bestLocation);
+			
 			return;
 			
 		}
@@ -328,6 +331,7 @@ private void findBestEquipment() {
 			return;
 		}
 		UnDeath.logging.info(String.format("Best Weapon is %s with score %d", bestWeapon.toString(),bestScore));
+		usingBow=false;
 		this.setCurrentItem(bestLocation);
 	}
 
@@ -443,7 +447,10 @@ private void findBestEquipment() {
         {
             this.setSize(0.72F, 2.34F);
         }
-
+        if(usingBow && !inventory.hasItem(Item.arrow.itemID) )
+        {
+        	findBestEquipment();
+        }
         super.onLivingUpdate();
     }
     
@@ -586,7 +593,7 @@ private void findBestEquipment() {
 	{
 		this.tasks.removeTask(this.aiAttackOnCollide);
         this.tasks.removeTask(this.aiArrowAttack);
-		if(this.getCurrentItemOrArmor(0).getItem() instanceof ItemBow)
+		if(usingBow && this.getCurrentItemOrArmor(0).getItem() instanceof ItemBow )
 			this.tasks.addTask(4, this.aiArrowAttack);
 		else
 			this.tasks.addTask(4, this.aiAttackOnCollide);
@@ -618,6 +625,8 @@ private void findBestEquipment() {
 
         this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.worldObj.spawnEntityInWorld(entityarrow);
+        inventory.consumeInventoryItem(Item.arrow.itemID);
+        
 
 	}
 
