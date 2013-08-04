@@ -40,6 +40,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.GameRules;
@@ -231,7 +232,18 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		{
 			setDropItems();
 		}
+		copyPotionEffects(par7EntityPlayer);
 		//
+	}
+	public void copyPotionEffects(EntityPlayer player)
+	{
+		Collection<PotionEffect> effects=player.getActivePotionEffects();
+		for(PotionEffect effect:effects)
+		{
+			PotionEffect toEffect=new PotionEffect(effect);
+			this.addPotionEffect(toEffect);
+		}
+		
 	}
 	private void setDropItems() {
 		GameRules gr=this.worldObj.getGameRules();

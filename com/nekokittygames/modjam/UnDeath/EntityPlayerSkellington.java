@@ -251,6 +251,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		findBestEquipment();
 		if(!this.worldObj.isRemote)
 			setDropItems();
+		copyPotionEffects(par7EntityPlayer);
 		//
 	}
 
@@ -258,7 +259,16 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		GameRules gr=this.worldObj.getGameRules();
 		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
 	}
-	
+	public void copyPotionEffects(EntityPlayer player)
+	{
+		Collection<PotionEffect> effects=player.getActivePotionEffects();
+		for(PotionEffect effect:effects)
+		{
+			PotionEffect toEffect=new PotionEffect(effect);
+			this.addPotionEffect(toEffect);
+		}
+		
+	}
 
 private void findBestEquipment() {
 		
