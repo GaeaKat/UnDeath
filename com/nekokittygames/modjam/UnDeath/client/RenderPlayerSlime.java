@@ -119,46 +119,53 @@ public class RenderPlayerSlime extends RenderLiving {
     protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
     {
         this.scaleSlime((EntityPlayerSlime)par1EntityLivingBase, par2);
-        EntityPlayerSlime pSlime=(EntityPlayerSlime)par1EntityLivingBase;
-      		rand.setSeed(1337L);
-      		float shiftX;
-              float shiftY;
-              float shiftZ;
-              int shift = 0;
-              float blockScale = 0.70F;//*(1f/pSlime.getSlimeSize());
-      		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
-      		GL11.glPushMatrix();
-      		GL11.glDisable(GL11.GL_LIGHTING);
-      		GL11.glTranslatef((float)pSlime.posX, (float)pSlime.posY, (float)pSlime.posZ);
-      		EntityItem custItem=new EntityItem(pSlime.worldObj);
-      		custItem.hoverStart=0f;
-      		for(ItemStack item:pSlime.items)
-      		{
-      			if(shift>=posShifts.length)
-      				break;
-      			if(item==null)
-      			{
-      				shift++;
-      				continue;
-      			}
-      			shiftX=posShifts[shift][0];
-      			shiftY=posShifts[shift][1];
-      			shiftZ=posShifts[shift][2];
-      			shift++;
-      			GL11.glPushMatrix();
-      			GL11.glTranslatef(shiftX, shiftY, shiftZ);
-      			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
-      			GL11.glScalef(blockScale, blockScale, blockScale);
-      			custItem.setEntityItemStack(item);
-      			itemRenderer.doRenderItem(custItem, 0, 0, 0, 0, 0);
-      			GL11.glPopMatrix();
-      		}
-      		GL11.glEnable(GL11.GL_LIGHTING);
-      		GL11.glPopMatrix();
-      		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        
     }
 
-    /**
+    @Override
+	public void doRender(Entity par1Entity, double par2, double par4,
+			double par6, float par8, float par9) {
+    	EntityPlayerSlime pSlime=(EntityPlayerSlime)par1Entity;
+  		rand.setSeed(1337L);
+  		float shiftX;
+          float shiftY;
+          float shiftZ;
+          int shift = 0;
+          float blockScale = 0.70F;//*(1f/pSlime.getSlimeSize());
+  		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
+  		GL11.glPushMatrix();
+  		GL11.glDisable(GL11.GL_LIGHTING);
+  		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
+  		EntityItem custItem=new EntityItem(pSlime.worldObj);
+  		custItem.hoverStart=0f;
+  		for(ItemStack item:pSlime.items)
+  		{
+  			if(shift>=posShifts.length)
+  				break;
+  			if(item==null)
+  			{
+  				shift++;
+  				continue;
+  			}
+  			shiftX=posShifts[shift][0];
+  			shiftY=posShifts[shift][1];
+  			shiftZ=posShifts[shift][2];
+  			shift++;
+  			GL11.glPushMatrix();
+  			GL11.glTranslatef(shiftX, shiftY, shiftZ);
+  			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
+  			GL11.glScalef(blockScale, blockScale, blockScale);
+  			custItem.setEntityItemStack(item);
+  			itemRenderer.doRenderItem(custItem, 0, 0, 0, 0, 0);
+  			GL11.glPopMatrix();
+  		}
+  		GL11.glEnable(GL11.GL_LIGHTING);
+  		GL11.glPopMatrix();
+  		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		super.doRender(par1Entity, par2, par4, par6, par8, par9);
+	}
+
+	/**
      * Queries whether should render the specified pass or not.
      */
     protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
