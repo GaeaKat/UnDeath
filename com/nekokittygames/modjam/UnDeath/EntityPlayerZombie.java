@@ -411,4 +411,8 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     		return null;
         return this.inventory.mainInventory[this.inventory.currentItem];
     }
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 }

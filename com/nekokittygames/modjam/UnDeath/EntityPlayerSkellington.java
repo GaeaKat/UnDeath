@@ -657,5 +657,9 @@ private void findBestEquipment() {
         
 
 	}
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 
 }

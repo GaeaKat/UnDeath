@@ -54,6 +54,44 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		}
 	}
 
+	@Override
+	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) {
+		// TODO Auto-generated method stub
+		super.writeEntityToNBT(par1nbtTagCompound);
+		par1nbtTagCompound.setBoolean("dropItems", dropItems);
+		NBTTagList nbtTagList=new NBTTagList();
+		for(int i=0;i<items.length;i++)
+		{
+			if(items[i]!=null)
+			{
+				NBTTagCompound comp=new NBTTagCompound();
+				items[i].writeToNBT(comp);
+				nbtTagList.appendTag(comp);
+			}
+		}
+		par1nbtTagCompound.setTag("Inventory", nbtTagList);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) {
+		// TODO Auto-generated method stub
+		super.readEntityFromNBT(par1nbtTagCompound);
+		this.dropItems=par1nbtTagCompound.getBoolean("dropItem");
+		NBTTagList nbttaglist = par1nbtTagCompound.getTagList("Inventory");
+		items=new ItemStack[41];
+		for (int i = 0; i < nbttaglist.tagCount(); ++i)
+        {
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
+            items[i]=itemstack;
+        }
+	}
+
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+
 	public void InitFromPlayer(EntityPlayer player,EntitySlime slime)
 	{
 		if(slime!=null)
