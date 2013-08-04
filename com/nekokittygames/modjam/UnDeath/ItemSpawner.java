@@ -21,6 +21,7 @@ import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.Facing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemSpawner extends Item {
@@ -34,7 +35,18 @@ public class ItemSpawner extends Item {
 		this.setHasSubtypes(true);
 	}
 	
-	
+	public String getItemDisplayName(ItemStack par1ItemStack)
+	{
+		String s = ("" + StatCollector.translateToLocal(this.getUnlocalizedName() + ".name")).trim();
+        String s1 = EntityList.getStringFromID(par1ItemStack.getItemDamage());
+
+        if (s1 != null)
+        {
+            s = s + " " + StatCollector.translateToLocal("entity." + s1 + ".name");
+        }
+
+        return s;
+	}
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
         if (par3World.isRemote)
@@ -143,19 +155,14 @@ public class ItemSpawner extends Item {
 
             for (int j = 0; j < 1; ++j)
             {
-            	if(itemDamage==1)
-            		entity = EntityList.createEntityByName("playerZombie",par0World);
-            	else if(itemDamage==2)
-            		entity = EntityList.createEntityByName("playerSkellington",par0World);
-            	else
-            		entity = EntityList.createEntityByName("playerSlime",par0World);
+            		entity = EntityList.createEntityByID(itemDamage,par0World);
 
                 if (entity != null && entity instanceof EntityLivingBase)
                 {
                     EntityLiving entityliving = (EntityLiving)entity;
-                    if(itemDamage==1)
+                    if(itemDamage==EntityPlayerZombie.EntityId)
                     	((EntityPlayerZombie)entityliving).InitFromPlayer(par7EntityPlayer);
-                    else if(itemDamage==2)
+                    else if(itemDamage==EntityPlayerSkellington.EntityId)
                     	((EntityPlayerSkellington)entityliving).InitFromPlayer(par7EntityPlayer);
                     entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
                     entityliving.rotationYawHead = entityliving.rotationYaw;
@@ -178,8 +185,8 @@ public class ItemSpawner extends Item {
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         
-            par3List.add(new ItemStack(par1, 1, 1));
-            par3List.add(new ItemStack(par1, 1, 2));
-            par3List.add(new ItemStack(par1, 1, 3));
+            par3List.add(new ItemStack(par1, 1, EntityPlayerZombie.EntityId));
+            par3List.add(new ItemStack(par1, 1, EntityPlayerSkellington.EntityId));
+            par3List.add(new ItemStack(par1, 1, EntityPlayerSlime.EntityId));
     }
 }

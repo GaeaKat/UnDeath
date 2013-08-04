@@ -55,7 +55,7 @@ public class UnDeath {
 		logging.info(Boolean.toString(Configs.KeepInventory));
 		
 		spawner=new ItemSpawner(Configs.debugStick);
-		LanguageRegistry.addName(spawner, "debug PZ Spawner");
+		LanguageRegistry.addName(spawner, "debug Spawner");
 	}
 	public static int PlayerZombieId;
 	@EventHandler
@@ -66,9 +66,15 @@ public class UnDeath {
 		
 		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", playerZombieId, 0xff0000, 0x00ff00);
 		int playerSkellingtonId=EntityRegistry.findGlobalUniqueEntityId();
+		
 		EntityRegistry.registerGlobalEntityID(EntityPlayerSkellington.class, "playerSkellington", playerSkellingtonId, 0xff0000, 0x00ff00);
 		int playerSlimeId=EntityRegistry.findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntityPlayerSlime.class, "playerSlime", playerSlimeId, 0xff0000, 0x00ff00);
+		
+		EntityPlayerZombie.EntityId=playerZombieId;
+		EntityPlayerSkellington.EntityId=playerSkellingtonId;
+		EntityPlayerSlime.EntityId=playerSlimeId;
+		
 		// Register entries
 		EntityRegistry.registerModEntity(EntityPlayerZombie.class, "playerZombie", playerZombieId, this, 80, 3, true);
 		EntityRegistry.registerModEntity(EntityPlayerSkellington.class, "playerSkellington", playerSkellingtonId, this, 80, 3, true);
@@ -80,7 +86,8 @@ public class UnDeath {
 		EntityRegistration er2=EntityRegistry.instance().lookupModSpawn(EntityPlayerSkellington.class, false);
 		er2.setCustomSpawning(new SpawnPlayerSkellingtons(), false);
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
-		LanguageRegistry.instance().addStringLocalization("entity.playerSkellington.name", "Player Zombie");
+		LanguageRegistry.instance().addStringLocalization("entity.playerSkellington.name", "Player Skellington");
+		LanguageRegistry.instance().addStringLocalization("entity.playerSlime.name", "Player Slime");
 		proxy.SetupRenderers();
 		MinecraftForge.EVENT_BUS.register(new PlayerEvent());
 	}

@@ -52,7 +52,7 @@ import net.minecraft.world.World;
  */
 public class EntityPlayerZombie extends EntityZombie implements IEntityAdditionalSpawnData {
 
-	
+	public static int EntityId;
 	public InventoryPlayerZombie inventory;
 	private int itemInUseCount=100; //TODO: For now until I can experiment with how to deal withthis
 	private String ZombieName="";

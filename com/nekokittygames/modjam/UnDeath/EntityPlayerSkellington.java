@@ -59,7 +59,7 @@ import net.minecraft.world.World;
 
 public class EntityPlayerSkellington extends EntityMob implements IEntityAdditionalSpawnData,IRangedAttackMob {
 
-
+	public static int EntityId;
 	private EntityAIArrowAttack aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F);
 	private EntityAIAttackOnCollide aiAttackOnCollide = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
 
