@@ -94,7 +94,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 
 	public String getCorruptedName()
 	{
-		return ZombieName.replace("e", "§ke§r").replace("a", "§ka§r").replace("i", "§ki§r").replace("o", "§ko§r").replace("u", "§ku§r");
+		return ZombieName.replace("e", "\u00A7ke\u00A7r").replace("a", "\u00A7ka\u00A7r").replace("i", "\u00A7ki\u00A7r").replace("o", "\u00A7ko\u00A7r").replace("u", "\u00A7ku\u00A7r");
 	}
 	public EntityPlayerZombie(World par1World) {
 		super(par1World);
