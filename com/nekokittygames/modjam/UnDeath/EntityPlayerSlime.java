@@ -62,8 +62,7 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 			slime.isDead=true;
 		}
 		
-		System.arraycopy(player.inventory.mainInventory, 0, items, 0, player.inventory.mainInventory.length);
-		System.arraycopy(player.inventory.armorInventory, 0, items, player.inventory.mainInventory.length, player.inventory.armorInventory.length);
+		copyInventory(player.inventory);
 		ItemStack head=new ItemStack(Item.skull, 1, 3);
 		NBTTagCompound compound= head.getTagCompound();
 		if(compound==null)
@@ -76,7 +75,17 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 	}
 	public void copyInventory(InventoryPlayer playerInv)
 	{
-		
+		int i;
+		for (i = 0; i < playerInv.mainInventory.length; ++i)
+        {
+            items[i] = ItemStack.copyItemStack(playerInv.mainInventory[i]);
+        }
+
+        for (i = 0; i < playerInv.armorInventory.length; ++i)
+        {
+            items[36+i] = ItemStack.copyItemStack(playerInv.armorInventory[i]);
+        }
+
 	}
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
