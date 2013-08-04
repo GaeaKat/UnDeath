@@ -152,7 +152,7 @@ public class RenderPlayerSlime extends RenderLiving {
   			shiftZ=posShifts[shift][2];
   			shift++;
   			GL11.glPushMatrix();
-  			//GL11.glTranslatef(shiftX, shiftY, shiftZ);
+  			//GL11.glTranslatef(shiftX, shiftY, shiftZ); this
   			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
   			GL11.glScalef(blockScale, blockScale, blockScale);
   			custItem.setEntityItemStack(item);
