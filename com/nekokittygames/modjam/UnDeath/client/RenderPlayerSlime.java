@@ -39,7 +39,7 @@ public class RenderPlayerSlime extends RenderLiving {
 
 			@Override
 			public boolean shouldBob() {
-				return true;
+				return false;
 			}
 
 			@Override
@@ -63,46 +63,7 @@ public class RenderPlayerSlime extends RenderLiving {
     	EntityPlayerSlime pSlime=(EntityPlayerSlime)par1EntityLivingBase;
 		// TODO Auto-generated method stub
 		super.passSpecialRender(par1EntityLivingBase, x, y, z);
-		GL11.glEnable(GL11.GL_NORMALIZE);
-		GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		rand.setSeed(1337L);
-		float shiftX;
-        float shiftY;
-        float shiftZ;
-        int shift = 0;
-        float blockScale = 0.70F;//*(1f/pSlime.getSlimeSize());
-		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
-		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glTranslatef((float)x, (float)y, (float)z);
-		EntityItem custItem=new EntityItem(pSlime.worldObj);
-		custItem.hoverStart=0f;
-		for(ItemStack item:pSlime.items)
-		{
-			if(shift>=posShifts.length)
-				break;
-			if(item==null)
-			{
-				shift++;
-				continue;
-			}
-			shiftX=posShifts[shift][0];
-			shiftY=posShifts[shift][1];
-			shiftZ=posShifts[shift][2];
-			shift++;
-			GL11.glPushMatrix();
-			GL11.glTranslatef(shiftX, shiftY, shiftZ);
-			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
-			GL11.glScalef(blockScale, blockScale, blockScale);
-			custItem.setEntityItemStack(item);
-			itemRenderer.doRenderItem(custItem, 0, 0, 0, 0, 0);
-			GL11.glPopMatrix();
-		}
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPopMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		
 	}
 
@@ -127,7 +88,7 @@ public class RenderPlayerSlime extends RenderLiving {
         {
             if (par2 == 1)
             {
-                GL11.glDisable(GL11.GL_BLEND);
+                //GL11.glDisable(GL11.GL_BLEND);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             }
 
@@ -158,6 +119,43 @@ public class RenderPlayerSlime extends RenderLiving {
     protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
     {
         this.scaleSlime((EntityPlayerSlime)par1EntityLivingBase, par2);
+        EntityPlayerSlime pSlime=(EntityPlayerSlime)par1EntityLivingBase;
+      		rand.setSeed(1337L);
+      		float shiftX;
+              float shiftY;
+              float shiftZ;
+              int shift = 0;
+              float blockScale = 0.70F;//*(1f/pSlime.getSlimeSize());
+      		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
+      		GL11.glPushMatrix();
+      		GL11.glDisable(GL11.GL_LIGHTING);
+      		GL11.glTranslatef((float)pSlime.posX, (float)pSlime.posY, (float)pSlime.posZ);
+      		EntityItem custItem=new EntityItem(pSlime.worldObj);
+      		custItem.hoverStart=0f;
+      		for(ItemStack item:pSlime.items)
+      		{
+      			if(shift>=posShifts.length)
+      				break;
+      			if(item==null)
+      			{
+      				shift++;
+      				continue;
+      			}
+      			shiftX=posShifts[shift][0];
+      			shiftY=posShifts[shift][1];
+      			shiftZ=posShifts[shift][2];
+      			shift++;
+      			GL11.glPushMatrix();
+      			GL11.glTranslatef(shiftX, shiftY, shiftZ);
+      			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
+      			GL11.glScalef(blockScale, blockScale, blockScale);
+      			custItem.setEntityItemStack(item);
+      			itemRenderer.doRenderItem(custItem, 0, 0, 0, 0, 0);
+      			GL11.glPopMatrix();
+      		}
+      		GL11.glEnable(GL11.GL_LIGHTING);
+      		GL11.glPopMatrix();
+      		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     /**
