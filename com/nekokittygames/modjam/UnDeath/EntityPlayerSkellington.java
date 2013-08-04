@@ -118,12 +118,12 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
-
-		if (par1World != null && !par1World.isRemote)
-		{
-			this.setCombatTask();
-		}
 	}
+	protected void func_110147_ax()
+    {
+        super.func_110147_ax();
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.25D);
+    }
 	@SideOnly(Side.CLIENT)
 	protected void func_110302_j()
 	{
@@ -251,14 +251,29 @@ private void findBestEquipment() {
 		int bestLocation=0;
 		ItemStack currentCheck;
 		int currentScore;
-		boolean hasBow;
+		boolean hasBow=false;
+		int arrows=0;
 		for(int i=0;i<this.inventory.mainInventory.length;i++)
 		{
 			currentCheck=this.inventory.mainInventory[i];
 			if(currentCheck==null)
 				continue;
 			if(currentCheck.getItem() instanceof ItemBow)
+			{
 				hasBow=true;
+				bestLocation=i;
+			}
+			if(currentCheck.getItem().itemID == Item.arrow.itemID)
+			{
+				arrows+=currentCheck.stackSize;
+			}
+		}
+		if(hasBow && arrows>0)
+		{
+			UnDeath.logging.info("Using bow found");
+			this.setCurrentItem(bestLocation);
+			return;
+			
 		}
 		for(int i=0;i<this.inventory.mainInventory.length;i++)
 		{
@@ -313,7 +328,7 @@ private void findBestEquipment() {
 			return;
 		}
 		UnDeath.logging.info(String.format("Best Weapon is %s with score %d", bestWeapon.toString(),bestScore));
-		this.inventory.currentItem=bestLocation;
+		this.setCurrentItem(bestLocation);
 	}
 
 	protected void entityInit()
@@ -523,7 +538,15 @@ private void findBestEquipment() {
 	{
 		return this.inventory.armorInventory[i];
 	}
-
+	
+	public void setCurrentItem(int location)
+	{
+		this.inventory.currentItem=location;
+		if (!this.worldObj.isRemote )
+        {
+            this.setCombatTask();
+        }
+	}
 	public void setCurrentItemOrArmor(int par1, ItemStack par2ItemStack)
 	{
 		if(par1==0)
@@ -561,7 +584,12 @@ private void findBestEquipment() {
 
 	public void setCombatTask()
 	{
-		this.tasks.addTask(4, this.aiArrowAttack);
+		this.tasks.removeTask(this.aiAttackOnCollide);
+        this.tasks.removeTask(this.aiArrowAttack);
+		if(this.getCurrentItemOrArmor(0).getItem() instanceof ItemBow)
+			this.tasks.addTask(4, this.aiArrowAttack);
+		else
+			this.tasks.addTask(4, this.aiAttackOnCollide);
 	}
 	
 	//TODO: make this use ininv arrows and such
