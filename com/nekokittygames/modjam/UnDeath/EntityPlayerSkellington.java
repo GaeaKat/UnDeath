@@ -253,7 +253,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 			setDropItems();
 		//
 	}
-	@SideOnly(Side.SERVER)
+
 	private void setDropItems() {
 		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
 		dropItems=!gr.getGameRuleBooleanValue("keepInventory");

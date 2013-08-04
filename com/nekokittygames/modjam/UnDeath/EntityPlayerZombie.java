@@ -225,12 +225,16 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		//this.setZombieName("nekosune");
 		this.inventory.copyInventory(par7EntityPlayer.inventory);
 		findBestEquipment();
-		if(FMLCommonHandler.instance().getSide()==Side.SERVER)
+		Side side1=FMLCommonHandler.instance().getEffectiveSide();
+		Side side2=FMLCommonHandler.instance().getSide();
+		if(!this.worldObj.isRemote)
+		{
 			setDropItems();
+		}
 		//
 	}
 	private void setDropItems() {
-		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
+		GameRules gr=this.worldObj.getGameRules();
 		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
 	}
 	private void findBestEquipment() {
