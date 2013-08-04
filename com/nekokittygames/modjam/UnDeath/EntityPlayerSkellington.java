@@ -241,7 +241,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	{
 		return this.itemInUseCount;
 	}
-	@SideOnly(Side.SERVER)
+	
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setSkellingtonName(par7EntityPlayer.getCommandSenderName());
 		//this.setSkellingtonName("nekosune");
@@ -249,10 +249,17 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.inventory.currentItem=1;
 		//TODO: The skellington version of this!
 		findBestEquipment();
-		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
-		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
+		if(FMLCommonHandler.instance().getSide()==Side.SERVER)
+			setDropItems();
 		//
 	}
+	@SideOnly(Side.SERVER)
+	private void setDropItems() {
+		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
+		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
+	}
+	
+
 private void findBestEquipment() {
 		
 		int bestScore=-1;
