@@ -15,7 +15,10 @@ import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureObject;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingData;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -33,6 +36,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -40,6 +44,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
@@ -305,7 +310,63 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		return EnumCreatureAttribute.UNDEAD;
 	}
 
-	
+	 /**
+     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
+     * use this to react to sunlight and start to burn.
+     */
+    public void onLivingUpdate()
+    {
+        if (this.worldObj.isDaytime() && !this.worldObj.isRemote)
+        {
+            float f = this.getBrightness(1.0F);
+
+            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)))
+            {
+                boolean flag = true;
+                ItemStack itemstack = this.getCurrentItemOrArmor(4);
+
+                if (itemstack != null)
+                {
+                    if (itemstack.isItemStackDamageable())
+                    {
+                        itemstack.setItemDamage(itemstack.getItemDamageForDisplay() + this.rand.nextInt(2));
+
+                        if (itemstack.getItemDamageForDisplay() >= itemstack.getMaxDamage())
+                        {
+                            this.renderBrokenItemStack(itemstack);
+                            this.setCurrentItemOrArmor(4, (ItemStack)null);
+                        }
+                    }
+
+                    flag = false;
+                }
+
+                if (flag)
+                {
+                    this.setFire(8);
+                }
+            }
+        }
+
+        if (this.worldObj.isRemote && this.getSkeletonType() == 1)
+        {
+            this.setSize(0.72F, 2.34F);
+        }
+
+        super.onLivingUpdate();
+    }
+    
+    public void updateRidden()
+    {
+        super.updateRidden();
+
+        if (this.ridingEntity instanceof EntityCreature)
+        {
+            EntityCreature entitycreature = (EntityCreature)this.ridingEntity;
+            this.renderYawOffset = entitycreature.renderYawOffset;
+        }
+    }
+   
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		NBTTagCompound compound=new NBTTagCompound();
@@ -402,10 +463,33 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	{
 		this.tasks.addTask(4, this.aiArrowAttack);
 	}
+	
+	//TODO: make this use ininv arrows and such
 	@Override
 	public void attackEntityWithRangedAttack(
-			EntityLivingBase entitylivingbase, float f) {
-		// TODO Auto-generated method stub
+			EntityLivingBase par1EntityLivingBase, float par2) {
+		EntityArrow entityarrow = new EntityArrow(this.worldObj, this, par1EntityLivingBase, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
+        int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
+        entityarrow.setDamage((double)(par2 * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F));
+
+        if (i > 0)
+        {
+            entityarrow.setDamage(entityarrow.getDamage() + (double)i * 0.5D + 0.5D);
+        }
+
+        if (j > 0)
+        {
+            entityarrow.setKnockbackStrength(j);
+        }
+
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0 || this.getSkeletonType() == 1)
+        {
+            entityarrow.setFire(100);
+        }
+
+        this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.worldObj.spawnEntityInWorld(entityarrow);
 
 	}
 
