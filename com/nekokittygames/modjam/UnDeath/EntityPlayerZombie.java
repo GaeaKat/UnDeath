@@ -61,6 +61,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     private ThreadDownloadZombieImageData field_110315_c;
     private ResourceLocation mmmm;
     private ResourceLocation tsch;
+    private boolean dropItems=true;
     @SideOnly(Side.CLIENT)
     private String LayeredName;
     @SideOnly(Side.CLIENT)
@@ -198,6 +199,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         this.inventory.readFromNBT(nbttaglist);
         this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
         this.setZombieName(par1NBTTagCompound.getString("zombieName"));
+        this.dropItems=par1NBTTagCompound.getBoolean("dropItems");
     }
 	
 	@Override
@@ -207,6 +209,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         par1NBTTagCompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
         par1NBTTagCompound.setInteger("SelectedItemSlot", this.inventory.currentItem);
         par1NBTTagCompound.setString("zombieName", getZombieName());
+        par1NBTTagCompound.setBoolean("dropItems", dropItems)
     }
 	
 
@@ -296,6 +299,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		compound.setString("zombieName", getZombieName());
+		compound.setBoolean("dropItems", dropItems);
 		try {
 			
 	        NBTBase.writeNamedTag(compound, data);
@@ -313,6 +317,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 	        this.inventory.readFromNBT(nbttaglist);
 	        this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
 	        this.setZombieName(compound.getString("zombieName"));
+	        dropItems=compound.getBoolean("dropItems");
 	        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 			{
 				this.func_110302_j();
