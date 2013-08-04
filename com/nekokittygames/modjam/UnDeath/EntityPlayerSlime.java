@@ -11,6 +11,7 @@ import net.minecraft.command.IAdminCommand;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -73,7 +74,10 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		items[40]=head;
 		
 	}
-
+	public void copyInventory(InventoryPlayer playerInv)
+	{
+		
+	}
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		NBTTagCompound compound=new NBTTagCompound();
