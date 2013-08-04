@@ -13,6 +13,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -53,6 +54,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityPlayerSkellington extends EntityMob implements IEntityAdditionalSpawnData,IRangedAttackMob {
@@ -75,6 +77,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	private boolean usingBow;
 	@SideOnly(Side.CLIENT)
 	private String LayeredName;
+	private boolean dropItems=true;
 	@SideOnly(Side.CLIENT)
 	public String getLayeredName() {
 		if(LayeredName==null)
@@ -221,6 +224,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.inventory.readFromNBT(nbttaglist);
 		this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
 		this.setSkellingtonName(par1NBTTagCompound.getString("skellingtonName"));
+		this.dropItems=par1NBTTagCompound.getBoolean("dropItems");
 	}
 
 	@Override
@@ -230,12 +234,14 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		par1NBTTagCompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		par1NBTTagCompound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		par1NBTTagCompound.setString("skellingtonName", getSkellingtonName());
+		par1NBTTagCompound.setBoolean("dropItems", dropItems);
 	}
 
 	public int getItemInUseCount()
 	{
 		return this.itemInUseCount;
 	}
+	@SideOnly(Side.SERVER)
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setSkellingtonName(par7EntityPlayer.getCommandSenderName());
 		//this.setSkellingtonName("nekosune");
@@ -243,6 +249,8 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.inventory.currentItem=1;
 		//TODO: The skellington version of this!
 		findBestEquipment();
+		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
+		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
 		//
 	}
 private void findBestEquipment() {
@@ -489,6 +497,7 @@ private void findBestEquipment() {
 		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		compound.setString("skellingtonName", getSkellingtonName());
+		compound.setBoolean("dropItems", dropItems);
 		try {
 
 			NBTBase.writeNamedTag(compound, data);
@@ -506,6 +515,7 @@ private void findBestEquipment() {
 			this.inventory.readFromNBT(nbttaglist);
 			this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
 			this.setSkellingtonName(compound.getString("skellingtonName"));
+			this.dropItems=compound.getBoolean("dropItems");
 			if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 			{
 				this.func_110302_j();
@@ -579,7 +589,8 @@ private void findBestEquipment() {
 	@Override
 	protected void dropEquipment(boolean par1, int par2)
 	{
-		this.inventory.dropAllItems();
+		if(dropItems)
+			this.inventory.dropAllItems();
 	}
 
 	public ItemStack getHeldItem()

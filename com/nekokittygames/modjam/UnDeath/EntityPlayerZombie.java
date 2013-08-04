@@ -21,6 +21,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -41,6 +42,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 /**
@@ -209,7 +211,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         par1NBTTagCompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
         par1NBTTagCompound.setInteger("SelectedItemSlot", this.inventory.currentItem);
         par1NBTTagCompound.setString("zombieName", getZombieName());
-        par1NBTTagCompound.setBoolean("dropItems", dropItems)
+        par1NBTTagCompound.setBoolean("dropItems", dropItems);
     }
 	
 
@@ -217,11 +219,14 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     {
         return this.itemInUseCount;
     }
+	@SideOnly(Side.SERVER)
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setZombieName(par7EntityPlayer.getCommandSenderName());
 		//this.setZombieName("nekosune");
 		this.inventory.copyInventory(par7EntityPlayer.inventory);
 		findBestEquipment();
+		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
+		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
 		//
 	}
 	private void findBestEquipment() {
@@ -376,7 +381,8 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     @Override
     protected void dropEquipment(boolean par1, int par2)
     {
-    	this.inventory.dropAllItems();
+    	if(dropItems)
+    		this.inventory.dropAllItems();
     }
     
     public ItemStack getHeldItem()
