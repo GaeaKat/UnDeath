@@ -1,28 +1,93 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.primitives.SignedBytes;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerSlime;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderPlayerSlime extends RenderLiving {
 
 	private static final ResourceLocation field_110897_a = new ResourceLocation("undeath","textures/entity/playerSlime.png");
     private ModelBase scaleAmount;
-
+    private RenderItem itemRenderer;
+    private Random rand;
+    private static float[][] posShifts = { { 0.3F, 0.45F, 0.3F }, { 0.7F, 0.45F, 0.3F }, { 0.3F, 0.45F, 0.7F }, { 0.7F, 0.45F, 0.7F }, { 0.3F, 0.1F, 0.3F },{ 0.7F, 0.1F, 0.3F }, { 0.3F, 0.1F, 0.7F }, { 0.7F, 0.1F, 0.7F }, { 0.5F, 0.32F, 0.5F }, };
     public RenderPlayerSlime(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3)
     {
         super(par1ModelBase, par3);
         this.scaleAmount = par2ModelBase;
+        itemRenderer=new RenderItem()
+        {
+
+			@Override
+			public boolean shouldSpreadItems() {
+				return false;
+			}
+
+			@Override
+			public boolean shouldBob() {
+				return true;
+			}
+
+			@Override
+			public byte getMiniBlockCount(ItemStack stack) {
+				return SignedBytes.saturatedCast(Math.min(stack.stackSize/32, 15)+1);
+			}
+
+			@Override
+			public byte getMiniItemCount(ItemStack stack) {
+				return SignedBytes.saturatedCast(Math.min(stack.stackSize/32, 7)+1);
+			}
+        	
+        };
+        itemRenderer.setRenderManager(RenderManager.instance);
     }
 
-    /**
+    @Override
+	protected void passSpecialRender(EntityLivingBase par1EntityLivingBase,
+			double x, double y, double z) {
+    	EntityPlayerSlime pSlime=(EntityPlayerSlime)par1EntityLivingBase;
+		// TODO Auto-generated method stub
+		super.passSpecialRender(par1EntityLivingBase, x, y, z);
+		rand.setSeed(1337L);
+		float shiftX;
+        float shiftY;
+        float shiftZ;
+        int shift = 0;
+        float blockScale = 0.70F*(1f/pSlime.getSlimeSize());
+		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
+		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glTranslatef((float)x, (float)y, (float)z);
+		EntityItem custItem=new EntityItem(pSlime.worldObj);
+		custItem.hoverStart=0f;
+		for(ItemStack item:pSlime.items)
+		{
+			if(shift>posShifts.length)
+				break;
+			if(item==null)
+			{
+				shift++;
+				continue;
+			}
+		}
+		
+	}
+
+	/**
      * Determines whether Slime Render should pass or not.
      */
     protected int shouldSlimeRenderPass(EntityPlayerSlime par1EntitySlime, int par2, float par3)
