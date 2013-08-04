@@ -249,13 +249,13 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.inventory.currentItem=1;
 		//TODO: The skellington version of this!
 		findBestEquipment();
-		if(FMLCommonHandler.instance().getSide()==Side.SERVER)
+		if(!this.worldObj.isRemote)
 			setDropItems();
 		//
 	}
 
 	private void setDropItems() {
-		GameRules gr=FMLServerHandler.instance().getServer().worldServerForDimension(0).getGameRules();
+		GameRules gr=this.worldObj.getGameRules();
 		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
 	}
 	
