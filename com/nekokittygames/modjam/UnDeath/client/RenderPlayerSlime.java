@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPlayerSlime extends RenderLiving {
 
-	private static final ResourceLocation field_110897_a = new ResourceLocation("textures/entity/slime/slime.png");
+	private static final ResourceLocation field_110897_a = new ResourceLocation("undeath","textures/entity/playerSlime.png");
     private ModelBase scaleAmount;
 
     public RenderPlayerSlime(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3)
