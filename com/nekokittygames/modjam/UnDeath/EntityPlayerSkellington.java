@@ -1,7 +1,10 @@
 package com.nekokittygames.modjam.UnDeath;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.google.common.collect.Multimap;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
@@ -23,6 +26,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingData;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIArrowAttack;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIFleeSun;
@@ -33,11 +37,13 @@ import net.minecraft.entity.ai.EntityAIRestrictSun;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -235,10 +241,80 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.inventory.copyInventory(par7EntityPlayer.inventory);
 		this.inventory.currentItem=1;
 		//TODO: The skellington version of this!
-		//findBestEquipment();
+		findBestEquipment();
 		//
 	}
-
+private void findBestEquipment() {
+		
+		int bestScore=-1;
+		ItemStack bestWeapon=null;
+		int bestLocation=0;
+		ItemStack currentCheck;
+		int currentScore;
+		boolean hasBow;
+		for(int i=0;i<this.inventory.mainInventory.length;i++)
+		{
+			currentCheck=this.inventory.mainInventory[i];
+			if(currentCheck==null)
+				continue;
+			if(currentCheck.getItem() instanceof ItemBow)
+				hasBow=true;
+		}
+		for(int i=0;i<this.inventory.mainInventory.length;i++)
+		{
+			currentCheck=this.inventory.mainInventory[i];
+			if(currentCheck==null)
+				continue;
+			Multimap map=currentCheck.func_111283_C();
+			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+			
+			if(Attributes.size()==0)
+				currentScore=0;
+			else
+				currentScore=(int)((AttributeModifier)Attributes.toArray()[0]).func_111164_d();
+			NBTTagList enchList=currentCheck.getEnchantmentTagList();
+			if(enchList==null)
+				currentScore+=0;
+			else
+			{
+				for(int j=0;j<enchList.tagCount();j++)
+				{
+					NBTTagCompound comp=(NBTTagCompound)enchList.tagAt(j);
+					int enchId=comp.getShort("id");
+					int enchLvl=comp.getShort("lvl");
+					switch(enchId)
+					{
+					case 16:
+						currentScore+=(1*enchLvl);
+						break;
+					case 19:
+						currentScore+=(1*enchLvl);
+						break;
+					case 20:
+						currentScore+=(2*enchLvl);
+						break;
+					default:
+						currentScore+=1;
+					}
+				}
+			}
+			UnDeath.logging.info(String.format("Item %s got score %d", currentCheck.toString(),currentScore));
+			if(currentScore>bestScore)
+			{
+				bestWeapon=currentCheck;
+				bestLocation=i;
+				bestScore=currentScore;
+			}
+		}
+		if(bestScore==-1)
+		{
+			UnDeath.logging.info("No weapons found");
+			this.inventory.currentItem=-1;
+			return;
+		}
+		UnDeath.logging.info(String.format("Best Weapon is %s with score %d", bestWeapon.toString(),bestScore));
+		this.inventory.currentItem=bestLocation;
+	}
 
 	protected void entityInit()
 	{
@@ -366,7 +442,24 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
             this.renderYawOffset = entitycreature.renderYawOffset;
         }
     }
-   
+    public int getSkeletonType()
+    {
+        return this.dataWatcher.getWatchableObjectByte(13);
+    }
+    public void setSkeletonType(int par1)
+    {
+        this.dataWatcher.updateObject(13, Byte.valueOf((byte)par1));
+
+        if (par1 == 1)
+        {
+            this.setSize(0.72F, 2.34F);
+        }
+        else
+        {
+            this.setSize(0.6F, 1.8F);
+        }
+    }
+    
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		NBTTagCompound compound=new NBTTagCompound();
@@ -437,8 +530,15 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 			this.inventory.mainInventory[this.inventory.currentItem]=par2ItemStack;
 		else
 			this.inventory.armorInventory[par1-1]=par2ItemStack;
+		if (!this.worldObj.isRemote && par1 == 0)
+        {
+            this.setCombatTask();
+        }
 	}
-
+	public double getYOffset()
+    {
+        return super.getYOffset() - 0.5D;
+    }
 	public ItemStack[] getLastActiveItems()
 	{
 		if(this.inventory.currentItem==-1)
@@ -483,7 +583,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
             entityarrow.setKnockbackStrength(j);
         }
 
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) )
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0 )
         {
             entityarrow.setFire(100);
         }
