@@ -145,15 +145,17 @@ public class ItemSpawner extends Item {
             {
             	if(itemDamage==1)
             		entity = EntityList.createEntityByName("playerZombie",par0World);
-            	else
+            	else if(itemDamage==2)
             		entity = EntityList.createEntityByName("playerSkellington",par0World);
+            	else
+            		entity = EntityList.createEntityByName("playerSlime",par0World);
 
                 if (entity != null && entity instanceof EntityLivingBase)
                 {
                     EntityLiving entityliving = (EntityLiving)entity;
                     if(itemDamage==1)
                     	((EntityPlayerZombie)entityliving).InitFromPlayer(par7EntityPlayer);
-                    else
+                    else if(itemDamage==2)
                     	((EntityPlayerSkellington)entityliving).InitFromPlayer(par7EntityPlayer);
                     entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
                     entityliving.rotationYawHead = entityliving.rotationYaw;
@@ -178,5 +180,6 @@ public class ItemSpawner extends Item {
         
             par3List.add(new ItemStack(par1, 1, 1));
             par3List.add(new ItemStack(par1, 1, 2));
+            par3List.add(new ItemStack(par1, 1, 3));
     }
 }
