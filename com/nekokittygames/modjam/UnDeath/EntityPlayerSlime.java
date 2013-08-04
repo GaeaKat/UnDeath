@@ -2,10 +2,13 @@ package com.nekokittygames.modjam.UnDeath;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityPlayerSlime extends EntitySlime {
 	public static int EntityId;
+	public ItemStack[] items=new ItemStack[41];
 	public EntityPlayerSlime(World par1World) {
 		super(par1World);
 	}
@@ -15,6 +18,7 @@ public class EntityPlayerSlime extends EntitySlime {
     {
         this.isDead = true;
     }
+	
 	@Override
 	protected void setSlimeSize(int par1)
     {
@@ -25,4 +29,15 @@ public class EntityPlayerSlime extends EntitySlime {
         //this.setEntityHealth(this.func_110138_aP());
         this.experienceValue = par1;
     }
+	
+	
+	public void playerInit(EntityPlayer player,EntitySlime slime)
+	{
+		if(slime!=null)
+		{
+			this.setSlimeSize(slime.getSlimeSize());
+			slime.isDead=true;
+		}
+	}
+	
 }
