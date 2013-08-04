@@ -17,14 +17,14 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Katrina
  *
  */
-public class SpawnPlayerZombies implements Function<EntitySpawnPacket, Entity> {
+public class SpawnPlayerSlimes implements Function<EntitySpawnPacket, Entity> {
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public 	Entity apply(EntitySpawnPacket input) {
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
-			return new EntityPlayerZombie(FMLClientHandler.instance().getClient().theWorld);
+			return new EntityPlayerSlime(FMLClientHandler.instance().getClient().theWorld);
 		}
 		return null;
 		//new EntityPlayerZombie(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(input.))

@@ -15,7 +15,6 @@ public class SpawnPlayerSkellingtons implements Function<EntitySpawnPacket, Enti
 	@Override
 	@SideOnly(Side.CLIENT)
 	public 	Entity apply(EntitySpawnPacket input) {
-		UnDeath.logging.info(FMLCommonHandler.instance().getEffectiveSide().toString());
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 		{
 			return new EntityPlayerSkellington(FMLClientHandler.instance().getClient().theWorld);

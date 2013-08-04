@@ -80,13 +80,22 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		compound.setName("Skellington");
 		compound.setBoolean("dropItems", dropItems);
 		NBTTagList nbtTagList=new NBTTagList();
-		for(int i=0;i<=items.length;i++)
+		for(int i=0;i<items.length;i++)
 		{
 			if(items[i]!=null)
 			{
 				NBTTagCompound comp=new NBTTagCompound();
 				items[i].writeToNBT(comp);
+				nbtTagList.appendTag(comp);
 			}
+		}
+		compound.setTag("Inventory", nbtTagList);
+		
+		try {
+
+			NBTBase.writeNamedTag(compound, data);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		
 	}
