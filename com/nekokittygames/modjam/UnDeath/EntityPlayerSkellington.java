@@ -483,7 +483,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
             entityarrow.setKnockbackStrength(j);
         }
 
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0 || this.getSkeletonType() == 1)
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) )
         {
             entityarrow.setFire(100);
         }
