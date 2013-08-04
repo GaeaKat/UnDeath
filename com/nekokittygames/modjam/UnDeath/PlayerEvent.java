@@ -2,6 +2,7 @@ package com.nekokittygames.modjam.UnDeath;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -16,6 +17,10 @@ public class PlayerEvent {
 	{
 		
 		if(event.entity.worldObj.isRemote)
+		{
+			return;
+		}
+		if(Minecraft.getMinecraft().gameSettings.difficulty==0)
 		{
 			return;
 		}
