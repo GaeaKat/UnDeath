@@ -164,6 +164,8 @@ public class ItemSpawner extends Item {
                     	((EntityPlayerZombie)entityliving).InitFromPlayer(par7EntityPlayer);
                     else if(itemDamage==EntityPlayerSkellington.EntityId)
                     	((EntityPlayerSkellington)entityliving).InitFromPlayer(par7EntityPlayer);
+                    else if(itemDamage==EntityPlayerSlime.EntityId)
+                    	((EntityPlayerSlime)entityliving).InitFromPlayer(par7EntityPlayer,null);
                     entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
                     entityliving.rotationYawHead = entityliving.rotationYaw;
                     entityliving.renderYawOffset = entityliving.rotationYaw;

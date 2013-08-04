@@ -2,17 +2,26 @@ package com.nekokittygames.modjam.UnDeath;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+import net.minecraft.command.IAdminCommand;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-public class EntityPlayerSlime extends EntitySlime {
+public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalSpawnData {
 	public static int EntityId;
 	public ItemStack[] items=new ItemStack[41];
+	private boolean dropItems;
 	public EntityPlayerSlime(World par1World) {
 		super(par1World);
 	}
@@ -39,11 +48,12 @@ public class EntityPlayerSlime extends EntitySlime {
 	protected void dropEquipment(boolean par1, int par2) {
 		for(ItemStack item:items)
 		{
-			this.entityDropItem(item, 0.0f);
+			if(item!=null)
+				this.entityDropItem(item, 0.0f);
 		}
 	}
 
-	public void playerInit(EntityPlayer player,EntitySlime slime)
+	public void InitFromPlayer(EntityPlayer player,EntitySlime slime)
 	{
 		if(slime!=null)
 		{
@@ -58,8 +68,48 @@ public class EntityPlayerSlime extends EntitySlime {
 		if(compound==null)
 			compound=new NBTTagCompound();
 		compound.setString("SkullOwner", player.username);
+		//compound.setString("SkullOwner", "nekosune");
 		head.setTagCompound(compound);
 		items[40]=head;
+		
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		NBTTagCompound compound=new NBTTagCompound();
+		compound.setName("Skellington");
+		compound.setBoolean("dropItems", dropItems);
+		NBTTagList nbtTagList=new NBTTagList();
+		for(int i=0;i<=items.length;i++)
+		{
+			if(items[i]!=null)
+			{
+				NBTTagCompound comp=new NBTTagCompound();
+				items[i].writeToNBT(comp);
+			}
+		}
+		
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		NBTTagCompound compound;
+		try {
+			compound = (NBTTagCompound) NBTBase.readNamedTag(data);
+			NBTTagList nbttaglist = compound.getTagList("Inventory");
+			items=new ItemStack[41];
+			for (int i = 0; i < nbttaglist.tagCount(); ++i)
+	        {
+				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+	            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
+	            items[i]=itemstack;
+	        }
+			this.dropItems=compound.getBoolean("dropItems");
+			
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
