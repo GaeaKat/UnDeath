@@ -36,7 +36,7 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 	public static int EntityID;
 	private static final UUID field_110189_bq = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier field_110190_br = (new AttributeModifier(field_110189_bq, "Attacking speed boost", 0.45D, 0)).func_111168_a(false);
-    private static final ResourceLocation Pigoverlay=new ResourceLocation("undeath","textures/entity/playerPigZombie.png");
+    private final ResourceLocation Pigoverlay=new ResourceLocation("undeath","textures/entity/playerPigZombie.png");
     /** Above zero if this PigZombie is Angry. */
     private int angerLevel;
 

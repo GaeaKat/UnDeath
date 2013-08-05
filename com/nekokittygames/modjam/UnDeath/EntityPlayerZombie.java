@@ -142,17 +142,17 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         return tsch;
     }
 	 @SideOnly(Side.CLIENT)
-    public static ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
+    public ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
     {
         return func_110301_a(par0ResourceLocation, func_110300_d(par1Str), field_110314_b, new ImageBufferDownload());
     }
 	 @SideOnly(Side.CLIENT)
-    public static ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
+    public  ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
     {
         return func_110301_a(par0ResourceLocation, func_110308_e(par1Str), (ResourceLocation)null, (IImageBuffer)null);
     }
 	 @SideOnly(Side.CLIENT)
-    private static ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+    private ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
     {
         TextureManager texturemanager = Minecraft.getMinecraft().func_110434_K();
         Object object = texturemanager.func_110581_b(par0ResourceLocation);
@@ -166,31 +166,31 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         return (ThreadDownloadZombieImageData)object;
     }
 	 @SideOnly(Side.CLIENT)
-    public static String func_110300_d(String par0Str)
+    public String func_110300_d(String par0Str)
     {
         return String.format("http://skins.minecraft.net/MinecraftSkins/%s.png", new Object[] {StringUtils.stripControlCodes(par0Str)});
     }
 	 @SideOnly(Side.CLIENT)
-    public static String func_110308_e(String par0Str)
+    public  String func_110308_e(String par0Str)
     {
         return String.format("http://skins.minecraft.net/MinecraftCloaks/%s.png", new Object[] {StringUtils.stripControlCodes(par0Str)});
     }
 	 @SideOnly(Side.CLIENT)
-    public static ResourceLocation func_110311_f(String par0Str)
+    public  ResourceLocation func_110311_f(String par0Str)
     {
         return new ResourceLocation(getSkinName(par0Str));
     }
 	 @SideOnly(Side.CLIENT)
-	private static String getSkinName(String par0Str) {
+	private  String getSkinName(String par0Str) {
 		return "zskins/" + StringUtils.stripControlCodes(par0Str);
 	}
 	 @SideOnly(Side.CLIENT)
-    public static ResourceLocation func_110299_g(String par0Str)
+    public  ResourceLocation func_110299_g(String par0Str)
     {
         return new ResourceLocation("zcloaks/" + StringUtils.stripControlCodes(par0Str));
     }
 	 @SideOnly(Side.CLIENT)
-    public static ResourceLocation func_110305_h(String par0Str)
+    public  ResourceLocation func_110305_h(String par0Str)
     {
         return new ResourceLocation("zskull/" + StringUtils.stripControlCodes(par0Str));
     }
