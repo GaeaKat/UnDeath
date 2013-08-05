@@ -36,7 +36,7 @@ public class UnDeath {
 
 	@Instance(ID)
 	public static UnDeath Instance;
-	
+	public static TemTestBook bookSpawn;
 	@SidedProxy(clientSide="com.nekokittygames.modjam.UnDeath.client.ClientProxy",serverSide="com.nekokittygames.modjam.UnDeath.ServerProxy")
 	public static ServerProxy proxy;
 	
@@ -54,7 +54,8 @@ public class UnDeath {
 		
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug Spawner");
-
+		bookSpawn=new TemTestBook(Configs.debugBook);
+		LanguageRegistry.addName(bookSpawn, "Book Spawner");
 	}
 	public static int PlayerZombieId;
 	@EventHandler

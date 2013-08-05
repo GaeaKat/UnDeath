@@ -288,6 +288,8 @@ private void findBestEquipment() {
 			{
 				hasBow=true;
 				bestLocation=i;
+				if(EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, currentCheck) > 0)
+					break;
 			}
 			if(currentCheck.getItem().itemID == Item.arrow.itemID)
 			{
@@ -653,7 +655,8 @@ private void findBestEquipment() {
 
         this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.worldObj.spawnEntityInWorld(entityarrow);
-        inventory.consumeInventoryItem(Item.arrow.itemID);
+        if(!(EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, this.getCurrentItemOrArmor(0)) > 0))
+        	inventory.consumeInventoryItem(Item.arrow.itemID);
         
 
 	}
