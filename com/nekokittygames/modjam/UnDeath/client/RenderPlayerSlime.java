@@ -24,7 +24,7 @@ public class RenderPlayerSlime extends RenderLiving {
     private ModelBase scaleAmount;
     private RenderItem itemRenderer;
     private Random rand;
-    private static float[][] posShifts = { { 0.3F, 0.45F, 0.3F }, { 0.7F, 0.45F, 0.3F }, { 0.3F, 0.45F, 0.7F }, { 0.7F, 0.45F, 0.7F }, { 0.3F, 0.1F, 0.3F },{ 0.7F, 0.1F, 0.3F }, { 0.3F, 0.1F, 0.7F }, { 0.7F, 0.1F, 0.7F }, { 0.5F, 0.32F, 0.5F }, };
+    private static float[][] posShifts = { { -0.75F, 1.75F, 0.5F },{ 0F, 1.75F, 0.5F },{ 0.75F, 1.75F, 0.5F },  };
     public RenderPlayerSlime(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3)
     {
         super(par1ModelBase, par3);
@@ -131,7 +131,7 @@ public class RenderPlayerSlime extends RenderLiving {
           float shiftY;
           float shiftZ;
           int shift = 0;
-        float blockScale = 1.0F ;//*(1f/pSlime.getSlimeSize());
+        float blockScale = 0.75f ;//*(1f/pSlime.getSlimeSize());
   		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
   		GL11.glPushMatrix();
   		GL11.glDisable(GL11.GL_LIGHTING);
