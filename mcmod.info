@@ -1,0 +1,16 @@
+[
+{
+  "modid": "UnDeath",
+  "name": "UnDeath!",
+  "description": "Ever wondered if there was life after death? wonder no more",
+  "version": "1.0",
+  "mcversion": "1.6.2",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["nekosune"],
+  "credits": "ModJam2013, All the wonderfull people at #modjam",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
