@@ -24,3 +24,5 @@ Compiliation
 ============ 
 
 Download into a freshly installed forge setup in the mcp/src directory
+and recompile/reobfusticate as usual
+Remember to copy assets folder into the zip created after reobfustication!
