@@ -43,6 +43,12 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 			BuildLayeredName();
     	return LayeredName;
 	}
+	@Override
+	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
+		// TODO Auto-generated method stub
+		super.InitFromPlayer(par7EntityPlayer);
+		//this.setZombieName("nekosune");
+	}
 	@SideOnly(Side.CLIENT)
 	public void setLayeredName(String layeredName) {
 		LayeredName = layeredName;
