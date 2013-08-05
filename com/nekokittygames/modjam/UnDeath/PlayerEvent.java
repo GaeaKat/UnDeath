@@ -34,7 +34,20 @@ public class PlayerEvent {
 		{
 			if(event.source.getEntity() instanceof EntityPlayer)
 			{
-				((EntityPlayer)event.source.getEntity()).addStat(UnDeath.undeadKilledYourself, 1);
+				String name="";
+				if(event.entity instanceof EntityPlayerSkellington)
+					name=((EntityPlayerSkellington)event.entity).getSkellingtonName();
+				
+				if(event.entity instanceof EntityPlayerZombie)
+					name=((EntityPlayerZombie)event.entity).getZombieName();
+				
+				if(event.entity instanceof EntityPlayerZombiePigmen)
+					name=((EntityPlayerZombiePigmen)event.entity).getPigZombieName();
+				
+				if(name.equalsIgnoreCase(((EntityPlayer)event.source.getEntity()).getCommandSenderName()))
+				{
+					((EntityPlayer)event.source.getEntity()).addStat(UnDeath.youKilledYourself, 1);
+				}
 			}
 		}
 		if(event.entity instanceof EntityPlayer)
