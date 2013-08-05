@@ -24,8 +24,25 @@ public class RenderPlayerSlime extends RenderLiving {
     private ModelBase scaleAmount;
     private RenderItem itemRenderer;
     private Random rand;
-    private static float[][] posShifts = { { -0.75F, 1.75F, 0.5F },{ 0F, 1.75F, 0.5F },{ 0.75F, 1.75F, 0.5F },  };
-    public RenderPlayerSlime(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3)
+    private static float[][] posShifts = { { -0.75F, 1.75F, 0.5F },{ 0F, 1.75F, 0.5F },{ 0.75F, 1.75F, 0.5F },
+    										{-0.75F, 1.75F, 0F },{ 0F, 1.75F, 0F },{ 0.75F, 1.75F, 0F },
+    										{-0.75F, 1.75F, -0.5F },{ 0F, 1.75F, -0.5F },{ 0.75F, 1.75F, -0.5F },
+    										
+    										{ -0.75F, 1.0F, 0.5F },{ 0F, 1F, 0.5F },{ 0.75F, 1F, 0.5F },
+    										{-0.75F, 1F, 0F },{ 0F, 1F, 0F },{ 0.75F, 1F, 0F },
+    										{-0.75F, 1F, -0.5F },{ 0F, 1F, -0.5F },{ 0.75F, 1F, -0.5F },
+    										
+    										{ -0.75F, 0.25F, 0.5F },{ 0F, 0.25F, 0.5F },{ 0.75F, 0.25F, 0.5F },
+    										{-0.75F, 0.25F, 0F },{ 0F, 0.25F, 0F },{ 0.75F, 0.25F, 0F },
+    										{-0.75F, 0.25F, -0.5F },{ 0F, 0.25F, -0.5F },{ 0.75F, 0.25F, -0.5F },};
+    @Override
+	protected void rotateCorpse(EntityLivingBase par1EntityLivingBase,
+			float par2, float par3, float par4) {
+		// Does this work to stop corpse rotation?
+		//super.rotateCorpse(par1EntityLivingBase, par2, par3, par4);
+	}
+
+	public RenderPlayerSlime(ModelBase par1ModelBase, ModelBase par2ModelBase, float par3)
     {
         super(par1ModelBase, par3);
         this.scaleAmount = par2ModelBase;
