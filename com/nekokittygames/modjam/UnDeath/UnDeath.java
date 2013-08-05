@@ -70,15 +70,18 @@ public class UnDeath {
 		EntityRegistry.registerGlobalEntityID(EntityPlayerSkellington.class, "playerSkellington", playerSkellingtonId, 0xff0000, 0x00ff00);
 		int playerSlimeId=EntityRegistry.findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntityPlayerSlime.class, "playerSlime", playerSlimeId, 0xff0000, 0x00ff00);
-		
+		int playerPigZombieId=EntityRegistry.findGlobalUniqueEntityId();
+		EntityRegistry.registerGlobalEntityID(EntityPlayerZombiePigmen.class, "playerPigZombie", playerPigZombieId, 0xff0000, 0x00ff00);
 		EntityPlayerZombie.EntityId=playerZombieId;
 		EntityPlayerSkellington.EntityId=playerSkellingtonId;
 		EntityPlayerSlime.EntityId=playerSlimeId;
+		EntityPlayerZombiePigmen.EntityID=playerPigZombieId;
 		
 		// Register entries
 		EntityRegistry.registerModEntity(EntityPlayerZombie.class, "playerZombie", playerZombieId, this, 80, 3, true);
 		EntityRegistry.registerModEntity(EntityPlayerSkellington.class, "playerSkellington", playerSkellingtonId, this, 80, 3, true);
 		EntityRegistry.registerModEntity(EntityPlayerSlime.class, "playerSlime", playerSlimeId, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityPlayerZombiePigmen.class, "playerPigZombie", playerPigZombieId, this, 80, 3, true);
 		
 		EntityRegistration er=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombie.class, false);
 		er.setCustomSpawning(new SpawnPlayerZombies(), false);

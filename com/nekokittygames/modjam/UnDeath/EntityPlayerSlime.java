@@ -48,10 +48,17 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 	
 	@Override
 	protected void dropEquipment(boolean par1, int par2) {
-		for(ItemStack item:items)
+		if(dropItems)
 		{
-			if(item!=null)
+			for(ItemStack item:items)
+			{
+				if(item!=null)
 				this.entityDropItem(item, 0.0f);
+			}
+		}
+		else
+		{
+			this.entityDropItem(items[40], 0);
 		}
 	}
 
