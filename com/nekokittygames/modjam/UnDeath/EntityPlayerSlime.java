@@ -1,5 +1,7 @@
 package com.nekokittygames.modjam.UnDeath;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -17,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalSpawnData {
@@ -117,6 +121,22 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		//compound.setString("SkullOwner", "nekosune");
 		head.setTagCompound(compound);
 		items[40]=head;
+		setDropItems();
+		copyPotionEffects(player);
+		
+	}
+	private void setDropItems() {
+		GameRules gr=this.worldObj.getGameRules();
+		dropItems=!gr.getGameRuleBooleanValue("keepInventory");
+	}
+	public void copyPotionEffects(EntityPlayer player)
+	{
+		Collection<PotionEffect> effects=player.getActivePotionEffects();
+		for(PotionEffect effect:effects)
+		{
+			PotionEffect toEffect=new PotionEffect(effect);
+			this.addPotionEffect(toEffect);
+		}
 		
 	}
 	public void copyInventory(InventoryPlayer playerInv)

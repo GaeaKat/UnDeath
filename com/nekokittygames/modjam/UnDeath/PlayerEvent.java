@@ -3,11 +3,13 @@ package com.nekokittygames.modjam.UnDeath;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -71,7 +73,8 @@ public class PlayerEvent {
 					double x=event.entity.posX;
 					double y=event.entity.posY;
 					double z=event.entity.posZ;
-					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombiePigmen.EntityID, x, y, z, (EntityPlayer)event.entity);
+					Entity zPigmen=ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombiePigmen.EntityID, x, y, z, (EntityPlayer)event.entity);
+					((EntityPlayerZombiePigmen)zPigmen).attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)event.entity), 0);
 					spawning=true;
 				}
 				return;
