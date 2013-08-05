@@ -22,6 +22,8 @@ public class Configs {
 	@Retention(RetentionPolicy.RUNTIME)
 	private static @interface CfgDouble {}
 	
+	@Retention(RetentionPolicy.RUNTIME)
+	private static @interface CfgInteger {}
 
 	
 	@CfgId(block=false)
@@ -37,6 +39,12 @@ public class Configs {
 	
 	@CfgDouble
 	public static double slimeEngulfChance=1.0;
+	
+	@CfgInteger
+	public static int undeadkillsYouAchivementID=2010;
+	
+	@CfgInteger
+	public static int YoukillsYouAchivementID=2012;
 	
 	public static void  load(Configuration config) {
 		try {
@@ -70,6 +78,12 @@ public class Configs {
 						double doub=field.getDouble(null);
 						doub=config.get(Configuration.CATEGORY_GENERAL, field.getName(), doub).getDouble(doub);
 						field.set(null, doub);
+					}
+					else if(field.isAnnotationPresent(CfgInteger.class))
+					{
+						int integer=field.getInt(null);
+						integer=config.get(Configuration.CATEGORY_GENERAL, field.getName(), integer).getInt();
+						field.set(null, integer);
 					}
 				}
 			}

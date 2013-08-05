@@ -30,8 +30,19 @@ public class PlayerEvent {
 		{
 			return;
 		}
+		if(event.entity instanceof EntityPlayerSkellington ||event.entity instanceof EntityPlayerZombiePigmen || event.entity instanceof EntityPlayerZombie)
+		{
+			if(event.source.getEntity() instanceof EntityPlayer)
+			{
+				((EntityPlayer)event.source.getEntity()).addStat(UnDeath.undeadKilledYourself, 1);
+			}
+		}
 		if(event.entity instanceof EntityPlayer)
 		{
+			if(event.source.getEntity() instanceof EntityPlayerSkellington ||event.source.getEntity() instanceof EntityPlayerZombiePigmen || event.source.getEntity() instanceof EntityPlayerZombie)
+			{
+				((EntityPlayer)event.entity).addStat(UnDeath.undeadKilledYourself, 1);
+			}
 			if (event.source.getEntity() instanceof EntitySkeleton ||event.source.getEntity() instanceof EntityPlayerSkellington)
 			{
 				Random rand=new Random();

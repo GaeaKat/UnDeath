@@ -6,7 +6,11 @@ import org.lwjgl.Sys;
 
 import com.google.common.base.Function;
 
+import net.minecraft.block.BlockSkull;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -33,10 +37,12 @@ public class UnDeath {
 	public static final String VERSION = "1.0";
 	public static final String NAME = "Un Death";
 	public static ItemSpawner spawner;
-
+	static  Achievement undeadKilledYourself;
+	static  Achievement youKilledYourself;
 	@Instance(ID)
 	public static UnDeath Instance;
-	public static TemTestBook bookSpawn;
+
+	
 	@SidedProxy(clientSide="com.nekokittygames.modjam.UnDeath.client.ClientProxy",serverSide="com.nekokittygames.modjam.UnDeath.ServerProxy")
 	public static ServerProxy proxy;
 	
@@ -50,12 +56,25 @@ public class UnDeath {
 		
 		Configuration config=new Configuration(event.getSuggestedConfigurationFile());
 		Configs.load(config);
-		
-		
+		undeadKilledYourself= new Achievement(Configs.undeadkillsYouAchivementID, "undeadKilledYou", 1, -2, Item.skull, AchievementList.buildSword).registerAchievement();
+		youKilledYourself= new Achievement(Configs.YoukillsYouAchivementID, "YouKilledYou", 1, -2, Item.cake, AchievementList.buildSword).setSpecial().registerAchievement();
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug Spawner");
-		bookSpawn=new TemTestBook(Configs.debugBook);
-		LanguageRegistry.addName(bookSpawn, "Book Spawner");
+		addAchievementName("undeadKilledYou", "Undead kill you");
+		addAchievementDesc("undeadKilledYou", "The undead corpse of a player, killed you");
+		
+		addAchievementName("YouKilledYou", "You kill you");
+		addAchievementDesc("YouKilledYou", "You defeat your own undead corpse");
+	}
+	
+	private void addAchievementName(String ach, String name)
+	{
+	        LanguageRegistry.instance().addStringLocalization("achievement." + ach, "en_US", name);
+	}
+
+	private void addAchievementDesc(String ach, String desc)
+	{
+	        LanguageRegistry.instance().addStringLocalization("achievement." + ach + ".desc", "en_US", desc);
 	}
 	public static int PlayerZombieId;
 	@EventHandler
