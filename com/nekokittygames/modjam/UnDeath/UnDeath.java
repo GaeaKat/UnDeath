@@ -33,7 +33,7 @@ public class UnDeath {
 	public static final String VERSION = "1.0";
 	public static final String NAME = "Un Death";
 	public static ItemSpawner spawner;
-	public static TestItem test;
+
 	@Instance(ID)
 	public static UnDeath Instance;
 	
@@ -54,8 +54,7 @@ public class UnDeath {
 		
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug Spawner");
-		test=new TestItem(Configs.testItem);
-		LanguageRegistry.addName(test, "test Spawner");
+
 	}
 	public static int PlayerZombieId;
 	@EventHandler
@@ -64,14 +63,14 @@ public class UnDeath {
 		int playerZombieId=EntityRegistry.findGlobalUniqueEntityId();
 		
 		
-		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", playerZombieId, 0xff0000, 0x00ff00);
+		EntityRegistry.registerGlobalEntityID(EntityPlayerZombie.class, "playerZombie", playerZombieId);
 		int playerSkellingtonId=EntityRegistry.findGlobalUniqueEntityId();
 		
-		EntityRegistry.registerGlobalEntityID(EntityPlayerSkellington.class, "playerSkellington", playerSkellingtonId, 0xff0000, 0x00ff00);
+		EntityRegistry.registerGlobalEntityID(EntityPlayerSkellington.class, "playerSkellington", playerSkellingtonId);
 		int playerSlimeId=EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityPlayerSlime.class, "playerSlime", playerSlimeId, 0xff0000, 0x00ff00);
+		EntityRegistry.registerGlobalEntityID(EntityPlayerSlime.class, "playerSlime", playerSlimeId);
 		int playerPigZombieId=EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityPlayerZombiePigmen.class, "playerPigZombie", playerPigZombieId, 0xff0000, 0x00ff00);
+		EntityRegistry.registerGlobalEntityID(EntityPlayerZombiePigmen.class, "playerPigZombie", playerPigZombieId);
 		EntityPlayerZombie.EntityId=playerZombieId;
 		EntityPlayerSkellington.EntityId=playerSkellingtonId;
 		EntityPlayerSlime.EntityId=playerSlimeId;
