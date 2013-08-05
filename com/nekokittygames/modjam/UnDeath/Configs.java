@@ -26,7 +26,8 @@ public class Configs {
 	
 	@CfgId(block=false)
 	public static int debugStick=2032;
-
+	@CfgId(block=false)
+	public static int testItem=2033;
 	
 	@CfgDouble
 	public static double ZombificationChance=1.0;

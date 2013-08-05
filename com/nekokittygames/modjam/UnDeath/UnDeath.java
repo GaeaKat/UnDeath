@@ -33,7 +33,7 @@ public class UnDeath {
 	public static final String VERSION = "1.0";
 	public static final String NAME = "Un Death";
 	public static ItemSpawner spawner;
-	
+	public static TestItem test;
 	@Instance(ID)
 	public static UnDeath Instance;
 	
@@ -54,6 +54,8 @@ public class UnDeath {
 		
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug Spawner");
+		test=new TestItem(Configs.testItem);
+		LanguageRegistry.addName(test, "test Spawner");
 	}
 	public static int PlayerZombieId;
 	@EventHandler
