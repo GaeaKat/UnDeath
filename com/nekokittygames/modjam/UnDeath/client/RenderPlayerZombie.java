@@ -85,11 +85,7 @@ public class RenderPlayerZombie extends RenderBiped {
     	
     }
 
-    // this is where it gets the thign to render as skin
-	protected ResourceLocation func_110817_a(EntityPlayerZombie par1EntityPlayerZombie)
-    {
-        return par1EntityPlayerZombie.func_110306_p();
-    }
+
 
 
 }
