@@ -84,7 +84,7 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 	        return this.field_110315_c;
 	    }
 	@SideOnly(Side.CLIENT)
-    public static ResourceLocation func_110311_f(String par0Str)
+    public  ResourceLocation func_110311_f(String par0Str)
     {
         return new ResourceLocation(getSkinName(par0Str));
     }
@@ -113,31 +113,31 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 		return new ResourceLocation[] {this.func_110306_p(),Pigoverlay};
 	}
 	@SideOnly(Side.CLIENT)
-	private static String getSkinName(String par0Str) {
+	private  String getSkinName(String par0Str) {
 		return "pzskins/" + StringUtils.stripControlCodes(par0Str);
 	}
 	 @SideOnly(Side.CLIENT)
-    public static ResourceLocation func_110299_g(String par0Str)
+    public  ResourceLocation func_110299_g(String par0Str)
     {
         return new ResourceLocation("pzcloaks/" + StringUtils.stripControlCodes(par0Str));
     }
 	 @SideOnly(Side.CLIENT)
-    public static ResourceLocation func_110305_h(String par0Str)
+    public  ResourceLocation func_110305_h(String par0Str)
     {
         return new ResourceLocation("pzskull/" + StringUtils.stripControlCodes(par0Str));
     }
 	 @SideOnly(Side.CLIENT)
-	    public static ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
+	    public  ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
 	    {
 	        return func_110301_a(par0ResourceLocation, func_110300_d(par1Str), field_110314_b, new ImageBufferDownload());
 	    }
 		 @SideOnly(Side.CLIENT)
-	    public static ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
+	    public  ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
 	    {
 	        return func_110301_a(par0ResourceLocation, func_110308_e(par1Str), (ResourceLocation)null, (IImageBuffer)null);
 	    }
 		 @SideOnly(Side.CLIENT)
-	    private static ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+	    private  ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
 	    {
 	        TextureManager texturemanager = Minecraft.getMinecraft().func_110434_K();
 	        Object object = texturemanager.func_110581_b(par0ResourceLocation);
