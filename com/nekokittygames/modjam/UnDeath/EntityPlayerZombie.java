@@ -64,7 +64,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     protected ThreadDownloadZombieImageData field_110315_c;
     protected ResourceLocation mmmm;
     protected ResourceLocation tsch;
-    private boolean dropItems=true;
+    protected boolean dropItems=true;
     @SideOnly(Side.CLIENT)
     private String LayeredName;
     @SideOnly(Side.CLIENT)
@@ -134,12 +134,12 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 	 @SideOnly(Side.CLIENT)
     public ResourceLocation func_110306_p()
     {
-        return this.mmmm;
+        return mmmm;
     }
 	 @SideOnly(Side.CLIENT)
     public ResourceLocation func_110303_q()
     {
-        return this.tsch;
+        return tsch;
     }
 	 @SideOnly(Side.CLIENT)
     public static ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)

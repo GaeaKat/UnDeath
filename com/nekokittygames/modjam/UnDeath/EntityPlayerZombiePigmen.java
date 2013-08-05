@@ -3,6 +3,9 @@ package com.nekokittygames.modjam.UnDeath;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.io.ByteArrayDataInput;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,7 +18,9 @@ import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
@@ -63,6 +68,11 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
         }
     }
 	@SideOnly(Side.CLIENT)
+    public static ResourceLocation func_110311_f(String par0Str)
+    {
+        return new ResourceLocation(getSkinName(par0Str));
+    }
+	@SideOnly(Side.CLIENT)
 	public void setLayeredName(String layeredName) {
 		LayeredName = layeredName;
 	}
@@ -71,6 +81,16 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 	{
 		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"/pigzombie";
 	}
+	@SideOnly(Side.CLIENT)
+    public ResourceLocation func_110306_p()
+    {
+        return mmmm;
+    }
+	 @SideOnly(Side.CLIENT)
+    public ResourceLocation func_110303_q()
+    {
+        return tsch;
+    }
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getSkins()
 	{
@@ -186,7 +206,29 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 	            return super.attackEntityFrom(par1DamageSource, par2);
 	        }
 	    }
-
+	 @Override
+		public void readSpawnData(ByteArrayDataInput data) {
+			NBTTagCompound compound;
+			try {
+				compound = (NBTTagCompound) NBTBase.readNamedTag(data);
+				NBTTagList nbttaglist = compound.getTagList("Inventory");
+		        this.inventory.readFromNBT(nbttaglist);
+		        this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
+		        this.setZombieName(compound.getString("zombieName"));
+		        dropItems=compound.getBoolean("dropItems");
+		        if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+				{
+					this.func_110302_j();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+			
+		}
 	    /**
 	     * Causes this PigZombie to become angry at the supplied Entity (which will be a player).
 	     */
