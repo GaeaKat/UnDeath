@@ -3,6 +3,8 @@ package com.nekokittygames.modjam.UnDeath;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -26,17 +28,38 @@ public class PlayerEvent {
 		}
 		if(event.entity instanceof EntityPlayer)
 		{
-			Random rand=new Random();
-			int num=rand.nextInt(100);
-			UnDeath.logging.info(String.format("I got %f,  and zombification chance is: %f",((double)num/100),Configs.ZombificationChance));
-			if(((float)num/100.0f) <= Configs.ZombificationChance)
+			if (event.source.getEntity() instanceof EntitySkeleton ||event.source.getEntity() instanceof EntityPlayerSkellington)
 			{
-				double x=event.entity.posX;
-				double y=event.entity.posY;
-				double z=event.entity.posZ;
-				ItemSpawner.spawnCreature(event.entity.worldObj,1, x, y, z, (EntityPlayer)event.entity);
-				spawning=true;
+				Random rand=new Random();
+				int num=rand.nextInt(100);
+				UnDeath.logging.info(String.format("I got %f,  and Skellification chance is: %f",((double)num/100),Configs.SkellificationChance));
+				if(((float)num/100.0f) <= Configs.SkellificationChance)
+				{
+					double x=event.entity.posX;
+					double y=event.entity.posY;
+					double z=event.entity.posZ;
+					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerSkellington.EntityId, x, y, z, (EntityPlayer)event.entity);
+					spawning=true;
+				}
+				return;
 			}
+			if (event.source.getEntity() instanceof EntitySlime ||event.source.getEntity() instanceof EntityPlayerSlime)
+			{
+				Random rand=new Random();
+				int num=rand.nextInt(100);
+				UnDeath.logging.info(String.format("I got %f,  and slimeEngulf chance is: %f",((double)num/100),Configs.slimeEngulfChance));
+				if(((float)num/100.0f) <= Configs.slimeEngulfChance)
+				{
+					double x=event.entity.posX;
+					double y=event.entity.posY;
+					double z=event.entity.posZ;
+					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerSkellington.EntityId, x, y, z, (EntityPlayer)event.entity);
+					event.source.getEntity().isDead=true;
+					spawning=true;
+				}
+				return;
+			}
+			
 		}
 	}
 	@ForgeSubscribe

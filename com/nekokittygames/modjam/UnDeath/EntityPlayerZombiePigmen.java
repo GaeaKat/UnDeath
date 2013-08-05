@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -15,12 +17,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 
 public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 	public static int EntityID;
 	private static final UUID field_110189_bq = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier field_110190_br = (new AttributeModifier(field_110189_bq, "Attacking speed boost", 0.45D, 0)).func_111168_a(false);
+    private static final ResourceLocation Pigoverlay=new ResourceLocation("undeath","textures/entity/playerPigZombie.png");
     /** Above zero if this PigZombie is Angry. */
     private int angerLevel;
 
@@ -31,7 +36,41 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 		super(par1World);
 		this.isImmuneToFire = true;
 	}
-	
+	private String LayeredName;
+    @SideOnly(Side.CLIENT)
+	public String getLayeredName() {
+		if(LayeredName==null)
+			BuildLayeredName();
+    	return LayeredName;
+	}
+	@SideOnly(Side.CLIENT)
+	public void setLayeredName(String layeredName) {
+		LayeredName = layeredName;
+	}
+	@SideOnly(Side.CLIENT)
+	public void BuildLayeredName()
+	{
+		LayeredName="skins/" + StringUtils.stripControlCodes(getZombieName())+"/pigzombie";
+	}
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation[] getSkins()
+	{
+		return new ResourceLocation[] {this.func_110306_p(),Pigoverlay};
+	}
+	@SideOnly(Side.CLIENT)
+	private static String getSkinName(String par0Str) {
+		return "pzskins/" + StringUtils.stripControlCodes(par0Str);
+	}
+	 @SideOnly(Side.CLIENT)
+    public static ResourceLocation func_110299_g(String par0Str)
+    {
+        return new ResourceLocation("pzcloaks/" + StringUtils.stripControlCodes(par0Str));
+    }
+	 @SideOnly(Side.CLIENT)
+    public static ResourceLocation func_110305_h(String par0Str)
+    {
+        return new ResourceLocation("pzskull/" + StringUtils.stripControlCodes(par0Str));
+    }
 	
 	 protected void func_110147_ax()
 	    {

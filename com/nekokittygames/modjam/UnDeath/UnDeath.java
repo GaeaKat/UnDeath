@@ -51,8 +51,6 @@ public class UnDeath {
 		Configuration config=new Configuration(event.getSuggestedConfigurationFile());
 		Configs.load(config);
 		
-		logging.info(Configs.TestString);
-		logging.info(Boolean.toString(Configs.KeepInventory));
 		
 		spawner=new ItemSpawner(Configs.debugStick);
 		LanguageRegistry.addName(spawner, "debug Spawner");
@@ -96,6 +94,7 @@ public class UnDeath {
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
 		LanguageRegistry.instance().addStringLocalization("entity.playerSkellington.name", "Player Skellington");
 		LanguageRegistry.instance().addStringLocalization("entity.playerSlime.name", "Player Slime");
+		LanguageRegistry.instance().addStringLocalization("entity.playerPigZombie.name", "Player Pig Zombie");
 		proxy.SetupRenderers();
 		MinecraftForge.EVENT_BUS.register(new PlayerEvent());
 	}

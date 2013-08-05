@@ -22,14 +22,20 @@ public class Configs {
 	@Retention(RetentionPolicy.RUNTIME)
 	private static @interface CfgDouble {}
 	
-	@CfgBool
-	public static boolean KeepInventory=true;
+
+	
 	@CfgId(block=false)
 	public static int debugStick=2032;
-	@CfgString
-	public static String TestString="test";
+
+	
 	@CfgDouble
 	public static double ZombificationChance=1.0;
+	
+	@CfgDouble
+	public static double SkellificationChance=1.0;
+	
+	@CfgDouble
+	public static double slimeEngulfChance=1.0;
 	
 	public static void  load(Configuration config) {
 		try {

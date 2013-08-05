@@ -160,12 +160,14 @@ public class ItemSpawner extends Item {
                 if (entity != null && entity instanceof EntityLivingBase)
                 {
                     EntityLiving entityliving = (EntityLiving)entity;
-                    if(itemDamage==EntityPlayerZombie.EntityId)
+                    if(itemDamage==EntityPlayerZombie.EntityId) 
                     	((EntityPlayerZombie)entityliving).InitFromPlayer(par7EntityPlayer);
                     else if(itemDamage==EntityPlayerSkellington.EntityId)
                     	((EntityPlayerSkellington)entityliving).InitFromPlayer(par7EntityPlayer);
                     else if(itemDamage==EntityPlayerSlime.EntityId)
                     	((EntityPlayerSlime)entityliving).InitFromPlayer(par7EntityPlayer,null);
+                    else if(itemDamage==EntityPlayerZombiePigmen.EntityID)
+                    	((EntityPlayerZombiePigmen)entityliving).InitFromPlayer(par7EntityPlayer);
                     entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
                     entityliving.rotationYawHead = entityliving.rotationYaw;
                     entityliving.renderYawOffset = entityliving.rotationYaw;
@@ -190,5 +192,6 @@ public class ItemSpawner extends Item {
             par3List.add(new ItemStack(par1, 1, EntityPlayerZombie.EntityId));
             par3List.add(new ItemStack(par1, 1, EntityPlayerSkellington.EntityId));
             par3List.add(new ItemStack(par1, 1, EntityPlayerSlime.EntityId));
+            par3List.add(new ItemStack(par1, 1, EntityPlayerZombiePigmen.EntityID));
     }
 }
