@@ -24,9 +24,9 @@ public class RenderPlayerSlime extends RenderLiving {
     private ModelBase scaleAmount;
     private RenderItem itemRenderer;
     private Random rand;
-    private static float[][] posShifts = { { -0.75F, 1.75F, 0.5F },{ 0F, 1.75F, 0.5F },{ 0.75F, 1.75F, 0.5F },
-    										{-0.75F, 1.75F, 0F },{ 0F, 1.75F, 0F },{ 0.75F, 1.75F, 0F },
-    										{-0.75F, 1.75F, -0.5F },{ 0F, 1.75F, -0.5F },{ 0.75F, 1.75F, -0.5F },
+    private static float[][] posShifts = { { -0.75F, 1.5F, 0.5F },{ 0F, 1.5F, 0.5F },{ 0.75F, 1.5F, 0.5F },
+    										{-0.75F, 1.5F, 0F },{ 0F, 1.5F, 0F },{ 0.75F, 1.5F, 0F },
+    										{-0.75F, 1.5F, -0.5F },{ 0F, 1.5F, -0.5F },{ 0.75F, 1.5F, -0.5F },
     										
     										{ -0.75F, 1.0F, 0.5F },{ 0F, 1F, 0.5F },{ 0.75F, 1F, 0.5F },
     										{-0.75F, 1F, 0F },{ 0F, 1F, 0F },{ 0.75F, 1F, 0F },
