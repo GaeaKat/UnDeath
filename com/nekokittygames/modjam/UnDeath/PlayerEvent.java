@@ -73,7 +73,7 @@ public class PlayerEvent {
 					double x=event.entity.posX;
 					double y=event.entity.posY;
 					double z=event.entity.posZ;
-					Entity zPigmen=ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombiePigmen.EntityID, x, y, z, (EntityPlayer)event.entity);
+					Entity zPigmen=ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombiePigmen.EntityId, x, y, z, (EntityPlayer)event.entity);
 					((EntityPlayerZombiePigmen)zPigmen).attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)event.entity), 0);
 					spawning=true;
 				}

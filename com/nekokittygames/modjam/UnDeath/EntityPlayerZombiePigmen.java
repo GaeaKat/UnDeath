@@ -51,7 +51,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
-    private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerZombie.png");
+    private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerPigZombie.png");
     protected ThreadDownloadZombieImageData field_110316_a;
     protected ThreadDownloadZombieImageData field_110315_c;
     protected ResourceLocation mmmm;
@@ -72,7 +72,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 	@SideOnly(Side.CLIENT)
 	public void BuildLayeredName()
 	{
-		LayeredName="skins/" + StringUtils.stripControlCodes(getPigZombieName())+"/zombie";
+		LayeredName="skins/" + StringUtils.stripControlCodes(getPigZombieName())+"/pigzombie";
 	}
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getSkins()
@@ -174,17 +174,17 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
     }
 	 @SideOnly(Side.CLIENT)
 	private  String getSkinName(String par0Str) {
-		return "zskins/" + StringUtils.stripControlCodes(par0Str);
+		return "pzskins/" + StringUtils.stripControlCodes(par0Str);
 	}
 	 @SideOnly(Side.CLIENT)
     public  ResourceLocation func_110299_g(String par0Str)
     {
-        return new ResourceLocation("zcloaks/" + StringUtils.stripControlCodes(par0Str));
+        return new ResourceLocation("pzcloaks/" + StringUtils.stripControlCodes(par0Str));
     }
 	 @SideOnly(Side.CLIENT)
     public  ResourceLocation func_110305_h(String par0Str)
     {
-        return new ResourceLocation("zskull/" + StringUtils.stripControlCodes(par0Str));
+        return new ResourceLocation("pzskull/" + StringUtils.stripControlCodes(par0Str));
     }
 	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)

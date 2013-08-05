@@ -74,7 +74,7 @@ public class UnDeath {
 		EntityPlayerZombie.EntityId=playerZombieId;
 		EntityPlayerSkellington.EntityId=playerSkellingtonId;
 		EntityPlayerSlime.EntityId=playerSlimeId;
-		EntityPlayerZombiePigmen.EntityID=playerPigZombieId;
+		EntityPlayerZombiePigmen.EntityId=playerPigZombieId;
 		
 		// Register entries
 		EntityRegistry.registerModEntity(EntityPlayerZombie.class, "playerZombie", playerZombieId, this, 80, 3, true);
@@ -91,6 +91,8 @@ public class UnDeath {
 		EntityRegistration er3=EntityRegistry.instance().lookupModSpawn(EntityPlayerSlime.class, false);
 		er3.setCustomSpawning(new SpawnPlayerSlimes(), false);
 		
+		EntityRegistration er4=EntityRegistry.instance().lookupModSpawn(EntityPlayerZombiePigmen.class, false);
+		er4.setCustomSpawning(new SpawnPlayerPigZombies(), false);
 		
 		LanguageRegistry.instance().addStringLocalization("entity.playerZombie.name", "Player Zombie");
 		LanguageRegistry.instance().addStringLocalization("entity.playerSkellington.name", "Player Skellington");

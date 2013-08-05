@@ -167,7 +167,7 @@ public class ItemSpawner extends Item {
                     	((EntityPlayerSkellington)entityliving).InitFromPlayer(par7EntityPlayer);
                     else if(itemDamage==EntityPlayerSlime.EntityId)
                     	((EntityPlayerSlime)entityliving).InitFromPlayer(par7EntityPlayer,null);
-                    else if(itemDamage==EntityPlayerZombiePigmen.EntityID)
+                    else if(itemDamage==EntityPlayerZombiePigmen.EntityId)
                     	((EntityPlayerZombiePigmen)entityliving).InitFromPlayer(par7EntityPlayer);
                     entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
                     entityliving.rotationYawHead = entityliving.rotationYaw;
@@ -193,6 +193,6 @@ public class ItemSpawner extends Item {
             par3List.add(new ItemStack(par1, 1, EntityPlayerZombie.EntityId));
             par3List.add(new ItemStack(par1, 1, EntityPlayerSkellington.EntityId));
             par3List.add(new ItemStack(par1, 1, EntityPlayerSlime.EntityId));
-            par3List.add(new ItemStack(par1, 1, EntityPlayerZombiePigmen.EntityID));
+            par3List.add(new ItemStack(par1, 1, EntityPlayerZombiePigmen.EntityId));
     }
 }
