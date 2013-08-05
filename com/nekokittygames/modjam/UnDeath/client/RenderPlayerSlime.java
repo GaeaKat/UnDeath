@@ -8,6 +8,7 @@ import com.google.common.primitives.SignedBytes;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerSlime;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -23,6 +24,7 @@ public class RenderPlayerSlime extends RenderLiving {
 	private static final ResourceLocation field_110897_a = new ResourceLocation("undeath","textures/entity/playerSlime.png");
     private ModelBase scaleAmount;
     private RenderItem itemRenderer;
+    private RenderBlocks blockRenderer;
     private Random rand;
     private static float[][] posShifts = { { -0.75F, 1.5F, 0.5F },{ 0F, 1.5F, 0.5F },{ 0.75F, 1.5F, 0.5F },
     										{-0.75F, 1.5F, 0F },{ 0F, 1.5F, 0F },{ 0.75F, 1.5F, 0F },
@@ -70,6 +72,7 @@ public class RenderPlayerSlime extends RenderLiving {
 			}
         	
         };
+
         itemRenderer.setRenderManager(RenderManager.instance);
         rand=new Random();
     }
