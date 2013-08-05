@@ -72,7 +72,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 	@SideOnly(Side.CLIENT)
 	public void BuildLayeredName()
 	{
-		LayeredName="skins/" + StringUtils.stripControlCodes(getPigZombieName())+"/pigzombie";
+		LayeredName="pzskins/" + StringUtils.stripControlCodes(getPigZombieName())+"/pigzombie";
 	}
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getSkins()
