@@ -131,7 +131,7 @@ public class RenderPlayerSlime extends RenderLiving {
           float shiftY;
           float shiftZ;
           int shift = 0;
-        float blockScale = 0.70F*(1f/pSlime.getSlimeSize());
+        float blockScale = 1.0F ;//*(1f/pSlime.getSlimeSize());
   		float timeDelta=(float)(360.0*(double)(System.currentTimeMillis() & 0x3FFFL)/(double)0x3FFFL);
   		GL11.glPushMatrix();
   		GL11.glDisable(GL11.GL_LIGHTING);
@@ -152,7 +152,7 @@ public class RenderPlayerSlime extends RenderLiving {
   			shiftZ=posShifts[shift][2];
   			shift++;
   			GL11.glPushMatrix();
-  			//GL11.glTranslatef(shiftX, shiftY, shiftZ); this
+  			GL11.glTranslatef(shiftX, shiftY, shiftZ); 
   			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
   			GL11.glScalef(blockScale, blockScale, blockScale);
   			custItem.setEntityItemStack(item);

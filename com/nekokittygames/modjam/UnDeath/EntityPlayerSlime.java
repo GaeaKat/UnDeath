@@ -25,6 +25,7 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 	private boolean dropItems;
 	public EntityPlayerSlime(World par1World) {
 		super(par1World);
+		this.setSlimeSize(4);
 	}
 	
 	@Override
