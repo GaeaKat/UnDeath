@@ -60,10 +60,10 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
     private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerZombie.png");
-    private ThreadDownloadZombieImageData field_110316_a;
-    private ThreadDownloadZombieImageData field_110315_c;
-    private ResourceLocation mmmm;
-    private ResourceLocation tsch;
+    protected ThreadDownloadZombieImageData field_110316_a;
+    protected ThreadDownloadZombieImageData field_110315_c;
+    protected ResourceLocation mmmm;
+    protected ResourceLocation tsch;
     private boolean dropItems=true;
     @SideOnly(Side.CLIENT)
     private String LayeredName;

@@ -50,6 +50,19 @@ public class EntityPlayerZombiePigmen extends EntityPlayerZombie {
 		//this.setZombieName("nekosune");
 	}
 	@SideOnly(Side.CLIENT)
+	protected void func_110302_j()
+    {
+        System.out.println("Setting up custom skins");
+
+        if (this.getZombieName() != null && !this.getZombieName().isEmpty())
+        {
+            this.mmmm = func_110311_f(this.getZombieName());
+            this.tsch = func_110299_g(this.getZombieName());
+            this.field_110316_a = func_110304_a(this.mmmm, this.getZombieName());
+            this.field_110315_c = func_110307_b(tsch, this.getZombieName());
+        }
+    }
+	@SideOnly(Side.CLIENT)
 	public void setLayeredName(String layeredName) {
 		LayeredName = layeredName;
 	}
