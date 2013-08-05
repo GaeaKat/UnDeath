@@ -289,7 +289,11 @@ private void findBestEquipment() {
 				hasBow=true;
 				bestLocation=i;
 				if(EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, currentCheck) > 0)
+				{
+					arrows=2;
 					break;
+					
+				}
 			}
 			if(currentCheck.getItem().itemID == Item.arrow.itemID)
 			{
