@@ -3,8 +3,10 @@ package com.nekokittygames.modjam.UnDeath;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -53,8 +55,38 @@ public class PlayerEvent {
 					double x=event.entity.posX;
 					double y=event.entity.posY;
 					double z=event.entity.posZ;
-					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerSkellington.EntityId, x, y, z, (EntityPlayer)event.entity);
+					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerSlime.EntityId, x, y, z, (EntityPlayer)event.entity);
 					event.source.getEntity().isDead=true;
+					spawning=true;
+				}
+				return;
+			}
+			if (event.source.getEntity() instanceof EntityPigZombie ||event.source.getEntity() instanceof EntityPlayerZombiePigmen)
+			{
+				Random rand=new Random();
+				int num=rand.nextInt(100);
+				UnDeath.logging.info(String.format("I got %f,  and zombification chance is: %f",((double)num/100),Configs.ZombificationChance));
+				if(((float)num/100.0f) <= Configs.ZombificationChance)
+				{
+					double x=event.entity.posX;
+					double y=event.entity.posY;
+					double z=event.entity.posZ;
+					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombiePigmen.EntityID, x, y, z, (EntityPlayer)event.entity);
+					spawning=true;
+				}
+				return;
+			}
+			if (event.source.getEntity() instanceof EntityZombie ||event.source.getEntity() instanceof EntityPlayerZombie)
+			{
+				Random rand=new Random();
+				int num=rand.nextInt(100);
+				UnDeath.logging.info(String.format("I got %f,  and zombification chance is: %f",((double)num/100),Configs.ZombificationChance));
+				if(((float)num/100.0f) <= Configs.ZombificationChance)
+				{
+					double x=event.entity.posX;
+					double y=event.entity.posY;
+					double z=event.entity.posZ;
+					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombie.EntityId, x, y, z, (EntityPlayer)event.entity);
 					spawning=true;
 				}
 				return;
