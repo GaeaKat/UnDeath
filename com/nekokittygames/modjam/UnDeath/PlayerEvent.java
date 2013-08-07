@@ -124,7 +124,7 @@ public class PlayerEvent {
 	@ForgeSubscribe
 	public void PlayerDrops(PlayerDropsEvent event)
 	{
-		if(spawning=true)
+		if(spawning==true)
 		{
 			event.setCanceled(true);
 			spawning=false;
