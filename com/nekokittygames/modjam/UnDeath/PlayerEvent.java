@@ -26,7 +26,7 @@ public class PlayerEvent {
 		{
 			return;
 		}
-		if(Minecraft.getMinecraft().gameSettings.difficulty==0)
+		if(event.entity.worldObj.difficultySetting==0)
 		{
 			return;
 		}

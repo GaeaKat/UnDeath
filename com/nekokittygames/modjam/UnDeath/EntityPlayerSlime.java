@@ -62,7 +62,8 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		}
 		else
 		{
-			this.entityDropItem(items[40], 0);
+			if(items[40]!=null)
+				this.entityDropItem(items[40], 0);
 		}
 	}
 

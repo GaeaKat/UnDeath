@@ -32,13 +32,13 @@ public class Configs {
 	@CfgId(block=false)
 	public static int debugBook=2033;
 	@CfgDouble
-	public static double ZombificationChance=1.0;
+	public static double ZombificationChance=0.02;
 	
 	@CfgDouble
-	public static double SkellificationChance=1.0;
+	public static double SkellificationChance=0.02;
 	
 	@CfgDouble
-	public static double slimeEngulfChance=1.0;
+	public static double slimeEngulfChance=0.25;
 	
 	@CfgInteger
 	public static int undeadkillsYouAchivementID=2010;
