@@ -4,24 +4,23 @@ import java.util.concurrent.Callable;
 
 import net.minecraft.item.ItemStack;
 
-public class CallableSkellingtonItemName implements Callable {
-	final ItemStack theItemStack;
+public class CallableSkellingtonItemName implements Callable<Object> {
+    final ItemStack                  theItemStack;
 
     final InventoryPlayerSkellington playerInventory;
 
-    CallableSkellingtonItemName(InventoryPlayerSkellington par1InventoryPlayer, ItemStack par2ItemStack)
-    {
-        this.playerInventory = par1InventoryPlayer;
-        this.theItemStack = par2ItemStack;
+    CallableSkellingtonItemName(InventoryPlayerSkellington par1InventoryPlayer,
+            ItemStack par2ItemStack) {
+        playerInventory = par1InventoryPlayer;
+        theItemStack = par2ItemStack;
     }
 
-    public String callItemDisplayName()
-    {
-        return this.theItemStack.getDisplayName();
-    }
-
-    public Object call()
-    {
+    @Override
+    public Object call() {
         return this.callItemDisplayName();
+    }
+
+    public String callItemDisplayName() {
+        return theItemStack.getDisplayName();
     }
 }

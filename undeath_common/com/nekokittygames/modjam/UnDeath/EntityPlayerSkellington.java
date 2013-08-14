@@ -13,7 +13,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -40,7 +39,6 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
@@ -49,7 +47,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -261,7 +258,8 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	}
 	public void copyPotionEffects(EntityPlayer player)
 	{
-		Collection<PotionEffect> effects=player.getActivePotionEffects();
+		@SuppressWarnings("unchecked")
+        Collection<PotionEffect> effects=player.getActivePotionEffects();
 		for(PotionEffect effect:effects)
 		{
 			PotionEffect toEffect=new PotionEffect(effect);
@@ -270,6 +268,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		
 	}
 
+@SuppressWarnings("unchecked")
 private void findBestEquipment() {
 		
 		int bestScore=-1;
@@ -314,8 +313,8 @@ private void findBestEquipment() {
 			currentCheck=this.inventory.mainInventory[i];
 			if(currentCheck==null)
 				continue;
-			Multimap map=currentCheck.func_111283_C();
-			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+            Multimap<String, Collection<AttributeModifier>> map=currentCheck.func_111283_C();
+			Collection<Collection<AttributeModifier>> Attributes=(Collection<Collection<AttributeModifier>>)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
 			
 			if(Attributes.size()==0)
 				currentScore=0;

@@ -10,17 +10,18 @@ import cpw.mods.fml.common.network.EntitySpawnPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class SpawnPlayerPigZombies implements Function<EntitySpawnPacket, Entity> {
+public class SpawnPlayerPigZombies implements
+        Function<EntitySpawnPacket, Entity> {
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public 	Entity apply(EntitySpawnPacket input) {
-		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-		{
-			return new EntityPlayerZombiePigmen(FMLClientHandler.instance().getClient().theWorld);
-		}
-		return null;
-		//new EntityPlayerZombie(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(input.))
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Entity apply(EntitySpawnPacket input) {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+            return new EntityPlayerZombiePigmen(FMLClientHandler.instance()
+                    .getClient().theWorld);
+        return null;
+        // new
+        // EntityPlayerZombie(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(input.))
+    }
 
 }

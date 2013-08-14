@@ -3,7 +3,7 @@
   "modid": "UnDeath",
   "name": "UnDeath!",
   "description": "Ever wondered if there was life after death? wonder no more",
-  "version": "1.0",
+  "version": "@VERSION@",
   "mcversion": "1.6.2",
   "url": "",
   "updateUrl": "",

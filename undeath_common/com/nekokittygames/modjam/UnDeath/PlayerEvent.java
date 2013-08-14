@@ -2,7 +2,6 @@ package com.nekokittygames.modjam.UnDeath;
 
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -16,118 +15,136 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 
 public class PlayerEvent {
 
-	public boolean spawning=false;
-	
-	@ForgeSubscribe
-	public void PlayerDies(LivingDeathEvent event)
-	{
-		
-		if(event.entity.worldObj.isRemote)
-		{
-			return;
-		}
-		if(event.entity.worldObj.difficultySetting==0)
-		{
-			return;
-		}
-		if(event.entity instanceof EntityPlayerSkellington ||event.entity instanceof EntityPlayerZombiePigmen || event.entity instanceof EntityPlayerZombie)
-		{
-			if(event.source.getEntity() instanceof EntityPlayer)
-			{
-				String name="";
-				if(event.entity instanceof EntityPlayerSkellington)
-					name=((EntityPlayerSkellington)event.entity).getSkellingtonName();
-				
-				if(event.entity instanceof EntityPlayerZombie)
-					name=((EntityPlayerZombie)event.entity).getZombieName();
-				
-				if(event.entity instanceof EntityPlayerZombiePigmen)
-					name=((EntityPlayerZombiePigmen)event.entity).getPigZombieName();
-				
-				if(name.equalsIgnoreCase(((EntityPlayer)event.source.getEntity()).getCommandSenderName()))
-				{
-					((EntityPlayer)event.source.getEntity()).addStat(UnDeath.youKilledYourself, 1);
-				}
-			}
-		}
-		if(event.entity instanceof EntityPlayer)
-		{
-			if(event.source.getEntity() instanceof EntityPlayerSkellington ||event.source.getEntity() instanceof EntityPlayerZombiePigmen || event.source.getEntity() instanceof EntityPlayerZombie)
-			{
-				((EntityPlayer)event.entity).addStat(UnDeath.undeadKilledYourself, 1);
-			}
-			if (event.source.getEntity() instanceof EntitySkeleton ||event.source.getEntity() instanceof EntityPlayerSkellington)
-			{
-				Random rand=new Random();
-				int num=rand.nextInt(100);
-				UnDeath.logging.info(String.format("I got %f,  and Skellification chance is: %f",((double)num/100),Configs.SkellificationChance));
-				if(((float)num/100.0f) <= Configs.SkellificationChance)
-				{
-					double x=event.entity.posX;
-					double y=event.entity.posY;
-					double z=event.entity.posZ;
-					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerSkellington.EntityId, x, y, z, (EntityPlayer)event.entity);
-					spawning=true;
-				}
-				return;
-			}
-			if (event.source.getEntity() instanceof EntitySlime ||event.source.getEntity() instanceof EntityPlayerSlime)
-			{
-				Random rand=new Random();
-				int num=rand.nextInt(100);
-				UnDeath.logging.info(String.format("I got %f,  and slimeEngulf chance is: %f",((double)num/100),Configs.slimeEngulfChance));
-				if(((float)num/100.0f) <= Configs.slimeEngulfChance)
-				{
-					double x=event.entity.posX;
-					double y=event.entity.posY;
-					double z=event.entity.posZ;
-					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerSlime.EntityId, x, y, z, (EntityPlayer)event.entity);
-					event.source.getEntity().isDead=true;
-					spawning=true;
-				}
-				return;
-			}
-			if (event.source.getEntity() instanceof EntityPigZombie ||event.source.getEntity() instanceof EntityPlayerZombiePigmen)
-			{
-				Random rand=new Random();
-				int num=rand.nextInt(100);
-				UnDeath.logging.info(String.format("I got %f,  and zombification chance is: %f",((double)num/100),Configs.ZombificationChance));
-				if(((float)num/100.0f) <= Configs.ZombificationChance)
-				{
-					double x=event.entity.posX;
-					double y=event.entity.posY;
-					double z=event.entity.posZ;
-					Entity zPigmen=ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombiePigmen.EntityId, x, y, z, (EntityPlayer)event.entity);
-					((EntityPlayerZombiePigmen)zPigmen).attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)event.entity), 0);
-					spawning=true;
-				}
-				return;
-			}
-			if (event.source.getEntity() instanceof EntityZombie ||event.source.getEntity() instanceof EntityPlayerZombie)
-			{
-				Random rand=new Random();
-				int num=rand.nextInt(100);
-				UnDeath.logging.info(String.format("I got %f,  and zombification chance is: %f",((double)num/100),Configs.ZombificationChance));
-				if(((float)num/100.0f) <= Configs.ZombificationChance)
-				{
-					double x=event.entity.posX;
-					double y=event.entity.posY;
-					double z=event.entity.posZ;
-					ItemSpawner.spawnCreature(event.entity.worldObj,EntityPlayerZombie.EntityId, x, y, z, (EntityPlayer)event.entity);
-					spawning=true;
-				}
-				return;
-			}
-			
-		}
-	}
-	@ForgeSubscribe
-	public void PlayerDrops(PlayerDropsEvent event)
-	{
-		if(spawning==true)
-		{
-			event.setCanceled(true);
-			spawning=false;
-	}
-	}
+    public boolean spawning = false;
+
+    @ForgeSubscribe
+    public void PlayerDies(LivingDeathEvent event) {
+
+        if (event.entity.worldObj.isRemote)
+            return;
+        if (event.entity.worldObj.difficultySetting == 0)
+            return;
+        if (event.entity instanceof EntityPlayerSkellington
+                || event.entity instanceof EntityPlayerZombiePigmen
+                || event.entity instanceof EntityPlayerZombie) {
+            if (event.source.getEntity() instanceof EntityPlayer) {
+                String name = "";
+                if (event.entity instanceof EntityPlayerSkellington) {
+                    name = ((EntityPlayerSkellington) event.entity)
+                            .getSkellingtonName();
+                }
+
+                if (event.entity instanceof EntityPlayerZombie) {
+                    name = ((EntityPlayerZombie) event.entity).getZombieName();
+                }
+
+                if (event.entity instanceof EntityPlayerZombiePigmen) {
+                    name = ((EntityPlayerZombiePigmen) event.entity)
+                            .getPigZombieName();
+                }
+
+                if (name.equalsIgnoreCase(((EntityPlayer) event.source
+                        .getEntity()).getCommandSenderName())) {
+                    ((EntityPlayer) event.source.getEntity()).addStat(
+                            UnDeath.youKilledYourself, 1);
+                }
+            }
+        }
+        if (event.entity instanceof EntityPlayer) {
+            if (event.source.getEntity() instanceof EntityPlayerSkellington
+                    || event.source.getEntity() instanceof EntityPlayerZombiePigmen
+                    || event.source.getEntity() instanceof EntityPlayerZombie) {
+                ((EntityPlayer) event.entity).addStat(
+                        UnDeath.undeadKilledYourself, 1);
+            }
+            if (event.source.getEntity() instanceof EntitySkeleton
+                    || event.source.getEntity() instanceof EntityPlayerSkellington) {
+                final Random rand = new Random();
+                final int num = rand.nextInt(100);
+                UnDeath.logging.info(String.format(
+                        "I got %f,  and Skellification chance is: %f",
+                        (double) num / 100, Configs.SkellificationChance));
+                if (num / 100.0f <= Configs.SkellificationChance) {
+                    final double x = event.entity.posX;
+                    final double y = event.entity.posY;
+                    final double z = event.entity.posZ;
+                    ItemSpawner.spawnCreature(event.entity.worldObj,
+                            EntityPlayerSkellington.EntityId, x, y, z,
+                            (EntityPlayer) event.entity);
+                    spawning = true;
+                }
+                return;
+            }
+            if (event.source.getEntity() instanceof EntitySlime
+                    || event.source.getEntity() instanceof EntityPlayerSlime) {
+                final Random rand = new Random();
+                final int num = rand.nextInt(100);
+                UnDeath.logging.info(String.format(
+                        "I got %f,  and slimeEngulf chance is: %f",
+                        (double) num / 100, Configs.slimeEngulfChance));
+                if (num / 100.0f <= Configs.slimeEngulfChance) {
+                    final double x = event.entity.posX;
+                    final double y = event.entity.posY;
+                    final double z = event.entity.posZ;
+                    ItemSpawner.spawnCreature(event.entity.worldObj,
+                            EntityPlayerSlime.EntityId, x, y, z,
+                            (EntityPlayer) event.entity);
+                    event.source.getEntity().isDead = true;
+                    spawning = true;
+                }
+                return;
+            }
+            if (event.source.getEntity() instanceof EntityPigZombie
+                    || event.source.getEntity() instanceof EntityPlayerZombiePigmen) {
+                final Random rand = new Random();
+                final int num = rand.nextInt(100);
+                UnDeath.logging.info(String.format(
+                        "I got %f,  and zombification chance is: %f",
+                        (double) num / 100, Configs.ZombificationChance));
+                if (num / 100.0f <= Configs.ZombificationChance) {
+                    final double x = event.entity.posX;
+                    final double y = event.entity.posY;
+                    final double z = event.entity.posZ;
+                    final Entity zPigmen = ItemSpawner.spawnCreature(
+                            event.entity.worldObj,
+                            EntityPlayerZombiePigmen.EntityId, x, y, z,
+                            (EntityPlayer) event.entity);
+                    ((EntityPlayerZombiePigmen) zPigmen)
+                            .attackEntityFrom(
+                                    DamageSource
+                                            .causePlayerDamage((EntityPlayer) event.entity),
+                                    0);
+                    spawning = true;
+                }
+                return;
+            }
+            if (event.source.getEntity() instanceof EntityZombie
+                    || event.source.getEntity() instanceof EntityPlayerZombie) {
+                final Random rand = new Random();
+                final int num = rand.nextInt(100);
+                UnDeath.logging.info(String.format(
+                        "I got %f,  and zombification chance is: %f",
+                        (double) num / 100, Configs.ZombificationChance));
+                if (num / 100.0f <= Configs.ZombificationChance) {
+                    final double x = event.entity.posX;
+                    final double y = event.entity.posY;
+                    final double z = event.entity.posZ;
+                    ItemSpawner.spawnCreature(event.entity.worldObj,
+                            EntityPlayerZombie.EntityId, x, y, z,
+                            (EntityPlayer) event.entity);
+                    spawning = true;
+                }
+                return;
+            }
+
+        }
+    }
+
+    @ForgeSubscribe
+    public void PlayerDrops(PlayerDropsEvent event) {
+        if (spawning == true) {
+            event.setCanceled(true);
+            spawning = false;
+        }
+    }
 }
