@@ -31,7 +31,7 @@ public class ResourceLayeredTexture extends AbstractTexture {
 	}
 
 	@Override
-	public void loadTexture(IResourceManager par1ResourceManager) throws IOException
+	public void loadTexture(IResourceManager par1ResourceManager)
 	{
 		BufferedImage bufferedimage = null;
 
@@ -81,10 +81,17 @@ public class ResourceLayeredTexture extends AbstractTexture {
 					}
 					else
 					{
-						IResource resource = par1ResourceManager.getResource(EntityPlayerZombie.field_110314_b);
-						InputStream inputstream = resource.getInputStream();
-						bufferedimage1 = ImageIO.read(inputstream);
+                        try {
 
+
+                            IResource resource = par1ResourceManager.getResource(EntityPlayerZombie.field_110314_b);
+                            InputStream inputstream = resource.getInputStream();
+                            bufferedimage1 = ImageIO.read(inputstream);
+                        }
+                        catch(Exception ex)
+                        {
+
+                        }
 						if (bufferedimage == null)
 						{
 							bufferedimage = new BufferedImage(bufferedimage1.getWidth(), bufferedimage1.getHeight(), 2);
