@@ -1,7 +1,6 @@
 package com.nekokittygames.modjam.UnDeath;
 
-import java.util.Random;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPigZombie;
@@ -10,15 +9,17 @@ import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+
+import java.util.Random;
 
 public class PlayerEvent {
 
 	public boolean spawning=false;
 	
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void PlayerDies(LivingDeathEvent event)
 	{
 		
@@ -26,7 +27,7 @@ public class PlayerEvent {
 		{
 			return;
 		}
-		if(Minecraft.getMinecraft().gameSettings.difficulty==0)
+		if(Minecraft.getMinecraft().gameSettings.difficulty== EnumDifficulty.PEACEFUL)
 		{
 			return;
 		}
@@ -121,7 +122,7 @@ public class PlayerEvent {
 			
 		}
 	}
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void PlayerDrops(PlayerDropsEvent event)
 	{
 		if(spawning=true)

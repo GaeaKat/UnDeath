@@ -1,11 +1,10 @@
 package com.nekokittygames.modjam.UnDeath;
 
+import net.minecraftforge.common.config.Configuration;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-
-import net.minecraftforge.common.Configuration;
 
 public class Configs {
 
@@ -26,11 +25,7 @@ public class Configs {
 	private static @interface CfgInteger {}
 
 	
-	@CfgId(block=false)
-	public static int debugStick=2032;
-	
-	@CfgId(block=false)
-	public static int debugBook=2033;
+
 	@CfgDouble
 	public static double ZombificationChance=1.0;
 	
@@ -39,28 +34,18 @@ public class Configs {
 	
 	@CfgDouble
 	public static double slimeEngulfChance=1.0;
+
+    @CfgString
+	public static String undeadkillsYouAchivementID="undead:undeadkillsyou";
 	
-	@CfgInteger
-	public static int undeadkillsYouAchivementID=2010;
-	
-	@CfgInteger
-	public static int YoukillsYouAchivementID=2012;
+	@CfgString
+	public static String YoukillsYouAchivementID="undead:youkillsyou";
 	
 	public static void  load(Configuration config) {
 		try {
 			config.load();
 			Field[] fields = Configs.class.getFields();
 			for(Field field : fields) {
-				CfgId annotation = field.getAnnotation(CfgId.class);
-				if(annotation != null) {
-					int id = field.getInt(null);
-					if(annotation.block()){
-						id = config.getBlock(field.getName(), id).getInt();
-					}else{
-						id = config.getItem(field.getName(), id).getInt();
-					}
-					field.setInt(null, id);
-				} else {
 					if(field.isAnnotationPresent(CfgBool.class)){
 						boolean bool = field.getBoolean(null);
 						bool = config.get(Configuration.CATEGORY_GENERAL,
@@ -85,10 +70,10 @@ public class Configs {
 						integer=config.get(Configuration.CATEGORY_GENERAL, field.getName(), integer).getInt();
 						field.set(null, integer);
 					}
-				}
+
 			}
 		} catch(Exception e) {
-			UnDeath.logging.log(Level.SEVERE, "Got an error in loading config!", e);
+			//UnDeath.logging.log(Level.SEVERE, "Got an error in loading config!", e);
 		} finally {
 			config.save();
 		}

@@ -1,4 +1,4 @@
-package com.nekokittygames.modjam.UnDeath.client;
+/*package com.nekokittygames.modjam.UnDeath.client;
 
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
@@ -56,3 +56,4 @@ public class ThreadDownloadZombieImageDataINNER1 extends Thread {
         }
     }
 }
+*/

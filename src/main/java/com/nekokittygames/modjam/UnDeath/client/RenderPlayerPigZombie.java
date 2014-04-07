@@ -1,16 +1,14 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.nekokittygames.modjam.UnDeath.EntityPlayerSkellington;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerZombiePigmen;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RenderPlayerPigZombie extends RenderBiped {
 	private static final Map<String,ResourceLocation> layerdSkins = new HashMap<String, ResourceLocation>();
@@ -30,7 +28,7 @@ public RenderPlayerPigZombie() {
 
 
 @Override
-protected ResourceLocation func_110775_a(Entity par1Entity)
+protected ResourceLocation getEntityTexture(Entity par1Entity)
 {
     //return this.func_110817_a((EntityPlayerZombie)par1Entity);
 	return this.getLayered((EntityPlayerZombiePigmen)par1Entity);
@@ -43,7 +41,7 @@ public ResourceLocation getLayered(EntityPlayerZombiePigmen par1EntityPlayerSkel
 	if(rl==null)
 	{
 		rl=new ResourceLocation(s);
-		Minecraft.getMinecraft().func_110434_K().func_110579_a(rl,new ResourceLayeredTexture(par1EntityPlayerSkellington.getSkins()));
+		Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new ResourceLayeredTexture(par1EntityPlayerSkellington.getSkins()));
 		layerdSkins.put(s, rl);
 	}
 	return rl;

@@ -1,61 +1,43 @@
 package com.nekokittygames.modjam.UnDeath;
 
-import java.util.Collection;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.google.common.collect.Multimap;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cpw.mods.fml.server.FMLServerHandler;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIFleeSun;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIRestrictSun;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Collection;
 
 public class EntityPlayerSkellington extends EntityMob implements IEntityAdditionalSpawnData,IRangedAttackMob {
 
@@ -70,8 +52,8 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 
 	public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
 	private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerSkellington.png");
-	private ThreadDownloadZombieImageData field_110316_a;
-	private ThreadDownloadZombieImageData field_110315_c;
+	private ThreadDownloadImageData field_110316_a;
+	private ThreadDownloadImageData field_110315_c;
 	private ResourceLocation mmmm;
 	private ResourceLocation tsch;
 	private boolean usingBow;
@@ -122,12 +104,15 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+
 	}
-	protected void func_110147_ax()
+    @Override
+	protected void applyEntityAttributes()
     {
-        super.func_110147_ax();
-        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.25D);
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
     }
+
 	@SideOnly(Side.CLIENT)
 	protected void func_110302_j()
 	{
@@ -142,12 +127,12 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		}
 	}
 	@SideOnly(Side.CLIENT)
-	public ThreadDownloadZombieImageData func_110309_l()
+	public ThreadDownloadImageData func_110309_l()
 	{
 		return this.field_110316_a;
 	}
 	@SideOnly(Side.CLIENT)
-	public ThreadDownloadZombieImageData func_110310_o()
+	public ThreadDownloadImageData func_110310_o()
 	{
 		return this.field_110315_c;
 	}
@@ -162,28 +147,28 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		return this.tsch;
 	}
 	@SideOnly(Side.CLIENT)
-	public static ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
+	public static ThreadDownloadImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
 	{
 		return func_110301_a(par0ResourceLocation, func_110300_d(par1Str), field_110314_b, new ImageBufferDownload());
 	}
 	@SideOnly(Side.CLIENT)
-	public static ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
+	public static ThreadDownloadImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
 	{
 		return func_110301_a(par0ResourceLocation, func_110308_e(par1Str), (ResourceLocation)null, (IImageBuffer)null);
 	}
 	@SideOnly(Side.CLIENT)
-	private static ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+	private static ThreadDownloadImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
 	{
-		TextureManager texturemanager = Minecraft.getMinecraft().func_110434_K();
-		Object object = texturemanager.func_110581_b(par0ResourceLocation);
+		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+		Object object = texturemanager.getTexture(par0ResourceLocation);
 
 		if (object == null)
 		{
-			object = new ThreadDownloadZombieImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
-			texturemanager.func_110579_a(par0ResourceLocation, (TextureObject)object);
+			object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
+			texturemanager.loadTexture(par0ResourceLocation, (ITextureObject) object);
 		}
 
-		return (ThreadDownloadZombieImageData)object;
+		return (ThreadDownloadImageData)object;
 	}
 	@SideOnly(Side.CLIENT)
 	public static String func_110300_d(String par0Str)
@@ -220,7 +205,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readEntityFromNBT(par1NBTTagCompound);
-		NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Inventory");
+		NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
 		this.inventory.readFromNBT(nbttaglist);
 		this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
 		this.setSkellingtonName(par1NBTTagCompound.getString("skellingtonName"));
@@ -295,7 +280,7 @@ private void findBestEquipment() {
 					
 				}
 			}
-			if(currentCheck.getItem().itemID == Item.arrow.itemID)
+			if(currentCheck.getItem() == Items.arrow)
 			{
 				arrows+=currentCheck.stackSize;
 			}
@@ -314,13 +299,13 @@ private void findBestEquipment() {
 			currentCheck=this.inventory.mainInventory[i];
 			if(currentCheck==null)
 				continue;
-			Multimap map=currentCheck.func_111283_C();
-			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+			Multimap map=currentCheck.getAttributeModifiers();
+			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.attackDamage);
 			
 			if(Attributes.size()==0)
 				currentScore=0;
 			else
-				currentScore=(int)((AttributeModifier)Attributes.toArray()[0]).func_111164_d();
+				currentScore=(int)((AttributeModifier)Attributes.toArray()[0]).getAmount();
 			NBTTagList enchList=currentCheck.getEnchantmentTagList();
 			if(enchList==null)
 				currentScore+=0;
@@ -328,7 +313,7 @@ private void findBestEquipment() {
 			{
 				for(int j=0;j<enchList.tagCount();j++)
 				{
-					NBTTagCompound comp=(NBTTagCompound)enchList.tagAt(j);
+					NBTTagCompound comp=(NBTTagCompound)enchList.getCompoundTagAt(j);
 					int enchId=comp.getShort("id");
 					int enchLvl=comp.getShort("lvl");
 					switch(enchId)
@@ -407,10 +392,7 @@ private void findBestEquipment() {
 		this.playSound("mob.skeleton.step", 0.15F, 1.0F);
 	}
 
-	public EntityLivingData func_110161_a(EntityLivingData par1EntityLivingData)
-	{
-		return null;
-	}
+
 
 
 
@@ -478,7 +460,7 @@ private void findBestEquipment() {
         {
             this.setSize(0.72F, 2.34F);
         }
-        if(usingBow && !inventory.hasItem(Item.arrow.itemID) )
+        if(usingBow && !inventory.hasItem(Items.arrow) )
         {
         	findBestEquipment();
         }
@@ -514,27 +496,29 @@ private void findBestEquipment() {
     }
     
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf buffer) {
 		NBTTagCompound compound=new NBTTagCompound();
-		compound.setName("Skellington");
+		//compound.setName("Skellington");
 		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		compound.setString("skellingtonName", getSkellingtonName());
 		compound.setBoolean("dropItems", dropItems);
 		try {
-
-			NBTBase.writeNamedTag(compound, data);
+            ByteArrayOutputStream bos=new ByteArrayOutputStream();
+			CompressedStreamTools.writeCompressed(compound,bos);
+            buffer.setBytes(0,bos.toByteArray());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
+
 	}
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf additionalData) {
 		NBTTagCompound compound;
 		try {
-			compound = (NBTTagCompound) NBTBase.readNamedTag(data);
-			NBTTagList nbttaglist = compound.getTagList("Inventory");
+			compound = (NBTTagCompound) CompressedStreamTools.readCompressed(new ByteArrayInputStream(additionalData.array()));
+			NBTTagList nbttaglist = compound.getTagList("Inventory",Constants.NBT.TAG_COMPOUND);
 			this.inventory.readFromNBT(nbttaglist);
 			this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
 			this.setSkellingtonName(compound.getString("skellingtonName"));
@@ -637,10 +621,10 @@ private void findBestEquipment() {
 	@Override
 	public void attackEntityWithRangedAttack(
 			EntityLivingBase par1EntityLivingBase, float par2) {
-		EntityArrow entityarrow = new EntityArrow(this.worldObj, this, par1EntityLivingBase, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
+        EntityArrow entityarrow = new EntityArrow(this.worldObj, this, par1EntityLivingBase, 1.6F, (float)(14 - this.worldObj.difficultySetting.getDifficultyId() * 4));
         int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
         int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
-        entityarrow.setDamage((double)(par2 * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F));
+        entityarrow.setDamage((double)(par2 * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting.getDifficultyId() * 0.11F));
 
         if (i > 0)
         {
@@ -652,7 +636,7 @@ private void findBestEquipment() {
             entityarrow.setKnockbackStrength(j);
         }
 
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0 )
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0 || this.getSkeletonType() == 1)
         {
             entityarrow.setFire(100);
         }
@@ -660,7 +644,7 @@ private void findBestEquipment() {
         this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.worldObj.spawnEntityInWorld(entityarrow);
         if(!(EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, this.getCurrentItemOrArmor(0)) > 0))
-        	inventory.consumeInventoryItem(Item.arrow.itemID);
+        	inventory.consumeInventoryItem(Items.arrow);
         
 
 	}
@@ -668,5 +652,6 @@ private void findBestEquipment() {
 	protected boolean canDespawn() {
 		return false;
 	}
+
 
 }

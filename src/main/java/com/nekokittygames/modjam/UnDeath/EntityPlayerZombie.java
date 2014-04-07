@@ -3,48 +3,37 @@
  */
 package com.nekokittygames.modjam.UnDeath;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Collection;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.google.common.collect.Multimap;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.nekokittygames.modjam.UnDeath.client.ThreadDownloadZombieImageData;
-
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cpw.mods.fml.server.FMLServerHandler;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureObject;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Collection;
 
 /**
  * @author Katrina
@@ -60,8 +49,8 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
     private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerZombie.png");
-    protected ThreadDownloadZombieImageData field_110316_a;
-    protected ThreadDownloadZombieImageData field_110315_c;
+    protected ThreadDownloadImageData field_110316_a;
+    protected ThreadDownloadImageData field_110315_c;
     protected ResourceLocation mmmm;
     protected ResourceLocation tsch;
     protected boolean dropItems=true;
@@ -122,12 +111,12 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         }
     }
 	 @SideOnly(Side.CLIENT)
-	public ThreadDownloadZombieImageData func_110309_l()
+	public ThreadDownloadImageData func_110309_l()
     {
         return this.field_110316_a;
     }
 	 @SideOnly(Side.CLIENT)
-    public ThreadDownloadZombieImageData func_110310_o()
+    public ThreadDownloadImageData func_110310_o()
     {
         return this.field_110315_c;
     }
@@ -142,28 +131,28 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
         return tsch;
     }
 	 @SideOnly(Side.CLIENT)
-    public ThreadDownloadZombieImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
+    public ThreadDownloadImageData func_110304_a(ResourceLocation par0ResourceLocation, String par1Str)
     {
         return func_110301_a(par0ResourceLocation, func_110300_d(par1Str), field_110314_b, new ImageBufferDownload());
     }
 	 @SideOnly(Side.CLIENT)
-    public  ThreadDownloadZombieImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
+    public ThreadDownloadImageData func_110307_b(ResourceLocation par0ResourceLocation, String par1Str)
     {
         return func_110301_a(par0ResourceLocation, func_110308_e(par1Str), (ResourceLocation)null, (IImageBuffer)null);
     }
 	 @SideOnly(Side.CLIENT)
-    private ThreadDownloadZombieImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+    private ThreadDownloadImageData func_110301_a(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
     {
-        TextureManager texturemanager = Minecraft.getMinecraft().func_110434_K();
-        Object object = texturemanager.func_110581_b(par0ResourceLocation);
+        TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+        Object object = texturemanager.getTexture(par0ResourceLocation);
 
         if (object == null)
         {
-            object = new ThreadDownloadZombieImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
-            texturemanager.func_110579_a(par0ResourceLocation, (TextureObject)object);
+            object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
+            texturemanager.loadTexture(par0ResourceLocation, (ITextureObject) object);
         }
 
-        return (ThreadDownloadZombieImageData)object;
+        return (ThreadDownloadImageData)object;
     }
 	 @SideOnly(Side.CLIENT)
     public String func_110300_d(String par0Str)
@@ -198,7 +187,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readEntityFromNBT(par1NBTTagCompound);
-        NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Inventory");
+        NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
         this.inventory.readFromNBT(nbttaglist);
         this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
         this.setZombieName(par1NBTTagCompound.getString("zombieName"));
@@ -261,13 +250,13 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 			currentCheck=this.inventory.mainInventory[i];
 			if(currentCheck==null)
 				continue;
-			Multimap map=currentCheck.func_111283_C();
-			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.field_111264_e.func_111108_a());
+			Multimap map=currentCheck.getAttributeModifiers();
+			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.attackDamage);
 			
 			if(Attributes.size()==0)
 				currentScore=0;
 			else
-				currentScore=(int)((AttributeModifier)Attributes.toArray()[0]).func_111164_d();
+				currentScore=(int)((AttributeModifier)Attributes.toArray()[0]).getAmount();
 			NBTTagList enchList=currentCheck.getEnchantmentTagList();
 			if(enchList==null)
 				currentScore+=0;
@@ -275,7 +264,7 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 			{
 				for(int j=0;j<enchList.tagCount();j++)
 				{
-					NBTTagCompound comp=(NBTTagCompound)enchList.tagAt(j);
+					NBTTagCompound comp=(NBTTagCompound)enchList.getCompoundTagAt(j);
 					int enchId=comp.getShort("id");
 					int enchLvl=comp.getShort("lvl");
 					switch(enchId)
@@ -311,34 +300,32 @@ public class EntityPlayerZombie extends EntityZombie implements IEntityAdditiona
 		UnDeath.logging.info(String.format("Best Weapon is %s with score %d", bestWeapon.toString(),bestScore));
 		this.inventory.currentItem=bestLocation;
 	}
-	
-	public EntityLivingData func_110161_a(EntityLivingData par1EntityLivingData)
-	{
-		return null;
-	}
+
 	
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		NBTTagCompound compound=new NBTTagCompound();
-		compound.setName("Zombie");
+		//compound.setName("Zombie");
 		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		compound.setString("zombieName", getZombieName());
 		compound.setBoolean("dropItems", dropItems);
 		try {
-			
-	        NBTBase.writeNamedTag(compound, data);
+
+            ByteArrayOutputStream bos=new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(compound, bos);
+            data.setBytes(0, bos.toByteArray());
 		} catch (Exception ex) {
 	        ex.printStackTrace();
 		}
 		
 	}
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		NBTTagCompound compound;
 		try {
-			compound = (NBTTagCompound) NBTBase.readNamedTag(data);
-			NBTTagList nbttaglist = compound.getTagList("Inventory");
+            compound = (NBTTagCompound) CompressedStreamTools.readCompressed(new ByteArrayInputStream(data.array()));
+			NBTTagList nbttaglist = compound.getTagList("Inventory",Constants.NBT.TAG_COMPOUND);
 	        this.inventory.readFromNBT(nbttaglist);
 	        this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
 	        this.setZombieName(compound.getString("zombieName"));

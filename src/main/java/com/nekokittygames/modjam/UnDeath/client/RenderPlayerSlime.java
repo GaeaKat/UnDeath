@@ -1,12 +1,7 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.primitives.SignedBytes;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerSlime;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -15,9 +10,11 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class RenderPlayerSlime extends RenderLiving {
 
@@ -62,12 +59,12 @@ public class RenderPlayerSlime extends RenderLiving {
 			}
 
 			@Override
-			public byte getMiniBlockCount(ItemStack stack) {
+			public byte getMiniBlockCount(ItemStack stack,byte original) {
 				return SignedBytes.saturatedCast(Math.min(stack.stackSize/32, 15)+1);
 			}
 
 			@Override
-			public byte getMiniItemCount(ItemStack stack) {
+			public byte getMiniItemCount(ItemStack stack,byte original) {
 				return SignedBytes.saturatedCast(Math.min(stack.stackSize/32, 7)+1);
 			}
         	
@@ -122,7 +119,7 @@ public class RenderPlayerSlime extends RenderLiving {
     protected void scaleSlime(EntityPlayerSlime par1EntitySlime, float par2)
     {
         float f1 = (float)par1EntitySlime.getSlimeSize();
-        float f2 = (par1EntitySlime.field_70812_c + (par1EntitySlime.field_70811_b - par1EntitySlime.field_70812_c) * par2) / (f1 * 0.5F + 1.0F);
+        float f2 = (par1EntitySlime.prevSquishFactor + (par1EntitySlime.squishFactor - par1EntitySlime.prevSquishFactor) * par2) / (f1 * 0.5F + 1.0F);
         float f3 = 1.0F / (f2 + 1.0F);
         GL11.glScalef(f3 * f1, 1.0F / f3 * f1, f3 * f1);
     }
@@ -176,7 +173,7 @@ public class RenderPlayerSlime extends RenderLiving {
   			GL11.glRotatef(timeDelta, 0.0F, 1.0F, 0.0F);
   			GL11.glScalef(blockScale, blockScale, blockScale);
   			custItem.setEntityItemStack(item);
-  			itemRenderer.doRenderItem(custItem, 0, 0, 0, 0, 0);
+  			itemRenderer.doRender(custItem, 0, 0, 0, 0, 0);
   			GL11.glPopMatrix();
   		}
   		GL11.glEnable(GL11.GL_LIGHTING);
@@ -185,7 +182,7 @@ public class RenderPlayerSlime extends RenderLiving {
 		super.doRender(par1Entity, par2, par4, par6, par8, par9);
 	}
 
-	/**
+    /**
      * Queries whether should render the specified pass or not.
      */
     protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
@@ -193,7 +190,7 @@ public class RenderPlayerSlime extends RenderLiving {
         return this.shouldSlimeRenderPass((EntityPlayerSlime)par1EntityLivingBase, par2, par3);
     }
 
-    protected ResourceLocation func_110775_a(Entity par1Entity)
+    protected ResourceLocation getEntityTexture(Entity par1Entity)
     {
         return this.func_110896_a((EntityPlayerSlime)par1Entity);
     }

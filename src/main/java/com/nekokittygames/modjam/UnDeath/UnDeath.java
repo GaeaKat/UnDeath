@@ -1,37 +1,24 @@
 package com.nekokittygames.modjam.UnDeath;
 
-import java.util.logging.Logger;
 
-import org.lwjgl.Sys;
-
-import com.google.common.base.Function;
-
-import net.minecraft.block.BlockSkull;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.EntitySpawnPacket;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import net.minecraft.init.Items;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid=UnDeath.ID,name=UnDeath.NAME,version=UnDeath.VERSION,modLanguage="java")
-@NetworkMod(clientSideRequired=true,serverSideRequired=false)
 public class UnDeath {
 	public static final String ID = "UnDeath";
 	public static final String VERSION = "1.0";
@@ -51,14 +38,12 @@ public class UnDeath {
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
-		logging=Logger.getLogger(ID);
-		logging.setParent(FMLLog.getLogger());
 		
 		Configuration config=new Configuration(event.getSuggestedConfigurationFile());
 		Configs.load(config);
-		undeadKilledYourself= new Achievement(Configs.undeadkillsYouAchivementID, "undeadKilledYou", 1, -2, Item.skull, AchievementList.buildSword).registerAchievement();
-		youKilledYourself= new Achievement(Configs.YoukillsYouAchivementID, "YouKilledYou", 1, -2, Item.cake, AchievementList.buildSword).setSpecial().registerAchievement();
-		spawner=new ItemSpawner(Configs.debugStick);
+		undeadKilledYourself= new Achievement(Configs.undeadkillsYouAchivementID, "undeadKilledYou", 1, -2, Items.skull, AchievementList.buildSword).registerStat();
+		youKilledYourself= new Achievement(Configs.YoukillsYouAchivementID, "YouKilledYou", 1, -2, Items.cake, AchievementList.buildSword).setSpecial().registerStat();
+		spawner=new ItemSpawner();
 		LanguageRegistry.addName(spawner, "debug Spawner");
 		addAchievementName("undeadKilledYou", "Undead kill you");
 		addAchievementDesc("undeadKilledYou", "The undead corpse of a player, killed you");

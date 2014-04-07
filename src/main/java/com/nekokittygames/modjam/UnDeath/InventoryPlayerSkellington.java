@@ -27,6 +27,7 @@ public class InventoryPlayerSkellington implements IInventory {
 
 	    /** The player whose inventory this is. */
 	    public EntityPlayerSkellington playerSkellington;
+
 	    private ItemStack itemStack;
 	    
 	    
@@ -43,11 +44,11 @@ public class InventoryPlayerSkellington implements IInventory {
 	        return this.currentItem < 36 && this.currentItem >= 0 ? this.mainInventory[this.currentItem] : null;
 	    }
 	    
-	    private int getInventorySlotContainItem(int par1)
+	    private int getInventorySlotContainItem(Item par1)
 	    {
 	        for (int j = 0; j < this.mainInventory.length; ++j)
 	        {
-	            if (this.mainInventory[j] != null && this.mainInventory[j].itemID == par1)
+	            if (this.mainInventory[j] != null && this.mainInventory[j].getItem() == par1)
 	            {
 	                return j;
 	            }
@@ -60,11 +61,11 @@ public class InventoryPlayerSkellington implements IInventory {
 	    
 	    
 	    @SideOnly(Side.CLIENT)
-	    private int getInventorySlotContainItemAndDamage(int par1, int par2)
+	    private int getInventorySlotContainItemAndDamage(Item par1, int par2)
 	    {
 	        for (int k = 0; k < this.mainInventory.length; ++k)
 	        {
-	            if (this.mainInventory[k] != null && this.mainInventory[k].itemID == par1 && this.mainInventory[k].getItemDamage() == par2)
+	            if (this.mainInventory[k] != null && this.mainInventory[k].getItem() == par1 && this.mainInventory[k].getItemDamage() == par2)
 	            {
 	                return k;
 	            }
@@ -79,7 +80,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	    {
 	        for (int i = 0; i < this.mainInventory.length; ++i)
 	        {
-	            if (this.mainInventory[i] != null && this.mainInventory[i].itemID == par1ItemStack.itemID && this.mainInventory[i].isStackable() && this.mainInventory[i].stackSize < this.mainInventory[i].getMaxStackSize() && this.mainInventory[i].stackSize < this.getInventoryStackLimit() && (!this.mainInventory[i].getHasSubtypes() || this.mainInventory[i].getItemDamage() == par1ItemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(this.mainInventory[i], par1ItemStack))
+	            if (this.mainInventory[i] != null && this.mainInventory[i].getItem() == par1ItemStack.getItem() && this.mainInventory[i].isStackable() && this.mainInventory[i].stackSize < this.mainInventory[i].getMaxStackSize() && this.mainInventory[i].stackSize < this.getInventoryStackLimit() && (!this.mainInventory[i].getHasSubtypes() || this.mainInventory[i].getItemDamage() == par1ItemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(this.mainInventory[i], par1ItemStack))
 	            {
 	                return i;
 	            }
@@ -109,7 +110,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	    /**
 	     * Sets a specific itemID as the current item being held (only if it exists on the hotbar)
 	     */
-	    public void setCurrentItem(int par1, int par2, boolean par3, boolean par4)
+	    public void setCurrentItem(Item par1, int par2, boolean par3, boolean par4)
 	    {
 	        boolean flag2 = true;
 	        this.currentItemStack = this.getCurrentItem();
@@ -130,7 +131,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	        }
 	        else
 	        {
-	            if (par4 && par1 > 0)
+	            if (par4 && par1 !=null)
 	            {
 	                int l = this.getFirstEmptyStack();
 
@@ -139,7 +140,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	                    this.currentItem = l;
 	                }
 
-	                this.func_70439_a(Item.itemsList[par1], par2);
+                    this.func_70439_a(par1, par2);
 	            }
 	        }
 	    }
@@ -172,7 +173,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	        }
 	    }
 	    
-	    public int clearInventory(int par1, int par2)
+	    public int clearInventory(Item par1, int par2)
 	    {
 	        int k = 0;
 	        int l;
@@ -182,7 +183,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	        {
 	            itemstack = this.mainInventory[l];
 
-	            if (itemstack != null && (par1 <= -1 || itemstack.itemID == par1) && (par2 <= -1 || itemstack.getItemDamage() == par2))
+	            if (itemstack != null && (par1 ==null || itemstack.getItem() == par1) && (par2 <= -1 || itemstack.getItemDamage() == par2))
 	            {
 	                k += itemstack.stackSize;
 	                this.mainInventory[l] = null;
@@ -193,7 +194,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	        {
 	            itemstack = this.armorInventory[l];
 
-	            if (itemstack != null && (par1 <= -1 || itemstack.itemID == par1) && (par2 <= -1 || itemstack.getItemDamage() == par2))
+	            if (itemstack != null && (par1 ==null || itemstack.getItem() == par1) && (par2 <= -1 || itemstack.getItemDamage() == par2))
 	            {
 	                k += itemstack.stackSize;
 	                this.armorInventory[l] = null;
@@ -202,7 +203,7 @@ public class InventoryPlayerSkellington implements IInventory {
 
 	        if (this.itemStack != null)
 	        {
-	            if (par1 > -1 && this.itemStack.itemID != par1)
+	            if (par1 !=null && this.itemStack.getItem() != par1)
 	            {
 	                return k;
 	            }
@@ -224,29 +225,28 @@ public class InventoryPlayerSkellington implements IInventory {
 	    {
 	        if (par1Item != null)
 	        {
-	            if (this.currentItemStack != null && this.currentItemStack.isItemEnchantable() && this.getInventorySlotContainItemAndDamage(this.currentItemStack.itemID, this.currentItemStack.getItemDamageForDisplay()) == this.currentItem)
+	            if (this.currentItemStack != null && this.currentItemStack.isItemEnchantable() && this.getInventorySlotContainItemAndDamage(this.currentItemStack.getItem(), this.currentItemStack.getItemDamageForDisplay()) == this.currentItem)
 	            {
 	                return;
 	            }
 
-	            int j = this.getInventorySlotContainItemAndDamage(par1Item.itemID, par2);
+	            int j = this.getInventorySlotContainItemAndDamage(par1Item, par2);
 
 	            if (j >= 0)
 	            {
 	                int k = this.mainInventory[j].stackSize;
 	                this.mainInventory[j] = this.mainInventory[this.currentItem];
-	                this.mainInventory[this.currentItem] = new ItemStack(Item.itemsList[par1Item.itemID], k, par2);
+	                this.mainInventory[this.currentItem] = new ItemStack(par1Item, k, par2);
 	            }
 	            else
 	            {
-	                this.mainInventory[this.currentItem] = new ItemStack(Item.itemsList[par1Item.itemID], 1, par2);
+	                this.mainInventory[this.currentItem] = new ItemStack(par1Item, 1, par2);
 	            }
 	        }
 	    }
 	    
 	    private int storePartialItemStack(ItemStack par1ItemStack)
 	    {
-	        int i = par1ItemStack.itemID;
 	        int j = par1ItemStack.stackSize;
 	        int k;
 
@@ -285,7 +285,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	            {
 	                if (this.mainInventory[k] == null)
 	                {
-	                    this.mainInventory[k] = new ItemStack(i, 0, par1ItemStack.getItemDamage());
+	                    this.mainInventory[k] = new ItemStack(par1ItemStack.getItem(), 0, par1ItemStack.getItemDamage());
 
 	                    if (par1ItemStack.hasTagCompound())
 	                    {
@@ -321,7 +321,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	    }
 	    
 	    
-	    public boolean consumeInventoryItem(int par1)
+	    public boolean consumeInventoryItem(Item par1)
 	    {
 	        int j = this.getInventorySlotContainItem(par1);
 
@@ -340,7 +340,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	        }
 	    }
 	    
-	    public boolean hasItem(int par1)
+	    public boolean hasItem(Item par1)
 	    {
 	        int j = this.getInventorySlotContainItem(par1);
 	        return j >= 0;
@@ -397,7 +397,7 @@ public class InventoryPlayerSkellington implements IInventory {
 	            {
 	                CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Adding item to inventory");
 	                CrashReportCategory crashreportcategory = crashreport.makeCategory("Item being added");
-	                crashreportcategory.addCrashSection("Item ID", Integer.valueOf(par1ItemStack.itemID));
+	                crashreportcategory.addCrashSection("Item ID", par1ItemStack.getItem());
 	                crashreportcategory.addCrashSection("Item data", Integer.valueOf(par1ItemStack.getItemDamage()));
 	                crashreportcategory.addCrashSectionCallable("Item name", new CallableSkellingtonItemName(this, par1ItemStack));
 	                throw new ReportedException(crashreport);
@@ -463,7 +463,18 @@ public class InventoryPlayerSkellington implements IInventory {
 
 	        aitemstack[par1] = par2ItemStack;
 	    }
-	    public NBTTagList writeToNBT(NBTTagList par1NBTTagList)
+
+    @Override
+    public String getInventoryName() {
+        return "container.inventory";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName() {
+        return false;
+    }
+
+    public NBTTagList writeToNBT(NBTTagList par1NBTTagList)
 	    {
 	        int i;
 	        NBTTagCompound nbttagcompound;
@@ -503,7 +514,7 @@ public class InventoryPlayerSkellington implements IInventory {
 
 	        for (int i = 0; i < par1NBTTagList.tagCount(); ++i)
 	        {
-	            NBTTagCompound nbttagcompound = (NBTTagCompound)par1NBTTagList.tagAt(i);
+	            NBTTagCompound nbttagcompound = (NBTTagCompound)par1NBTTagList.getCompoundTagAt(i);
 	            int j = nbttagcompound.getByte("Slot") & 255;
 	            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 
@@ -546,24 +557,6 @@ public class InventoryPlayerSkellington implements IInventory {
 
 	        return aitemstack[par1];
 	    }
-	    /**
-	     * Returns the name of the inventory.
-	     */
-	    @Override
-	    public String getInvName()
-	    {
-	        return "container.inventory";
-	    }
-
-	    /**
-	     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
-	     * language. Otherwise it will be used directly.
-	     */
-	    @Override
-	    public boolean isInvNameLocalized()
-	    {
-	        return false;
-	    }
 
 	    /**
 	     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
@@ -575,7 +568,13 @@ public class InventoryPlayerSkellington implements IInventory {
 	        return 64;
 	    }
 
-	    public ItemStack armorItemInSlot(int par1)
+    @Override
+    public void markDirty() {
+            this.inventoryChanged = true;
+
+    }
+
+    public ItemStack armorItemInSlot(int par1)
 	    {
 	        return this.armorInventory[par1];
 	    }
@@ -643,11 +642,6 @@ public class InventoryPlayerSkellington implements IInventory {
 	        }
 	    }
 	    
-	    @Override
-	    public void onInventoryChanged()
-	    {
-	        this.inventoryChanged = true;
-	    }
 
 	    public void setItemStack(ItemStack par1ItemStack)
 	    {
@@ -662,8 +656,18 @@ public class InventoryPlayerSkellington implements IInventory {
 	    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 			return false;
 		}
-	    
-	    public boolean hasItemStack(ItemStack par1ItemStack)
+
+    @Override
+    public void openInventory() {
+
+    }
+
+    @Override
+    public void closeInventory() {
+
+    }
+
+    public boolean hasItemStack(ItemStack par1ItemStack)
 	    {
 	        int i;
 
@@ -730,19 +734,7 @@ public class InventoryPlayerSkellington implements IInventory {
 
 
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#openChest()
-	 */
-	@Override
-	public void openChest() {
-	}
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#closeChest()
-	 */
-	@Override
-	public void closeChest() {
-	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {

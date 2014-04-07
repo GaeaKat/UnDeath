@@ -1,27 +1,24 @@
 package com.nekokittygames.modjam.UnDeath;
 
-import java.util.Collection;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-
-import net.minecraft.command.IAdminCommand;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Collection;
 
 public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalSpawnData {
 	public static int EntityId;
@@ -44,8 +41,8 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
         this.dataWatcher.updateObject(16, new Byte((byte)par1));
         this.setSize(0.6F * (float)par1, 0.6F * (float)par1);
         this.setPosition(this.posX, this.posY, this.posZ);
-        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(par1 * par1));
-        //this.setEntityHealth(this.func_110138_aP());
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double) (par1 * par1));
+        this.setHealth(this.getMaxHealth());
         this.experienceValue = par1;
     }
 	
@@ -89,11 +86,11 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		// TODO Auto-generated method stub
 		super.readEntityFromNBT(par1nbtTagCompound);
 		this.dropItems=par1nbtTagCompound.getBoolean("dropItem");
-		NBTTagList nbttaglist = par1nbtTagCompound.getTagList("Inventory");
+		NBTTagList nbttaglist = par1nbtTagCompound.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
 		items=new ItemStack[41];
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
             ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
             items[i]=itemstack;
         }
@@ -113,11 +110,11 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		}
 		
 		copyInventory(player.inventory);
-		ItemStack head=new ItemStack(Item.skull, 1, 3);
+		ItemStack head=new ItemStack(Items.skull, 1, 3);
 		NBTTagCompound compound= head.getTagCompound();
 		if(compound==null)
 			compound=new NBTTagCompound();
-		compound.setString("SkullOwner", player.username);
+		compound.setString("SkullOwner", player.getGameProfile().getName());
 		//compound.setString("SkullOwner", "nekosune");
 		head.setTagCompound(compound);
 		items[40]=head;
@@ -154,9 +151,9 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 
 	}
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		NBTTagCompound compound=new NBTTagCompound();
-		compound.setName("Skellington");
+		//compound.setName("Skellington");
 		compound.setBoolean("dropItems", dropItems);
 		NBTTagList nbtTagList=new NBTTagList();
 		for(int i=0;i<items.length;i++)
@@ -172,7 +169,9 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		
 		try {
 
-			NBTBase.writeNamedTag(compound, data);
+            ByteArrayOutputStream bos=new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(compound, bos);
+            data.setBytes(0, bos.toByteArray());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -180,15 +179,15 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		NBTTagCompound compound;
 		try {
-			compound = (NBTTagCompound) NBTBase.readNamedTag(data);
-			NBTTagList nbttaglist = compound.getTagList("Inventory");
+            compound = (NBTTagCompound) CompressedStreamTools.readCompressed(new ByteArrayInputStream(data.array()));
+			NBTTagList nbttaglist = compound.getTagList("Inventory",Constants.NBT.TAG_COMPOUND);
 			items=new ItemStack[41];
 			for (int i = 0; i < nbttaglist.tagCount(); ++i)
 	        {
-				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
 	            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 	            items[i]=itemstack;
 	        }

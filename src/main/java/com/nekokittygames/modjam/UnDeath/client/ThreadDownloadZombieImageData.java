@@ -1,15 +1,14 @@
-package com.nekokittygames.modjam.UnDeath.client;
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
+/*package com.nekokittygames.modjam.UnDeath.client;
 
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.ResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class ThreadDownloadZombieImageData extends AbstractTexture {
 
@@ -30,6 +29,7 @@ public class ThreadDownloadZombieImageData extends AbstractTexture {
 
 	    public ThreadDownloadZombieImageData(String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
 	    {
+            super();
 	        this.field_110562_b = par1Str;
 	        this.field_110563_c = par3IImageBuffer;
 	        this.field_110558_f = par2ResourceLocation != null ? new SimpleTexture(par2ResourceLocation) : null;
@@ -37,11 +37,11 @@ public class ThreadDownloadZombieImageData extends AbstractTexture {
 
 	    public int func_110552_b()
 	    {
-	        int i = super.func_110552_b();
+	        int i = super.getGlTextureId();
 
 	        if (!this.field_110559_g && this.field_110560_d != null)
 	        {
-	            TextureUtil.func_110987_a(i, this.field_110560_d);
+	            TextureUtil.uploadTextureImage(i, this.field_110560_d);
 	            this.field_110559_g = true;
 	        }
 
@@ -53,7 +53,7 @@ public class ThreadDownloadZombieImageData extends AbstractTexture {
 	        this.field_110560_d = par1BufferedImage;
 	    }
 
-	    public void func_110551_a(ResourceManager par1ResourceManager) throws IOException
+	    public void loadTexture(IResourceManager par1ResourceManager) throws IOException
 	    {
 	        if (this.field_110560_d == null)
 	        {
@@ -77,7 +77,7 @@ public class ThreadDownloadZombieImageData extends AbstractTexture {
 	        }
 	    }
 
-	    public boolean func_110557_a()
+	    public boolean fff()
 	    {
 	        this.func_110552_b();
 	        return this.field_110559_g;
@@ -93,4 +93,4 @@ public class ThreadDownloadZombieImageData extends AbstractTexture {
 	        return par0ThreadDownloadImageData.field_110563_c;
 	    }
 
-}
+}*/
