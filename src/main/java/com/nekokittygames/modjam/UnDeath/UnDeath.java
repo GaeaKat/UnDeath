@@ -10,13 +10,15 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.Logger;
+
+import java.util.logging.Logger;
 
 @Mod(modid=UnDeath.ID,name=UnDeath.NAME,version=UnDeath.VERSION,modLanguage="java")
 public class UnDeath {
@@ -38,12 +40,13 @@ public class UnDeath {
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
-		
+		logging=Logger.getLogger(ID);
 		Configuration config=new Configuration(event.getSuggestedConfigurationFile());
 		Configs.load(config);
 		undeadKilledYourself= new Achievement(Configs.undeadkillsYouAchivementID, "undeadKilledYou", 1, -2, Items.skull, AchievementList.buildSword).registerStat();
 		youKilledYourself= new Achievement(Configs.YoukillsYouAchivementID, "YouKilledYou", 1, -2, Items.cake, AchievementList.buildSword).setSpecial().registerStat();
 		spawner=new ItemSpawner();
+        GameRegistry.registerItem(spawner,"undeath:spawner");
 		LanguageRegistry.addName(spawner, "debug Spawner");
 		addAchievementName("undeadKilledYou", "Undead kill you");
 		addAchievementDesc("undeadKilledYou", "The undead corpse of a player, killed you");

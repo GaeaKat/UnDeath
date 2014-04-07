@@ -2,6 +2,7 @@ package com.nekokittygames.modjam.UnDeath;
 
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,7 +37,6 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 
 public class EntityPlayerSkellington extends EntityMob implements IEntityAdditionalSpawnData,IRangedAttackMob {
@@ -504,9 +504,7 @@ private void findBestEquipment() {
 		compound.setString("skellingtonName", getSkellingtonName());
 		compound.setBoolean("dropItems", dropItems);
 		try {
-            ByteArrayOutputStream bos=new ByteArrayOutputStream();
-			CompressedStreamTools.writeCompressed(compound,bos);
-            buffer.setBytes(0,bos.toByteArray());
+            ByteBufUtils.writeTag(buffer, compound);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -517,7 +515,7 @@ private void findBestEquipment() {
 	public void readSpawnData(ByteBuf additionalData) {
 		NBTTagCompound compound;
 		try {
-			compound = (NBTTagCompound) CompressedStreamTools.readCompressed(new ByteArrayInputStream(additionalData.array()));
+            compound=ByteBufUtils.readTag(additionalData);
 			NBTTagList nbttaglist = compound.getTagList("Inventory",Constants.NBT.TAG_COMPOUND);
 			this.inventory.readFromNBT(nbttaglist);
 			this.inventory.currentItem = compound.getInteger("SelectedItemSlot");

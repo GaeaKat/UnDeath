@@ -2,6 +2,7 @@ package com.nekokittygames.modjam.UnDeath;
 
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,7 +18,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
@@ -28,8 +28,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 
 public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntityAdditionalSpawnData{
@@ -305,9 +303,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 		compound.setBoolean("dropItems", dropItems);
 		try {
 
-            ByteArrayOutputStream bos=new ByteArrayOutputStream();
-            CompressedStreamTools.writeCompressed(compound, bos);
-            data.setBytes(0, bos.toByteArray());
+            ByteBufUtils.writeTag(data, compound);
 		} catch (Exception ex) {
 	        ex.printStackTrace();
 		}
@@ -317,7 +313,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 	public void readSpawnData(ByteBuf data) {
 		NBTTagCompound compound;
 		try {
-            compound = (NBTTagCompound) CompressedStreamTools.readCompressed(new ByteArrayInputStream(data.array()));
+            compound=ByteBufUtils.readTag(data);
             NBTTagList nbttaglist = compound.getTagList("Inventory",Constants.NBT.TAG_COMPOUND);
 	        this.inventory.readFromNBT(nbttaglist);
 	        this.inventory.currentItem = compound.getInteger("SelectedItemSlot");

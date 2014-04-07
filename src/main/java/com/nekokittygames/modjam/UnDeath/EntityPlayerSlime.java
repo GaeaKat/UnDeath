@@ -1,5 +1,6 @@
 package com.nekokittygames.modjam.UnDeath;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -8,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
@@ -16,8 +16,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 
 public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalSpawnData {
@@ -169,9 +167,7 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		
 		try {
 
-            ByteArrayOutputStream bos=new ByteArrayOutputStream();
-            CompressedStreamTools.writeCompressed(compound, bos);
-            data.setBytes(0, bos.toByteArray());
+            ByteBufUtils.writeTag(data, compound);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -182,7 +178,7 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 	public void readSpawnData(ByteBuf data) {
 		NBTTagCompound compound;
 		try {
-            compound = (NBTTagCompound) CompressedStreamTools.readCompressed(new ByteArrayInputStream(data.array()));
+            compound=ByteBufUtils.readTag(data);
 			NBTTagList nbttaglist = compound.getTagList("Inventory",Constants.NBT.TAG_COMPOUND);
 			items=new ItemStack[41];
 			for (int i = 0; i < nbttaglist.tagCount(); ++i)
