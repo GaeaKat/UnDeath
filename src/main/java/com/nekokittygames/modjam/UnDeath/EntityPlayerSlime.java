@@ -11,6 +11,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -112,6 +113,9 @@ public class EntityPlayerSlime extends EntitySlime implements IEntityAdditionalS
 		NBTTagCompound compound= head.getTagCompound();
 		if(compound==null)
 			compound=new NBTTagCompound();
+        //NBTTagCompound cmp=new NBTTagCompound();
+        //NBTUtil.func_152460_a(cmp,player.getGameProfile());
+        //compound.setTag("SkullOwner",cmp);
 		compound.setString("SkullOwner", player.getGameProfile().getName());
 		//compound.setString("SkullOwner", "nekosune");
 		head.setTagCompound(compound);

@@ -39,7 +39,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 
     
     public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
-    private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerPigZombie.png");
+    public static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerPigZombie.png");
     protected ThreadDownloadImageData field_110316_a;
     protected ThreadDownloadImageData field_110315_c;
     protected ResourceLocation mmmm;
@@ -139,7 +139,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 
         if (object == null)
         {
-            object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
+            object = new ThreadDownloadImageData(null,par1Str, par2ResourceLocation, par3IImageBuffer);
             texturemanager.loadTexture(par0ResourceLocation, (ITextureObject) object);
         }
 
@@ -242,7 +242,7 @@ public class EntityPlayerZombiePigmen extends EntityPigZombie implements IEntity
 			if(currentCheck==null)
 				continue;
 			Multimap map=currentCheck.getAttributeModifiers();
-			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.attackDamage);
+			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
 			
 			if(Attributes.size()==0)
 				currentScore=0;

@@ -1,39 +1,34 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
-import com.google.common.collect.Lists;
-import com.nekokittygames.modjam.UnDeath.EntityPlayerZombie;
-import com.nekokittygames.modjam.UnDeath.EntityPlayerZombiePigmen;
 import com.nekokittygames.modjam.UnDeath.UnDeath;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.html.parser.Entity;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 
 @SideOnly(Side.CLIENT)
-public class ResourceLayeredTexture extends AbstractTexture {
-    public final ThreadDownloadImageData data;
+public class RResourceLayeredTexture extends AbstractTexture {
+    public final ResourceLocation data;
     public final ResourceLocation loc;
-    public ResourceLayeredTexture(ThreadDownloadImageData par1ArrayOfStr,ResourceLocation location)
+    public final String user;
+    public RResourceLayeredTexture(ResourceLocation par1ArrayOfStr, ResourceLocation location,String username)
     {
         data= par1ArrayOfStr;
         loc=location;
+        user=username;
     }
 
     @Override
@@ -45,7 +40,13 @@ public class ResourceLayeredTexture extends AbstractTexture {
 
                 try
                 {
-                    BufferedImage bufferedimage1 = ClientUtils.getBufferedImageSkin(data);
+                    UnDeath.logging.warning("Got: "+data.toString());
+                    InputStream inputstream = par1ResourceManager.getResource(data).getInputStream();
+                    TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+                    Object object = texturemanager.getTexture(data);
+                    ThreadDownloadImageData tddata=AbstractClientPlayer.getDownloadImageSkin(data,user);
+
+                    BufferedImage bufferedimage1 = ReflectionHelper.getPrivateValue(ThreadDownloadImageData.class, tddata, "bufferedImage");
 
                     if (bufferedimage == null)
                     {
@@ -54,7 +55,7 @@ public class ResourceLayeredTexture extends AbstractTexture {
 
 
                     bufferedimage.getGraphics().drawImage(bufferedimage1, 0, 0, (ImageObserver)null);
-                    InputStream inputstream = par1ResourceManager.getResource(loc).getInputStream();
+                    inputstream = par1ResourceManager.getResource(loc).getInputStream();
                     bufferedimage1 = ImageIO.read(inputstream);
                     bufferedimage.getGraphics().drawImage(bufferedimage1, 0, 0, (ImageObserver)null);
                 }

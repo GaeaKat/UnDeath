@@ -1,6 +1,7 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
 import com.nekokittygames.modjam.UnDeath.EntityPlayerZombie;
+import com.nekokittygames.modjam.UnDeath.EntityPlayerZombiePigmen;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -45,7 +46,7 @@ public class RenderPlayerZombie extends RenderBiped {
     	if(rl==null)
     	{
     		rl=new ResourceLocation(s);
-    		Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new ResourceLayeredTexture(par1EntityPlayerZombie.getSkins()));
+            Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new ResourceLayeredTexture(par1EntityPlayerZombie.func_110309_l(), EntityPlayerZombie.overlay));
     		layerdSkins.put(s, rl);
     	}
     	return rl;

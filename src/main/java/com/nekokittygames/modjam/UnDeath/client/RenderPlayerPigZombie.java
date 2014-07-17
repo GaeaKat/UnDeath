@@ -1,5 +1,6 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
+import com.nekokittygames.modjam.UnDeath.EntityPlayerZombie;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerZombiePigmen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -41,7 +42,7 @@ public ResourceLocation getLayered(EntityPlayerZombiePigmen par1EntityPlayerSkel
 	if(rl==null)
 	{
 		rl=new ResourceLocation(s);
-		Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new ResourceLayeredTexture(par1EntityPlayerSkellington.getSkins()));
+		Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new ResourceLayeredTexture(par1EntityPlayerSkellington.func_110309_l(), EntityPlayerZombiePigmen.overlay));
 		layerdSkins.put(s, rl);
 	}
 	return rl;

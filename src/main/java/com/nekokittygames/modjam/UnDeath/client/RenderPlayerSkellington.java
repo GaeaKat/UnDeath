@@ -1,5 +1,6 @@
 package com.nekokittygames.modjam.UnDeath.client;
 
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.nekokittygames.modjam.UnDeath.EntityPlayerSkellington;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -42,7 +43,21 @@ public ResourceLocation getLayered(EntityPlayerSkellington par1EntityPlayerSkell
 	if(rl==null)
 	{
 		rl=new ResourceLocation(s);
-		Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new ResourceLayeredTexture(par1EntityPlayerSkellington.getSkins()));
+        ResourceLocation loc=null;
+        if (par1EntityPlayerSkellington.gameProfile!= null)
+        {
+
+            Minecraft minecraft = Minecraft.getMinecraft();
+            Map map = minecraft.func_152342_ad().func_152788_a(par1EntityPlayerSkellington.gameProfile);
+
+            if (map.containsKey(MinecraftProfileTexture.Type.SKIN))
+            {
+                loc = minecraft.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+            }
+            else
+                loc=EntityPlayerSkellington.field_110314_b;
+        }
+        Minecraft.getMinecraft().getTextureManager().loadTexture(rl,new RResourceLayeredTexture(loc,EntityPlayerSkellington.overlay,par1EntityPlayerSkellington.getSkellingtonName()));
 		layerdSkins.put(s, rl);
 	}
 	return rl;

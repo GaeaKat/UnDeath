@@ -1,6 +1,7 @@
 package com.nekokittygames.modjam.UnDeath;
 
 import com.google.common.collect.Multimap;
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -27,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -38,6 +40,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
+import java.util.UUID;
 
 public class EntityPlayerSkellington extends EntityMob implements IEntityAdditionalSpawnData,IRangedAttackMob {
 
@@ -48,10 +51,11 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	public InventoryPlayerSkellington inventory;
 	private int itemInUseCount=100; //TODO: For now until I can experiment with how to deal withthis
 	private String SkellingtonName="";
-
+    private UUID playerUUID=null;
+    public GameProfile gameProfile=null;
 
 	public static final ResourceLocation field_110314_b = new ResourceLocation("textures/entity/steve.png");
-	private static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerSkellington.png");
+	public static final ResourceLocation overlay=new ResourceLocation("undeath","textures/entity/playerSkellington.png");
 	private ThreadDownloadImageData field_110316_a;
 	private ThreadDownloadImageData field_110315_c;
 	private ResourceLocation mmmm;
@@ -85,6 +89,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	}
 
 	public void setSkellingtonName(String zombieName) {
+
 		SkellingtonName = zombieName;
 		this.setCustomNameTag(getCorruptedName());
 	}
@@ -164,7 +169,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 
 		if (object == null)
 		{
-			object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
+			object = new ThreadDownloadImageData(null,par1Str, par2ResourceLocation, par3IImageBuffer);
 			texturemanager.loadTexture(par0ResourceLocation, (ITextureObject) object);
 		}
 
@@ -209,6 +214,7 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		this.inventory.readFromNBT(nbttaglist);
 		this.inventory.currentItem = par1NBTTagCompound.getInteger("SelectedItemSlot");
 		this.setSkellingtonName(par1NBTTagCompound.getString("skellingtonName"));
+        this.gameProfile= NBTUtil.func_152459_a(par1NBTTagCompound.getCompoundTag("gameProfile"));
 		this.dropItems=par1NBTTagCompound.getBoolean("dropItems");
 	}
 
@@ -219,6 +225,10 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 		par1NBTTagCompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		par1NBTTagCompound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		par1NBTTagCompound.setString("skellingtonName", getSkellingtonName());
+        par1NBTTagCompound.setString("playerUUID",gameProfile.getId().toString());
+        NBTTagCompound cmp=new NBTTagCompound();
+        NBTUtil.func_152460_a(cmp,gameProfile);
+        par1NBTTagCompound.setTag("gameProfile",cmp);
 		par1NBTTagCompound.setBoolean("dropItems", dropItems);
 	}
 
@@ -229,6 +239,8 @@ public class EntityPlayerSkellington extends EntityMob implements IEntityAdditio
 	
 	public void InitFromPlayer(EntityPlayer par7EntityPlayer) {
 		this.setSkellingtonName(par7EntityPlayer.getCommandSenderName());
+        this.gameProfile=par7EntityPlayer.getGameProfile();
+        this.playerUUID=this.gameProfile.getId();
 		//this.setSkellingtonName("nekosune");
 		this.inventory.copyInventory(par7EntityPlayer.inventory);
 		this.inventory.currentItem=1;
@@ -300,7 +312,7 @@ private void findBestEquipment() {
 			if(currentCheck==null)
 				continue;
 			Multimap map=currentCheck.getAttributeModifiers();
-			Collection Attributes=(Collection)map.get(SharedMonsterAttributes.attackDamage);
+            Collection Attributes=(Collection)map.get(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
 			
 			if(Attributes.size()==0)
 				currentScore=0;
@@ -422,6 +434,7 @@ private void findBestEquipment() {
      * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
      * use this to react to sunlight and start to burn.
      */
+    @Override
     public void onLivingUpdate()
     {
         if (this.worldObj.isDaytime() && !this.worldObj.isRemote)
@@ -502,6 +515,9 @@ private void findBestEquipment() {
 		compound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
 		compound.setInteger("SelectedItemSlot", this.inventory.currentItem);
 		compound.setString("skellingtonName", getSkellingtonName());
+        NBTTagCompound cmp=new NBTTagCompound();
+        NBTUtil.func_152460_a(cmp,gameProfile);
+        compound.setTag("gameProfile",cmp);
 		compound.setBoolean("dropItems", dropItems);
 		try {
             ByteBufUtils.writeTag(buffer, compound);
@@ -520,6 +536,7 @@ private void findBestEquipment() {
 			this.inventory.readFromNBT(nbttaglist);
 			this.inventory.currentItem = compound.getInteger("SelectedItemSlot");
 			this.setSkellingtonName(compound.getString("skellingtonName"));
+            this.gameProfile= NBTUtil.func_152459_a(compound.getCompoundTag("gameProfile"));
 			this.dropItems=compound.getBoolean("dropItems");
 			if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
 			{
